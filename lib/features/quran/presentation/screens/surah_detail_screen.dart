@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quran_app/features/quran/presentation/state/providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/header_section.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../state/reading_mode.dart';
 import '../widgets/ayah_details_widget/ayah_list.dart';
 import '../widgets/ayah_details_widget/basmallah.dart';
 import '../widgets/ayah_details_widget/mode_switcher.dart';
+import '../widgets/ayah_details_widget/paged/paged_list.dart';
 import '../widgets/ayah_details_widget/surah_navigation_card.dart';
 import '../widgets/ayah_details_widget/surah_info.dart';
 
@@ -59,12 +62,6 @@ class _SurahDetailScreenState extends State<SurahDetailScreen> {
                           setState(() {
                             readingMode = newMode;
                           });
-
-                          if (newMode == ReadingMode.reading) {
-                            context.push("/readAyah");
-                          } else {
-                            context.push("/readAyah");
-                          }
                         },
                       ),
                     ),
@@ -77,10 +74,25 @@ class _SurahDetailScreenState extends State<SurahDetailScreen> {
                   SliverToBoxAdapter(child: Basmallah()),
 
                   SliverToBoxAdapter(
-                    child: SizedBox(height: 30),
+                    child: SizedBox(height: 5),
                   ),
 
-                  AyahList(),
+                  if (readingMode == ReadingMode.translation) ...[
+                    AyahList(),
+                  ] else ...[
+                      Consumer(
+                          builder: (context, ref, child) {
+                            final surah = ref.watch(selectedSurahProvider);
+                            final pagesAsync = ref.watch(pagedListProvider(surah!.number));
+
+                            return pagesAsync.when(
+                              data: (pages) => PagedList(pages: pages),
+                              loading: () => const Center(child: CircularProgressIndicator()),
+                              error: (err, stack) => Center(child: Text('Error: $err')),
+                            );
+                          }
+                      ),
+                  ],
                   SurahNavigationCard(),
                 ]
               ),

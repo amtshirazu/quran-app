@@ -19,15 +19,18 @@ class Basmallah extends StatelessWidget {
             'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
             style: textTheme.titleLarge?.copyWith(
               color: AppColors.gray900,
-              fontFamily: "Uthmanic"
+              fontFamily: "Uthmanic",
+              fontSize: 30,
             ),
           ),
-          SizedBox(height: 4),
+          SizedBox(height: 12),
           Text(
             'In the name of Allah, the Most Gracious, the Most Merciful',
             style: textTheme.titleSmall?.copyWith(
               color: AppColors.gray600,
+              fontSize: 16,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

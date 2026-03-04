@@ -5,6 +5,7 @@ import 'package:quran_app/features/quran/data/datasource/surah_local_datasource.
 import 'package:quran_app/features/quran/data/repository/quran_metadata.dart';
 import 'package:quran_app/features/quran/data/repository/quran_repository.dart';
 import '../../data/datasource/translation_local_datasource.dart';
+import '../../data/repository/paged_repository.dart';
 import '../../data/repository/translation_repository.dart';
 import '../../domain/models/ayah.dart';
 import '../../domain/models/surah.dart';
@@ -25,6 +26,28 @@ FutureProvider((ref) async {
     final data = await repo.getSurahMetadata();
     print("Loaded ${data.length} surahs");
     return data;
+  } catch (e, st) {
+    print("ERROR loading surahs: $e");
+    print(st);
+    rethrow;
+  }
+});
+
+
+final pagedRepositoryProvider =
+Provider<PagedRepository>((ref) {
+  return PagedRepository();
+});
+
+
+final pagedListProvider =
+FutureProvider.family((ref,surahId) async {
+  final repo = ref.watch(pagedRepositoryProvider);
+
+  try {
+    final allPages = await repo.loadPages();
+    print("Loaded ${allPages.length} surahs");
+    return allPages.where((p) => p.surahNumbers.contains(surahId)).toList();;
   } catch (e, st) {
     print("ERROR loading surahs: $e");
     print(st);
