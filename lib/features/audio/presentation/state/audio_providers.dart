@@ -1,11 +1,11 @@
-
-
-
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:quran_app/features/audio/data/reciters_list.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
+import '../../../quran/domain/models/surah.dart';
+import '../../../quran/presentation/state/quran_providers.dart';
 import 'audio_service.dart';
 
 
@@ -50,8 +50,28 @@ final filteredRecitersProvider =
     });
 
 final recitersSearchQueryProvider =
-StateProvider<String>((ref) => '');
+    StateProvider<String>((ref) => '');
 
 
 final selectedReciterProvider =
     StateProvider<Reciter?>((ref) => null);
+
+final selectedSurahIndexProvider =
+     StateProvider<int?>((ref) => 0 );
+
+final selectedAudioSurahProvider = Provider<Surah?>((ref) {
+  final index = ref.watch(selectedSurahIndexProvider);
+  final surahsAsync = ref.watch(surahListProvider);
+
+
+  if (surahsAsync is AsyncData<List<Surah>> && index != null && index >= 0) {
+    final surahs = surahsAsync.value;
+    if (index < surahs.length) {
+      return surahs[index];
+    }
+  }
+
+  return null;
+});
+
+final repeatModeProvider = StateProvider<bool>((ref) => false);

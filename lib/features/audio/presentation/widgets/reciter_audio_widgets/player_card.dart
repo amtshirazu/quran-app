@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/player_card_buttons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -18,10 +19,24 @@ class PlayerCard extends ConsumerStatefulWidget {
 }
 
 class PlayerCardState extends ConsumerState<PlayerCard> {
+
   @override
   Widget build(BuildContext context) {
+
+    final selectedAudioSurah = ref.watch(selectedAudioSurahProvider);
+    final playerState = ref.watch(audioStreamProvider).value;
+
+    if (selectedAudioSurah == null) {
+      return const SizedBox(
+        height: 220,
+        child: Center(child: Text("Select a Surah to play")),
+      );
+    }
+
     return Card(
         margin: EdgeInsets.symmetric(horizontal: 15),
+        clipBehavior: Clip.antiAlias,
+
         child: Column(
           children: [
             Container(
@@ -32,9 +47,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppColors.emerald100,
-                    AppColors.emerald50,
-                    Colors.white
+                    AppColors.emerald200,
+                    AppColors.emerald300,
+                    AppColors.emerald200,
                   ],
                 ),
               ),
@@ -42,27 +57,30 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
-                      "Al-Fatiha",
-                      style: TextStyle(
+                      selectedAudioSurah.nameEnglish,
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Text(
-                        "الفاتحة",
-                        style: TextStyle(fontSize: 40),
+                    const SizedBox(height: 4),
+
+                   Text(
+                        selectedAudioSurah.nameArabic,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6),
-                    Chip(label: Text("The Opening")),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
+                    Chip(label: Text(selectedAudioSurah.translation)),
+                    const SizedBox(height: 6),
                     Text(
-                      "Surah 1 • 7 Verses",
+                      "Surah ${selectedAudioSurah.number} • ${selectedAudioSurah.totalAyahs} Verses",
                       style: TextStyle(color: Colors.grey),
                     )
                   ],
@@ -76,7 +94,6 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
               child: Column(
                 children: [
 
-                  /// PROGRESS BAR
                   Column(
                     children: [
                       Slider(
@@ -99,15 +116,18 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
 
                   const SizedBox(height: 20),
 
-                  /// CONTROLS
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                            LucideIcons.repeat,
+                        onPressed: () {
+                          final repeat = ref.read(repeatModeProvider.notifier);
+                          repeat.state = !repeat.state;
+                        },
+                        icon: Icon(
+                          LucideIcons.repeat,
+                          color: ref.watch(repeatModeProvider) ? Colors.green : Colors.white,
                         ),
                       ),
 
@@ -127,10 +147,17 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                         ),
                         child: IconButton(
                           icon: Icon(
-                            LucideIcons.play,
+                            playerState?.playing == true ? LucideIcons.pause : LucideIcons.play,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            final audioProvider = ref.read(audioServiceProvider);
+                            if (playerState?.playing ?? false) {
+                              audioProvider.pause();
+                            } else {
+                              audioProvider.play();
+                            }
+                          },
                         ),
                       ),
 
@@ -144,7 +171,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                       IconButton(
                         onPressed: () {},
                         icon:  Icon(
-                            LucideIcons.volume,
+                            LucideIcons.volume2,
                         ),
                       ),
                     ],
@@ -156,8 +183,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   Row(
                     children: [
                        Icon(
-                          LucideIcons.volume,
-                          color: AppColors.gray200,
+                          LucideIcons.volume2,
+                          color: AppColors.gray400,
+                         size: 25,
                        ),
                       Expanded(
                         child: Slider(

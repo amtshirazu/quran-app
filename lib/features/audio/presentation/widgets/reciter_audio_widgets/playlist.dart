@@ -1,52 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/playlist_card.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../quran/presentation/state/quran_providers.dart';
+import '../../state/audio_providers.dart';
 
 class Playlist extends ConsumerWidget {
-  const Playlist({super.key});
+  const Playlist({super.key, });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final surahsAsync = ref.watch(surahListProvider);
 
-    return surahsAsync.when(
-      loading: () => const SliverFillRemaining(
-        child: Center(child: CircularProgressIndicator()),
+    return sliverAdapter(
+      child: Card(
+        margin: const EdgeInsets.only(right: 16, left: 16, bottom: 30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        clipBehavior: Clip.antiAlias,
+        elevation: 3,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Container(
+              padding: const EdgeInsets.all(25),
+              child: const Text(
+                "Playlist",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+
+
+            surahsAsync.when(
+              loading: () => const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+
+              error: (e, st) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(child: Text("Error: $e")),
+              ),
+
+              data: (surahs) => Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 400,
+                ),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(12),
+                  ),
+                ),
+
+                child: PlaylistCard(surahs: surahs)
+              ),
+            ),
+
+            Container(
+              padding: const EdgeInsets.all(15),
+            ),
+          ],
+        ),
       ),
-
-      error: (e, st) => SliverToBoxAdapter(
-        child: Center(child: Text("Error: $e")),
-      ),
-
-      data: (surahs) {
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-                (context, index) {
-              final surah = surahs[index];
-
-              return ListTile(
-                leading: CircleAvatar(
-                  child: Text("${index + 1}"),
-                ),
-
-                title: Text(surah.nameEnglish),
-
-                subtitle: Text(
-                  "${surah.translation} • ${surah.totalAyahs} verses",
-                ),
-
-                trailing: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Text(surah.nameArabic),
-                ),
-
-                onTap: () {},
-              );
-            },
-            childCount: surahs.length,
-          ),
-        );
-      },
     );
+  }
+
+
+  SliverToBoxAdapter sliverAdapter({required Widget child}) {
+    return SliverToBoxAdapter(child: child);
   }
 }

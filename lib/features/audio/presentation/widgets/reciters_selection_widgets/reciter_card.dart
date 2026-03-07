@@ -119,7 +119,7 @@ class ReciterCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Style: ${reciter.style}",
+                          reciter.style,
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.black,

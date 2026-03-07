@@ -1,63 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../domain/models/Reciters.dart';
+import '../../state/audio_providers.dart';
 
-
-
-
-
-
-class ReciterHeader extends StatelessWidget {
-  const ReciterHeader({
-    super.key,
-    required this.reciter,
-  });
+class ReciterHeader extends ConsumerWidget {
+  const ReciterHeader({super.key, required this.reciter});
 
   final Reciter reciter;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsetsGeometry.all(16),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                context.pop();
-              },
-              icon: const Icon(
-                  LucideIcons.arrowLeft,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedReciter = ref.watch(selectedReciterProvider);
+
+    if (selectedReciter == null) return const SizedBox.shrink();
+
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      height: 100,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              final audioProvider = ref.read(audioServiceProvider);
+              audioProvider.stop();
+              ref.read(selectedReciterProvider.notifier).state = null;
+              ref.read(selectedSurahIndexProvider.notifier).state = 0;
+              context.pop();
+            },
+            icon: const Icon(LucideIcons.arrowLeft),
+          ),
+          const SizedBox(width: 8),
+
+
+         Stack(
+              clipBehavior: Clip.none,
               children: [
+
                 Text(
-                  "Mishary Alafasy",
-                  style: TextStyle(
+                  selectedReciter.name,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-                Directionality(
-                  textDirection: TextDirection.rtl,
+
+
+                Positioned(
+                  top: 30,
+                  right: 0,
                   child: Text(
-                    "مشاري العفاسي",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.gray400,
+                    selectedReciter.arabicName,
+                    textDirection: TextDirection.rtl,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: AppColors.gray600,
                     ),
                   ),
-                )
+                ),
               ],
-            )
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
