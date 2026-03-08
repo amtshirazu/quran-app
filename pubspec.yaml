@@ -31,12 +31,12 @@ flutter:
     - lib/assets/reciters/
 
   fonts:
-    - family: Indo park
+    - family: Indo Park
       fonts:
         - asset: lib/assets/quran/fonts/indopark.ttf
     - family: Uthmanic
       fonts:
-        - asset: lib/assets/quran/fonts/KFGQPCNastaleeq-Regular.ttf
+        - asset: lib/assets/quran/fonts/KFGQPC-Uthman-Naskh-Regular.ttf
     - family: QPCPage001
       fonts:
         - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p1.ttf

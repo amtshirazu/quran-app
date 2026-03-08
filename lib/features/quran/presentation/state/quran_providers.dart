@@ -100,8 +100,6 @@ final translationListProvider = FutureProvider.family<List<Translation>, Map<Str
     );
     return translations;
   } catch (e, st) {
-    print("ERROR loading translations: $e");
-    print(st);
     rethrow;
   }
 });

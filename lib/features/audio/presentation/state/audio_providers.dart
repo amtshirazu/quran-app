@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:quran_app/features/audio/data/reciters_list.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
+import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import '../../../quran/domain/models/surah.dart';
 import '../../../quran/presentation/state/quran_providers.dart';
 import 'audio_service.dart';
@@ -74,4 +75,6 @@ final selectedAudioSurahProvider = Provider<Surah?>((ref) {
   return null;
 });
 
-final repeatModeProvider = StateProvider<bool>((ref) => false);
+final repeatModeProvider = StateProvider<RepeatStates>((ref) => RepeatStates.off);
+
+final volumeProvider = StateProvider<double>((ref) => 0.7);

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
+import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/player_card_buttons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../quran/presentation/state/quran_providers.dart';
 
 
 
@@ -26,12 +29,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
     final selectedAudioSurah = ref.watch(selectedAudioSurahProvider);
     final playerState = ref.watch(audioStreamProvider).value;
 
-    if (selectedAudioSurah == null) {
-      return const SizedBox(
-        height: 220,
-        child: Center(child: Text("Select a Surah to play")),
-      );
-    }
+
 
     return Card(
         margin: EdgeInsets.symmetric(horizontal: 15),
@@ -59,7 +57,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      selectedAudioSurah.nameEnglish,
+                      selectedAudioSurah!.nameEnglish,
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -122,20 +120,55 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
 
                       IconButton(
                         onPressed: () {
-                          final repeat = ref.read(repeatModeProvider.notifier);
-                          repeat.state = !repeat.state;
+                          final repeatNotifier = ref.read(repeatModeProvider.notifier);
+
+                          final newMode = switch(repeatNotifier.state) {
+                            RepeatStates.off => RepeatStates.repeatAll,
+                            RepeatStates.repeatAll => RepeatStates.repeatOne,
+                            RepeatStates.repeatOne => RepeatStates.off,
+                          };
+
+                          repeatNotifier.state = newMode;
                         },
                         icon: Icon(
-                          LucideIcons.repeat,
-                          color: ref.watch(repeatModeProvider) ? Colors.green : Colors.white,
+                            switch(ref.watch(repeatModeProvider)){
+                              RepeatStates.off => LucideIcons.repeat,
+                              RepeatStates.repeatAll => LucideIcons.repeat,
+                              RepeatStates.repeatOne => LucideIcons.repeat1,
+                            },
+                          color: switch(ref.watch(repeatModeProvider)){
+                            RepeatStates.off => AppColors.gray600,
+                            RepeatStates.repeatAll => Colors.green,
+                            RepeatStates.repeatOne => Colors.green,
+                          }
                         ),
                       ),
 
                       IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                            LucideIcons.skipBack,
-                        ),
+                        onPressed: () async {
+                          final audio = ref.read(audioServiceProvider);
+                          final reciter = ref.read(selectedReciterProvider);
+                          final surahs = ref.read(surahListProvider).value;
+
+                          if (reciter == null) return;
+
+                          final currentIndex = ref.read(selectedSurahIndexProvider) ?? 0;
+
+                          if (currentIndex > 0) {
+                            final prevIndex = currentIndex - 1;
+
+                            ref.read(selectedSurahIndexProvider.notifier).state = prevIndex;
+
+                            final surah = surahs![prevIndex];
+
+                            await audio.playSurah(
+                              reciterFolder: reciter.audioFolder,
+                              surah: surah.number,
+                              totalAyahs: surah.totalAyahs,
+                            );
+                          }
+                        },
+                        icon: const Icon(LucideIcons.skipBack),
                       ),
 
                       Container(
@@ -150,26 +183,72 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             playerState?.playing == true ? LucideIcons.pause : LucideIcons.play,
                             color: Colors.white,
                           ),
-                          onPressed: () {
-                            final audioProvider = ref.read(audioServiceProvider);
-                            if (playerState?.playing ?? false) {
-                              audioProvider.pause();
-                            } else {
-                              audioProvider.play();
-                            }
+                          onPressed: () async {
+                              final audio = ref.read(audioServiceProvider);
+                              final reciter = ref.read(selectedReciterProvider);
+                              final surah = ref.read(selectedAudioSurahProvider);
+
+                              if (playerState?.playing == true) {
+                                await audio.pause();
+                              } else {
+
+                                if (!audio.hasLoadedSurah && reciter != null && surah != null) {
+                                  await audio.playSurah(
+                                    reciterFolder: reciter.audioFolder,
+                                    surah: surah.number,
+                                    totalAyahs: surah.totalAyahs,
+                                  );
+                                  return;
+                                }
+
+                                if (playerState?.processingState == ProcessingState.completed) {
+                                  await audio.seekToStart();
+                                }
+
+                                await audio.play();
+                              }
                           },
                         ),
                       ),
 
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          LucideIcons.skipForward,
-                        ),
+                        onPressed: () async {
+                          final audio = ref.read(audioServiceProvider);
+                          final reciter = ref.read(selectedReciterProvider);
+                          final surahs = ref.read(surahListProvider).value;
+
+                          if (reciter == null) return;
+
+                          final currentIndex = ref.read(selectedSurahIndexProvider) ?? 0;
+
+                          if (currentIndex < surahs!.length - 1) {
+                            final nextIndex = currentIndex + 1;
+
+                            ref.read(selectedSurahIndexProvider.notifier).state = nextIndex;
+
+                            final surah = surahs[nextIndex];
+
+                            await audio.playSurah(
+                              reciterFolder: reciter.audioFolder,
+                              surah: surah.number,
+                              totalAyahs: surah.totalAyahs,
+                            );
+                          }
+                        },
+                        icon: const Icon(LucideIcons.skipForward),
                       ),
 
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          final volumeNotifier = ref.read(volumeProvider.notifier);
+                          final audio = ref.read(audioServiceProvider);
+
+                          final newVolume = (volumeNotifier.state + 0.05).clamp(0.0, 1.0);
+
+                          volumeNotifier.state = newVolume;
+
+                          audio.setVolume(newVolume);
+                        },
                         icon:  Icon(
                             LucideIcons.volume2,
                         ),
@@ -182,21 +261,27 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
 
                   Row(
                     children: [
-                       Icon(
-                          LucideIcons.volume2,
-                          color: AppColors.gray400,
-                         size: 25,
-                       ),
+                      Icon(
+                        ref.watch(volumeProvider) == 0
+                            ? LucideIcons.volumeX :
+                        ref.watch(volumeProvider) <= 0.5
+                            ? LucideIcons.volume1 : LucideIcons.volume2,
+                        color: AppColors.gray400,
+                        size: 25,
+                      ),
                       Expanded(
                         child: Slider(
-                          value: 70,
-                          max: 100,
-                          onChanged: (value) {},
+                          value: ref.watch(volumeProvider),
+                          max: 1,
+                          onChanged: (value) {
+                            ref.read(volumeProvider.notifier).state = value;
+                            ref.read(audioServiceProvider).setVolume(value);
+                          },
                         ),
                       ),
-                      const Text(
-                        "70%",
-                        style: TextStyle(color: Colors.grey),
+                      Text(
+                          "${(ref.watch(volumeProvider) * 100).toInt()}%",
+                        style: const TextStyle(color: Colors.grey),
                       )
                     ],
                   ),

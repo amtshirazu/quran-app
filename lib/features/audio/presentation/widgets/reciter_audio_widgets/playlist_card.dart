@@ -34,22 +34,22 @@ class PlaylistCard extends ConsumerWidget {
         final isSelected = selectedIndex == index;
 
         return InkWell(
-          onTap: () async {
-            ref.read(selectedSurahIndexProvider.notifier).state =
-                index;
+            onTap: () async {
+              final reciter = ref.read(selectedReciterProvider);
+              if (reciter == null) return;
 
-            try {
-              await audioProvider.playSurah(
-                reciterFolder: selectedReciter!.audioFolder,
-                surah: surah.number,
-                totalAyahs: surah.totalAyahs,
-              );
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Error playing audio: $e"))
-              );
-            }
-          },
+              ref.read(selectedSurahIndexProvider.notifier).state = index;
+
+              try {
+                await audioProvider.playSurah(
+                  reciterFolder: reciter.audioFolder,
+                  surah: surah.number,
+                  totalAyahs: surah.totalAyahs,
+                );
+              } catch (e) {
+                debugPrint("Audio error: $e");
+              }
+            },
           child: Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 12),

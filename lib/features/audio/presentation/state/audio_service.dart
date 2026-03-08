@@ -1,9 +1,57 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
+
+import '../../../quran/domain/models/surah.dart';
+import '../../../quran/presentation/state/quran_providers.dart';
+import 'audio_providers.dart';
 
 
 class AudioService {
 
      final AudioPlayer _audioPlayer = AudioPlayer();
+
+     void init(WidgetRef ref) {
+       _audioPlayer.processingStateStream.listen((state) async {
+         if (state == ProcessingState.completed) {
+           final repeatMode = ref.read(repeatModeProvider);
+           final currentReciter = ref.read(selectedReciterProvider);
+           final currentIndex = ref.read(selectedSurahIndexProvider)!;
+           final surahsAsync = ref.read(surahListProvider);
+
+           if (surahsAsync is AsyncData<List<Surah>>) {
+             final surahs = surahsAsync.value;
+
+             if (repeatMode == RepeatStates.repeatAll) {
+               final nextIndex = (currentIndex + 1) % surahs.length;
+               ref.read(selectedSurahIndexProvider.notifier).state = nextIndex;
+
+               final nextSurah = surahs[nextIndex];
+               await playSurah(
+                 reciterFolder: currentReciter!.audioFolder,
+                 surah: nextSurah.number,
+                 totalAyahs: nextSurah.totalAyahs,
+               );
+             } else if (repeatMode == RepeatStates.repeatOne) {
+               final surah = surahs[currentIndex];
+               await playSurah(
+                 reciterFolder: currentReciter!.audioFolder,
+                 surah: surah.number,
+                 totalAyahs: surah.totalAyahs,
+               );
+             } else {
+               await _audioPlayer.stop();
+             }
+           }
+         }
+       });
+     }
+
+     bool _hasLoadedSurah = false;
+
+     bool get hasLoadedSurah => _hasLoadedSurah;
+
      AudioPlayer get player => _audioPlayer;
 
      Future<void> playVerse({
@@ -69,8 +117,24 @@ class AudioService {
        });
 
        await _audioPlayer.setAudioSources(ayahs);
+       _hasLoadedSurah = true;
        await _audioPlayer.play();
      }
 
+     Future<void> seekToStart() async {
+       await _audioPlayer.seek(Duration.zero);
+     }
+
+     Future<void> reset() async {
+       await _audioPlayer.stop();
+       await _audioPlayer.seek(Duration.zero);
+       await _audioPlayer.setAudioSources([]);
+
+       _hasLoadedSurah = false;
+     }
+
+     Future<void> setVolume(double volume) async {
+       await _audioPlayer.setVolume(volume);
+     }
 
 }

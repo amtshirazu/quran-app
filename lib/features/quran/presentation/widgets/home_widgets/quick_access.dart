@@ -33,7 +33,7 @@ class QuickAccess extends StatelessWidget {
             fgColor: AppColors.blue600,
             icon: LucideIcons.headphones,
             text: "Listen Quran",
-            route: "/audio",
+            route: "/audioHome",
           ),
           QuickAccessCard(
             bgColor: AppColors.purple100,

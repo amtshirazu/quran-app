@@ -25,11 +25,14 @@ class ReciterHeader extends ConsumerWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               final audioProvider = ref.read(audioServiceProvider);
-              audioProvider.stop();
+
+               await audioProvider.reset();
+
               ref.read(selectedReciterProvider.notifier).state = null;
               ref.read(selectedSurahIndexProvider.notifier).state = 0;
+
               context.pop();
             },
             icon: const Icon(LucideIcons.arrowLeft),

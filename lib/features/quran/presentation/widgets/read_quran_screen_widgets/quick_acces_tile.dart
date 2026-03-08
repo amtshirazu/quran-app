@@ -27,57 +27,61 @@ class QuickAccessCard extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return InkWell(
+      onTap: () {
 
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-            children: [
-
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  color: fgColor,
-                  size: 24,
-                ),
-              ),
-
-              SizedBox(width: 6),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    label,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.gray500,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    sublabel,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.gray900,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+      },
+      child: Card(
+        color: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
+        clipBehavior: Clip.antiAlias,
+
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: fgColor,
+                    size: 24,
+                  ),
+                ),
+
+                SizedBox(width: 6),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      label,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.gray500,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      sublabel,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.gray900,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+      ),
     );
   }
 }

@@ -93,7 +93,7 @@ class _AyahTileState extends State<AyahTile> {
                 widget.ayah.text,
                 style: textTheme.headlineLarge?.copyWith(
                   color: AppColors.gray900,
-                  fontFamily: "Uthmanic"
+                  fontFamily: "Uthmanic",
                 ),
                 textAlign: TextAlign.right,
                 softWrap: true,

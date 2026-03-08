@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/features/quran/presentation/state/daily_verse_provider.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../state/quran_providers.dart';
 
 
 
 
-class DailyVerseCard extends StatelessWidget {
+class DailyVerseCard extends ConsumerWidget {
   const DailyVerseCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final textTheme = Theme.of(context).textTheme;
+    final ayahAsync = ref.watch(dailyVerseWithTranslationProvider);
+
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 25,left: 15,right: 15),
+      margin: const EdgeInsets.only(bottom: 25, left: 15, right: 15),
       elevation: 6,
       clipBehavior: Clip.antiAlias,
-
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -30,58 +34,56 @@ class DailyVerseCard extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
-
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(
-                    LucideIcons.heart,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 10,),
-                  Text("Verse of the Day",
-                    style: textTheme.headlineLarge,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              const Text(
-                "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
+          child: ayahAsync.when(
+            data: (ayahWithTranslation) => Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      LucideIcons.heart,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      "Verse of the Day",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                  ],
                 ),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                "For indeed, with hardship will be ease.",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.emerald50),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                "Surah Ash-Sharh (94:6)",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.emerald50),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Text(
+                  ayahWithTranslation.ayah.text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 22, color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  ayahWithTranslation.translation.text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.emerald50),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Surah (${ayahWithTranslation.ayah.surahNumber} : ${ayahWithTranslation.ayah.ayahNumber})",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.emerald50),
+                ),
+              ],
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+            error: (err, stack) => Text(
+              "Error loading verse: $err",
+              style: const TextStyle(color: Colors.red),
+            ),
           ),
         ),
       ),
-
-
     );
   }
 }
