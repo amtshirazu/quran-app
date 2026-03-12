@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../state/quran_providers.dart';
 
 
 
 
 
-class ReadHeaderSection extends StatelessWidget {
+class ReadHeaderSection extends ConsumerWidget {
   const ReadHeaderSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final textTheme = Theme.of(context).textTheme;
 
@@ -30,6 +32,7 @@ class ReadHeaderSection extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
+                  ref.watch(searchQueryProvider.notifier).state = '';
                   context.go('/');
                 },
                 icon: Icon(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 
-import '../../../../../core/constants/app_spacing.dart';
+import '../../../../../../core/constants/app_spacing.dart';
 
 
 
@@ -20,11 +20,11 @@ class ModeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.7,
+    return SizedBox(
+      width: 225,
       child: Container(
-        margin: EdgeInsets.all(AppSpacing.medium),
-        padding: EdgeInsets.all(AppSpacing.small),
+        margin: EdgeInsets.only(right: 5),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: AppColors.gray700,
           borderRadius: BorderRadius.circular(30),
@@ -45,7 +45,7 @@ class ModeSwitcher extends StatelessWidget {
     return GestureDetector(
       onTap: () => onChanged(newMode),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical : 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical : 10),
         decoration: BoxDecoration(
           color: mode == newMode ? AppColors.emerald500.withOpacity(0.5): Colors.transparent,
           borderRadius: BorderRadius.circular(24),

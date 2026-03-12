@@ -43,7 +43,6 @@ final pageAyahsProvider =
 FutureProvider.family<List<PagedAyah>, int>((ref, pageNumber) async {
 
   return loadPageAyahs(pageNumber);
-
 });
 
 
@@ -135,3 +134,22 @@ final defaultReciterProvider = Provider<Reciter?>((ref) =>
       audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
     ),
 );
+
+
+final currentPlayingAyahProvider = StateProvider<AyahIdentifier?>((ref) => null);
+
+class AyahIdentifier {
+  final int surah;
+  final int ayah;
+  final int page;
+  AyahIdentifier({
+  required this.surah,
+  required this.ayah,
+  required this.page,
+  });
+}
+
+final currentPlayingPageProvider = Provider<int?>((ref) {
+  final playing = ref.watch(currentPlayingAyahProvider);
+  return playing?.page;
+});

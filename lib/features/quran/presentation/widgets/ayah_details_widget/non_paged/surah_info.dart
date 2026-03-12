@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
-import '../../state/quran_providers.dart';
+import '../../../state/quran_providers.dart';
 
 
 

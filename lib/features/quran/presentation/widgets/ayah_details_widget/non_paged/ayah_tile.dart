@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/selectedButton.dart';
+import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
 
-import '../../../domain/models/ayah.dart';
-import '../../../domain/models/translation.dart';
+import '../../../../../audio/presentation/state/audio_providers.dart';
+import '../../../../domain/models/ayah.dart';
+import '../../../../domain/models/translation.dart';
 
 
 
 
 
-class AyahTile extends StatefulWidget {
+class AyahTile extends ConsumerStatefulWidget {
   const AyahTile({
     super.key,
     required this.ayah,
@@ -21,10 +24,10 @@ class AyahTile extends StatefulWidget {
   final Translation translation;
 
   @override
-  State<AyahTile> createState() => _AyahTileState();
+  ConsumerState<AyahTile> createState() => _AyahTileState();
 }
 
-class _AyahTileState extends State<AyahTile> {
+class _AyahTileState extends ConsumerState<AyahTile> {
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,16 @@ class _AyahTileState extends State<AyahTile> {
                         )
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                           final audio = ref.read(audioServiceProvider);
+                           final defaultReciter = ref.read(defaultReciterProvider);
+
+                           await audio.playVerse(
+                             reciterFolder: defaultReciter!.audioFolder,
+                             surah: widget.ayah.surahNumber,
+                             ayah: widget.ayah.ayahNumber,
+                           );
+                        },
                         icon: Icon(
                           LucideIcons.volume2,
                           color: AppColors.gray400,

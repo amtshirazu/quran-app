@@ -4,6 +4,7 @@ import 'package:quran_app/core/widgets/Loading.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/Surah_tile.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../ayah_details_widget/non_paged/mode_switcher.dart';
 
 class SurahList extends ConsumerWidget {
   const SurahList({super.key});
@@ -29,40 +30,52 @@ class SurahList extends ConsumerWidget {
         ),
       ),
 
-      data: (surahs) {
 
-        final filteredSurahs = surahs.where((surahs) {
+      data: (surahs) {
+        final filteredSurahs = surahs.where((s) {
           final query = searchQuery.toLowerCase();
-          return surahs.nameArabic.toLowerCase().contains(query) ||
-              surahs.nameEnglish.toLowerCase().contains(query);
+          return s.nameArabic.toLowerCase().contains(query) ||
+              s.nameEnglish.toLowerCase().contains(query);
         }).toList();
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-            if (index == 0) {
-              return Padding(
+        return SliverMainAxisGroup(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
-                child: Text(
-                  "ALL SURAHS",
-                  style: textTheme.titleMedium?.copyWith(
-                    color: AppColors.gray700,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "ALL SURAHS",
+                      style: textTheme.titleMedium?.copyWith(
+                        color: AppColors.gray700,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    ModeSwitcher(
+                      mode: ref.watch(readingModeProvider),
+                      onChanged: (newMode) =>
+                      ref.read(readingModeProvider.notifier).state = newMode,
+                    ),
+                  ],
                 ),
-              );
-            }
-
-            final surah = filteredSurahs[index - 1];
-
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, ),
-              child: SurahTile(
-                surah: surah,
               ),
-            );
-          },
-            childCount: filteredSurahs.length + 1,
-          ),
+            ),
+
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: SurahTile(surah: filteredSurahs[index]),
+                  );
+                },
+                childCount: filteredSurahs.length,
+              ),
+            ),
+          ],
         );
       },
     );

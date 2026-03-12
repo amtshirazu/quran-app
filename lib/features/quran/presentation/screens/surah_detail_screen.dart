@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/header_section.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/header_section.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../state/reading_mode.dart';
-import '../widgets/ayah_details_widget/ayah_list.dart';
-import '../widgets/ayah_details_widget/basmallah.dart';
-import '../widgets/ayah_details_widget/mode_switcher.dart';
+import '../widgets/ayah_details_widget/non_paged/ayah_list.dart';
+import '../widgets/ayah_details_widget/non_paged/basmallah.dart';
+import '../widgets/ayah_details_widget/non_paged/mode_switcher.dart';
 import '../widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../widgets/ayah_details_widget/paged/quran_paged_reader_screen.dart';
-import '../widgets/ayah_details_widget/surah_navigation_card.dart';
-import '../widgets/ayah_details_widget/surah_info.dart';
-
-
-
-
+import '../widgets/ayah_details_widget/non_paged/surah_navigation_card.dart';
+import '../widgets/ayah_details_widget/non_paged/surah_info.dart';
 
 class SurahDetailScreen extends ConsumerStatefulWidget {
   const SurahDetailScreen({super.key});
@@ -24,10 +20,8 @@ class SurahDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
-
   @override
   Widget build(BuildContext context) {
-
     final readingMode = ref.watch(readingModeProvider);
     final selectedSurah = ref.watch(selectedSurahProvider);
 
@@ -54,17 +48,8 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(child: SurahInfo()),
-                    SliverToBoxAdapter(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: ModeSwitcher(
-                          mode: readingMode,
-                          onChanged: (newMode) {
-                            ref.read(readingModeProvider.notifier).state = newMode;
-                          },
-                        ),
-                      ),
-                    ),
+                    SliverToBoxAdapter(child: Basmallah()),
+                    SliverToBoxAdapter(child: SizedBox(height: 10)),
                     AyahList(),
                     SurahNavigationCard(),
                   ],
@@ -72,18 +57,8 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
               )
             else
               Expanded(
-                child: Column(
-                  children: [
-                    ModeSwitcher(
-                      mode: readingMode,
-                      onChanged: (newMode) => ref.read(readingModeProvider.notifier).state = newMode,
-                    ),
-                    Expanded(
-                      child: QuranPagedReaderScreen(
-                        initialPage: surahStartPage[selectedSurah.number]!,
-                      ),
-                    ),
-                  ],
+                child: QuranPagedReaderScreen(
+                  initialPage: surahStartPage[selectedSurah.number]!,
                 ),
               ),
           ],
@@ -92,4 +67,3 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     );
   }
 }
-

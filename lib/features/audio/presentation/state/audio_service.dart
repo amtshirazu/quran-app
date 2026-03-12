@@ -12,7 +12,30 @@ class AudioService {
 
      final AudioPlayer _audioPlayer = AudioPlayer();
 
+     bool _hasBasmallah = false;
+
      void init(WidgetRef ref) {
+       _audioPlayer.currentIndexStream.listen((index) {
+
+         if (index == null) return;
+         final current = ref.read(currentPlayingAyahProvider);
+         int ayahNumber = index + 1;
+
+         if (_hasBasmallah) {
+           ayahNumber = index;
+           if (ayahNumber == 0) return;
+         }
+
+         if (current != null) {
+           ref.read(currentPlayingAyahProvider.notifier).state = AyahIdentifier(
+               surah: current.surah,
+               ayah: ayahNumber,
+               page: current.page
+           );
+         }
+       });
+
+
        _audioPlayer.processingStateStream.listen((state) async {
          if (state == ProcessingState.completed) {
            final repeatMode = ref.read(repeatModeProvider);
@@ -107,16 +130,16 @@ class AudioService {
      }) async {
 
        await _audioPlayer.stop();
-
        final surahStr = surah.toString().padLeft(3, '0');
-
        List<AudioSource> ayahs = [];
+       _hasBasmallah = false;
 
        if (surah != 1 && surah != 9 && reciterFolder != "warsh/warsh_yassin_al_jazaery_64kbps") {
          final basmallahUrl =
              "https://everyayah.com/data/$reciterFolder/001001.mp3";
 
          ayahs.add(AudioSource.uri(Uri.parse(basmallahUrl)));
+         _hasBasmallah = true;
        }
 
        ayahs.addAll(

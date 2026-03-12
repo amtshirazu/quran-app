@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../audio/presentation/state/audio_providers.dart';
-import '../../state/quran_providers.dart';
+import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../audio/presentation/state/audio_providers.dart';
+import '../../../state/quran_providers.dart';
 
 class AyahHeaderSection extends ConsumerWidget {
   const AyahHeaderSection({super.key});

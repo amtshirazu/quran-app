@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/quran_paged_reader_screen.dart';
-import '../../../../../core/constants/app_colors.dart';
-import '../../state/quran_providers.dart';
+import '../../../../../../core/constants/app_colors.dart';
+import '../../../state/quran_providers.dart';
 
 
 

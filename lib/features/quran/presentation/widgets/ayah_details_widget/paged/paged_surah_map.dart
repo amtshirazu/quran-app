@@ -17,3 +17,15 @@ Map<int, int> surahStartPage = {
   101: 600, 102: 600, 103: 601, 104: 601, 105: 601, 106: 602, 107: 602, 108: 602, 109: 603, 110: 603,
   111: 603, 112: 604, 113: 604, 114: 604
 };
+
+
+int getSurahNumberFromPage(int pageNumber) {
+  int foundSurah = 1;
+
+  surahStartPage.forEach((surahNum, startPage) {
+    if (pageNumber >= startPage) {
+      foundSurah = surahNum;
+    }
+  });
+  return foundSurah;
+}
