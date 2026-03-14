@@ -60,25 +60,24 @@ class AyahHeaderSection extends ConsumerWidget {
 
               if (playerState?.playing == true) {
                 await audio.pause();
-              } else {
-
-                final surah = surahs?[selectedSurah!.number - 1];
-
-                if (!audio.hasLoadedSurah && reciter != null && surah != null) {
-                  await audio.playSurah(
-                    reciterFolder: reciter.audioFolder,
-                    surah: surah.number,
-                    totalAyahs: surah.totalAyahs,
-                  );
-                  return;
-                }
-
-                if (playerState?.processingState == ProcessingState.completed) {
-                  await audio.seekToStart();
-                }
-                await audio.play();
+                return;
               }
 
+              if (playerState?.processingState == ProcessingState.completed) {
+                await audio.seekToStart();
+              }
+
+
+              final surah = surahs?[selectedSurah!.number - 1];
+              if (!audio.hasLoadedSurah && reciter != null && surah != null) {
+                await audio.playSurah(
+                  reciterFolder: reciter.audioFolder,
+                  surah: surah.number,
+                  totalAyahs: surah.totalAyahs,
+                );
+              } else {
+                await audio.play();
+              }
             },
             icon: Icon(
                 playerState?.playing == true ? LucideIcons.pause : LucideIcons.play,

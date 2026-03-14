@@ -100,9 +100,11 @@ class _QuranPagedReaderScreenState
                   padding: EdgeInsetsGeometry.symmetric(vertical: 8),
                   child: Row(
                     children: [
-                      Divider(
-                        color: AppColors.gray400,
-                        thickness: 2,
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.gray400,
+                          thickness: 2,
+                        ),
                       ),
 
                       Container(
@@ -111,14 +113,16 @@ class _QuranPagedReaderScreenState
                           ayahs.first.page.toString(),
                           style: TextStyle(
                             fontSize: 16,
-                            color: AppColors.gray400,
+                            color: AppColors.gray600,
                           ),
                         ),
                       ),
 
-                      Divider(
-                        color: AppColors.gray400,
-                        thickness: 2,
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.gray400,
+                          thickness: 2,
+                        ),
                       )
                     ],
                   ),
