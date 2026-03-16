@@ -83,7 +83,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                            final selectedSurah = ref.read(selectedSurahProvider);
 
                            await audio.playVerse(
-                             reciterFolder: defaultReciter!.audioFolder,
+                             reciter: defaultReciter!,
                              surah: selectedSurah!,
                              ayah: widget.ayah.ayahNumber,
                            );
