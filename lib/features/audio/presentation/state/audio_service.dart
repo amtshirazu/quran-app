@@ -14,6 +14,8 @@ import 'audio_providers.dart';
 class QuranAudioService {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer _ayahPlayer = AudioPlayer();
+
   final Set<String> _downloadingTasks = {};
 
   Future<void> init(WidgetRef ref) async {
@@ -96,24 +98,38 @@ class QuranAudioService {
   }
 
   Future<AudioSource> buildUrl({
-    required int surah,
+    required Surah surah,
     required int ayah,
     required String reciterFolder,
     required String dirPath,
   }) async {
-    final surahStr = surah.toString().padLeft(3, '0');
+    final surahStr = surah.number.toString().padLeft(3, '0');
     final ayahStr = ayah.toString().padLeft(3, '0');
 
     final url = "https://everyayah.com/data/$reciterFolder/$surahStr$ayahStr.mp3";
-    final fileName = "$ayahStr.mp3";
+    final fileName = "$surahStr$ayahStr.mp3";
     final localPath = "$dirPath/$reciterFolder/$fileName";
 
     if (await File(localPath).exists()) {
-    return AudioSource.file(localPath);
+    return AudioSource.file(
+      localPath,
+      tag: MediaItem(
+        id: "${surah.number}:$ayah",
+        album: "Quran",
+        title: "Surah ${surah.nameEnglish} - Ayah $ayah",
+        artist: reciterFolder,
+      ),
+    );
     } else {
-    _startBackgroundDownload(url, localPath);
+      _startBackgroundDownload(url, localPath);
     return AudioSource.uri(
       Uri.parse(url),
+      tag: MediaItem(
+        id: "${surah.number}:$ayah",
+        album: "Quran",
+        title: "Surah ${surah.nameEnglish} - Ayah $ayah",
+        artist: reciterFolder,
+      ),
     );
     }
 
@@ -121,10 +137,18 @@ class QuranAudioService {
 
   Future<void> playVerse({
     required String reciterFolder,
-    required int surah,
+    required Surah surah,
     required int ayah,
   }) async {
+
+    final session = await AudioSession.instance;
+    await session.setActive(true);
+
+    await _audioPlayer.stop();
+    await _ayahPlayer.stop();
+
     final directory = await getApplicationDocumentsDirectory();
+
     final audioSource = await buildUrl(
       surah: surah,
       ayah: ayah,
@@ -132,14 +156,11 @@ class QuranAudioService {
       dirPath: directory.path,
     );
 
-    await _audioPlayer.setAudioSource(
-      audioSource,
-      initialIndex: 0,
-      initialPosition: Duration.zero,
-    );
+    await _ayahPlayer.setAudioSource(audioSource);
 
-    _audioPlayer.play();
+    await _ayahPlayer.play();
   }
+
 
   Future<void> playSurah({
     required Reciter reciter,
@@ -147,22 +168,45 @@ class QuranAudioService {
     required List<Surah> allSurahs,
   }) async {
 
+    await _ayahPlayer.stop();
     await _audioPlayer.pause();
     final directory = await getApplicationDocumentsDirectory();
 
+    final currentIndex = surah.number - 1;
+
+    List<Surah> playlistSurahs = [];
+
+    if (currentIndex > 0) {
+      playlistSurahs.add(allSurahs[currentIndex - 1]);
+    }
+
+    playlistSurahs.add(allSurahs[currentIndex]);
+
+    if (currentIndex < allSurahs.length - 1) {
+      playlistSurahs.add(allSurahs[currentIndex + 1]);
+    }
+
     List<AudioSource> sources = [];
 
-    for (var s in allSurahs) {
+    for (var s in playlistSurahs) {
       final source = await _buildSingleAudioSource(s, reciter, directory.path);
       sources.add(source);
     }
 
     await _audioPlayer.setAudioSources(
       sources,
-      initialIndex: surah.number - 1,
+      initialIndex: playlistSurahs.indexWhere((s) => s.number == surah.number),
     );
 
     _hasLoadedSurah = true;
+
+    final surahStr = surah.number.toString().padLeft(3, '0');
+    final fileName = "$surahStr.mp3";
+    final localPath = "$directory.path/${reciter.audioFolder}/$fileName";
+    final url = "${reciter.serverUrl}/$fileName";
+
+    _startBackgroundDownload(url, localPath);
+
     await _audioPlayer.play();
   }
 
@@ -174,9 +218,16 @@ class QuranAudioService {
     final url = "${reciter.serverUrl}/$fileName";
 
     if (await File(localPath).exists()) {
-      return AudioSource.file(localPath);
+      return AudioSource.file(
+        localPath,
+        tag: MediaItem(
+          id: '${surah.number}',
+          album: surah.translation,
+          title: 'Surah ${surah.nameEnglish}',
+          artist: reciter.name,
+        ),
+      );
     } else {
-      _startBackgroundDownload(url, localPath);
       return AudioSource.uri(
         Uri.parse(url),
         tag: MediaItem(
@@ -241,7 +292,6 @@ class QuranAudioService {
   Future<void> reset() async {
     await _audioPlayer.seek(Duration.zero, index: 0);
     await _audioPlayer.stop();
-    await _audioPlayer.setAudioSources([]); // Clears the list
     _hasLoadedSurah = false;
   }
 
