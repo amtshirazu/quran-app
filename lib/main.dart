@@ -8,20 +8,17 @@ import 'features/quran/data/repository/quran_repository.dart';
 
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
-
   await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.example.quran_app',
-    androidNotificationChannelName: 'Audio playback',
+    androidNotificationChannelId: 'com.example.quran_app.channel.audio',
+    androidNotificationChannelName: 'Quran Audio',
     androidNotificationOngoing: true,
   );
 
   runApp(
-      ProviderScope(
-          child: QuranApp(),
-      ),
+    const ProviderScope(
+      child: QuranApp(),
+    ),
   );
 }
-

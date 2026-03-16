@@ -212,6 +212,10 @@ class QuranAudioService {
     required Surah surah,
     required List<Surah> allSurahs,
   }) async {
+
+    final session = await AudioSession.instance;
+    await session.setActive(true);
+
     await _ayahPlayer.stop();
     await _audioPlayer.pause();
     final directory = await getApplicationDocumentsDirectory();
@@ -340,6 +344,8 @@ class QuranAudioService {
   Future<void> configureAudioSession() async {
     final session = await AudioSession.instance;
 
-    await session.configure(const AudioSessionConfiguration.speech());
+    await session.configure(
+      const AudioSessionConfiguration.music(),
+    );
   }
 }
