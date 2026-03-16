@@ -69,11 +69,14 @@ class AyahHeaderSection extends ConsumerWidget {
 
 
               final surah = surahs?[selectedSurah!.number - 1];
-              if (!audio.hasLoadedSurah && reciter != null && surah != null) {
+              if (!audio.hasLoadedSurah
+                  && reciter != null &&
+                  surah != null &&
+                  surahs != null ) {
                 await audio.playSurah(
-                  reciterFolder: reciter.audioFolder,
-                  surah: surah.number,
-                  totalAyahs: surah.totalAyahs,
+                  reciter: reciter,
+                  surah: surah,
+                  allSurahs: surahs,
                 );
               } else {
                 await audio.play();

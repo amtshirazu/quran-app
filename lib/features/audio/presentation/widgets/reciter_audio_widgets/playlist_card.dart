@@ -42,9 +42,9 @@ class PlaylistCard extends ConsumerWidget {
 
               try {
                 await audioProvider.playSurah(
-                  reciterFolder: reciter.audioFolder,
-                  surah: surah.number,
-                  totalAyahs: surah.totalAyahs,
+                  reciter: reciter,
+                  surah: surah,
+                  allSurahs: surahs,
                 );
               } catch (e) {
                 debugPrint("Audio error: $e");

@@ -1,31 +1,29 @@
 import 'dart:io';
-
+import 'package:audio_service/audio_service.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
-
+import 'package:audio_session/audio_session.dart';
 import '../../../quran/domain/models/surah.dart';
 import '../../../quran/presentation/state/quran_providers.dart';
+import '../../domain/models/Reciters.dart';
 import 'audio_providers.dart';
 
-class AudioService {
+class QuranAudioService {
+
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final Set<String> _downloadingTasks = {};
 
-  bool _hasBasmallah = false;
+  Future<void> init(WidgetRef ref) async {
 
-  void init(WidgetRef ref) {
+    await configureAudioSession();
+
     _audioPlayer.currentIndexStream.listen((index) {
       if (index == null) return;
       final current = ref.read(currentPlayingAyahProvider);
       int ayahNumber = index + 1;
-
-      if (_hasBasmallah) {
-        ayahNumber = index;
-        if (ayahNumber == 0) return;
-      }
 
       if (current != null) {
         ref.read(currentPlayingAyahProvider.notifier).state = AyahIdentifier(
@@ -52,16 +50,16 @@ class AudioService {
 
             final nextSurah = surahs[nextIndex];
             await playSurah(
-              reciterFolder: currentReciter!.audioFolder,
-              surah: nextSurah.number,
-              totalAyahs: nextSurah.totalAyahs,
+              reciter: currentReciter!,
+              surah: nextSurah,
+              allSurahs: surahs,
             );
           } else if (repeatMode == RepeatStates.repeatOne) {
             final surah = surahs[currentIndex];
             await playSurah(
-              reciterFolder: currentReciter!.audioFolder,
-              surah: surah.number,
-              totalAyahs: surah.totalAyahs,
+              reciter: currentReciter!,
+              surah: surah,
+              allSurahs: surahs,
             );
           } else {
             await _audioPlayer.pause();
@@ -78,23 +76,7 @@ class AudioService {
 
   AudioPlayer get player => _audioPlayer;
 
-  Future<void> playVerse({
-    required String reciterFolder,
-    required int surah,
-    required int ayah,
-  }) async {
-    final url = buildUrl(
-      surah: surah,
-      ayah: ayah,
-      reciterFolder: reciterFolder,
-    );
-    await playUrl(url);
-  }
 
-  Future<void> playUrl(String url) async {
-    await _audioPlayer.setUrl(url);
-    await _audioPlayer.play();
-  }
 
   Future<void> play() async {
     await _audioPlayer.play();
@@ -113,108 +95,142 @@ class AudioService {
     _audioPlayer.dispose();
   }
 
-  String buildUrl({
+  Future<AudioSource> buildUrl({
     required int surah,
     required int ayah,
     required String reciterFolder,
-  }) {
+    required String dirPath,
+  }) async {
     final surahStr = surah.toString().padLeft(3, '0');
     final ayahStr = ayah.toString().padLeft(3, '0');
 
-    return "https://everyayah.com/data/$reciterFolder/$surahStr$ayahStr.mp3";
-  }
+    final url = "https://everyayah.com/data/$reciterFolder/$surahStr$ayahStr.mp3";
+    final fileName = "$ayahStr.mp3";
+    final localPath = "$dirPath/$reciterFolder/$fileName";
 
-  int? _currentActiveSurah;
-
-  Future<void> playSurah({
-    required String reciterFolder,
-    required int surah,
-    required int totalAyahs,
-  }) async {
-
-    _currentActiveSurah = surah;
-    await _audioPlayer.pause();
-    final directory = await getApplicationDocumentsDirectory();
-    final surahStr = surah.toString().padLeft(3, '0');
-
-    // Build only the first 2 Ayahs to start
-    List<AudioSource> initialSources = [];
-    for (int i = 1; i <= (totalAyahs < 2 ? totalAyahs : 2); i++) {
-      initialSources.add(await _buildSingleAudioSource(i, surahStr, reciterFolder, directory.path));
+    if (await File(localPath).exists()) {
+    return AudioSource.file(localPath);
+    } else {
+    _startBackgroundDownload(url, localPath);
+    return AudioSource.uri(
+      Uri.parse(url),
+    );
     }
 
-    await _audioPlayer.setAudioSources(
-      initialSources,
+  }
+
+  Future<void> playVerse({
+    required String reciterFolder,
+    required int surah,
+    required int ayah,
+  }) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final audioSource = await buildUrl(
+      surah: surah,
+      ayah: ayah,
+      reciterFolder: reciterFolder,
+      dirPath: directory.path,
+    );
+
+    await _audioPlayer.setAudioSource(
+      audioSource,
       initialIndex: 0,
       initialPosition: Duration.zero,
     );
 
-    _hasLoadedSurah = true;
     _audioPlayer.play();
+  }
 
-    // 3. Background: Load and APPEND the rest
-    _appendRemainingAyahs(
-      currentSessionSurah: surah,
-      startFrom: 3,
-      totalAyahs: totalAyahs,
-      surahStr: surahStr,
-      reciterFolder: reciterFolder,
-      directoryPath: directory.path,
+  Future<void> playSurah({
+    required Reciter reciter,
+    required Surah surah,
+    required List<Surah> allSurahs,
+  }) async {
+
+    await _audioPlayer.pause();
+    final directory = await getApplicationDocumentsDirectory();
+
+    List<AudioSource> sources = [];
+
+    for (var s in allSurahs) {
+      final source = await _buildSingleAudioSource(s, reciter, directory.path);
+      sources.add(source);
+    }
+
+    await _audioPlayer.setAudioSources(
+      sources,
+      initialIndex: surah.number - 1,
     );
+
+    _hasLoadedSurah = true;
+    await _audioPlayer.play();
   }
 
 // Helper to create a single source (Check Cache -> Fallback to URL)
-  Future<AudioSource> _buildSingleAudioSource(int i, String surahStr, String reciterFolder, String dirPath) async {
-    final fileName = "$surahStr${i.toString().padLeft(3, '0')}.mp3";
-    final localPath = "$dirPath/$reciterFolder/$fileName";
-    final url = "https://everyayah.com/data/$reciterFolder/$fileName";
+  Future<AudioSource> _buildSingleAudioSource(Surah surah, Reciter reciter, String dirPath) async {
+    final surahStr = surah.number.toString().padLeft(3, '0');
+    final fileName = "$surahStr.mp3";
+    final localPath = "$dirPath/${reciter.audioFolder}/$fileName";
+    final url = "${reciter.serverUrl}/$fileName";
 
     if (await File(localPath).exists()) {
       return AudioSource.file(localPath);
     } else {
       _startBackgroundDownload(url, localPath);
-      return AudioSource.uri(Uri.parse(url));
+      return AudioSource.uri(
+        Uri.parse(url),
+        tag: MediaItem(
+          id: '${surah.number}',
+          album: surah.translation,
+          title: 'Surah ${surah.nameEnglish}',
+          artist: reciter.name,
+        ),
+      );
     }
   }
 
-// Background Task: Appends the rest of the Surah while Ayah 1 is playing
-  Future<void> _appendRemainingAyahs({
-    required int currentSessionSurah,
-    required int startFrom,
-    required int totalAyahs,
-    required String surahStr,
-    required String reciterFolder,
-    required String directoryPath,
-  }) async {
-    for (int i = startFrom; i <= totalAyahs; i++) {
 
-      if (_currentActiveSurah != currentSessionSurah) {
-        debugPrint("Stopping old background loop for Surah $currentSessionSurah");
-        return; // Kill this loop immediately!
-      }
 
-      final source = await _buildSingleAudioSource(i, surahStr, reciterFolder, directoryPath);
-
-      await _audioPlayer.addAudioSource(source);
-    }
-  }
-
-  // Background downloading helper
   Future<void> _startBackgroundDownload(String url, String savePath) async {
+    // If this specific path is already being downloaded, exit immediately
+    if (_downloadingTasks.contains(savePath)) {
+      return;
+    }
+
     try {
       final file = File(savePath);
+
       if (await file.exists()) return;
 
+      _downloadingTasks.add(savePath);
+
       await file.parent.create(recursive: true);
-      final tempPath = "$savePath.temp"; // Temporary name
+      final tempPath = "$savePath.temp";
 
       final dio = Dio();
-      await dio.download(url, tempPath);
 
-      // Rename temp file to actual file name once finished
-      await File(tempPath).rename(savePath);
+      print("Download started: $url");
+
+      await dio.download(
+        url,
+        tempPath,
+        deleteOnError: true,
+      );
+
+      final tempFile = File(tempPath);
+      if (await tempFile.exists()) {
+        await tempFile.rename(savePath);
+        print("Download finished: $savePath");
+      }
+
     } catch (e) {
-      print("Caching failed for $url: $e");
+      print("Download failed: $e");
+      final tempFile = File("$savePath.temp");
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    } finally {
+      _downloadingTasks.remove(savePath);
     }
   }
 
@@ -223,7 +239,6 @@ class AudioService {
   }
 
   Future<void> reset() async {
-    _currentActiveSurah = null;
     await _audioPlayer.seek(Duration.zero, index: 0);
     await _audioPlayer.stop();
     await _audioPlayer.setAudioSources([]); // Clears the list
@@ -233,4 +248,13 @@ class AudioService {
   Future<void> setVolume(double volume) async {
     await _audioPlayer.setVolume(volume);
   }
+
+  Future<void> configureAudioSession() async {
+    final session =  await AudioSession.instance;
+
+    await session.configure(
+      const AudioSessionConfiguration.speech(),
+    );
+  }
+
 }

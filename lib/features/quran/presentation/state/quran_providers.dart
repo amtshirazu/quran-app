@@ -132,6 +132,7 @@ final defaultReciterProvider = Provider<Reciter?>((ref) =>
       style: "Hafs - Murattal",
       totalSurahs: 114,
       audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
+      serverUrl: "https://server11.mp3quran.net/shatri",
     ),
 );
 

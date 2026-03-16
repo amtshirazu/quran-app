@@ -12,6 +12,7 @@ class Reciter {
   final String style;
   final int totalSurahs;
   final String audioFolder;
+  final String serverUrl;
 
   Reciter({
     required this.id,
@@ -22,5 +23,7 @@ class Reciter {
     required this.style,
     required this.totalSurahs,
     required this.audioFolder,
+    required this.serverUrl,
   });
+
 }

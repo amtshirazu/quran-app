@@ -5,14 +5,15 @@ import '../domain/models/Reciters.dart';
 final reciters = [
 
   Reciter(
-    id: "abdul_basit_mujawwad",
-    name: "Abdul Basit Mujawwad",
-    arabicName: "عبد الباسط عبد الصمد",
+    id: "Abdurrahmaan_As-Sudais",
+    name: "Abdurrahmaan As-Sudais",
+    arabicName: "عبد الرحمن السديس",
     image: "lib/assets/reciters/1.jpg",
-    country: "Egypt",
+    country: "Saudi Arabia",
     style: "Hafs - Mujawwad",
     totalSurahs: 114,
-    audioFolder: "Abdul_Basit_Mujawwad_128kbps",
+    audioFolder: "Abdurrahmaan_As-Sudais_192kbps",
+    serverUrl: "https://server11.mp3quran.net/sds",
   ),
 
   Reciter(
@@ -24,6 +25,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Abdul_Basit_Murattal_192kbps",
+    serverUrl: "https://server7.mp3quran.net/basit",
   ),
 
   Reciter(
@@ -35,6 +37,7 @@ final reciters = [
     style: "Murattal",
     totalSurahs: 114,
     audioFolder: "Abdullah_Matroud_128kbps",
+    serverUrl: "https://server8.mp3quran.net/mtrod",
   ),
 
   Reciter(
@@ -46,6 +49,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Abdullah_Basfar_192kbps",
+    serverUrl: "https://server6.mp3quran.net/bsfr",
   ),
 
   Reciter(
@@ -57,17 +61,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
-  ),
-
-  Reciter(
-    id: "husary_muallim",
-    name: "Mahmoud Khalil Al-Husary",
-    arabicName: "محمود خليل الحصري",
-    image: "lib/assets/reciters/6.jpg",
-    country: "Egypt",
-    style: "Hafs - Muallim",
-    totalSurahs: 114,
-    audioFolder: "Husary_Muallim_128kbps",
+    serverUrl: "https://server11.mp3quran.net/shatri",
   ),
 
   Reciter(
@@ -79,6 +73,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Husary_128kbps",
+    serverUrl: "https://server13.mp3quran.net/husr",
   ),
 
   Reciter(
@@ -90,6 +85,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Alafasy_128kbps",
+    serverUrl: "https://server8.mp3quran.net/afs",
   ),
 
   Reciter(
@@ -101,6 +97,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Ali_Jaber_64kbps",
+    serverUrl: "https://server11.mp3quran.net/a_jbr",
   ),
 
   Reciter(
@@ -112,6 +109,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "MaherAlMuaiqly128kbps",
+    serverUrl: "https://server12.mp3quran.net/maher",
   ),
 
   Reciter(
@@ -123,6 +121,7 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Saood_ash-Shuraym_128kbps",
+    serverUrl: "https://server7.mp3quran.net/shur",
   ),
 
   Reciter(
@@ -134,28 +133,19 @@ final reciters = [
     style: "Hafs - Murattal",
     totalSurahs: 114,
     audioFolder: "Yasser_Ad-Dussary_128kbps",
+    serverUrl: "https://server11.mp3quran.net/yasser",
   ),
 
   Reciter(
-    id: "warsh_dosary",
-    name: "Ibrahim Al-Dosary",
-    arabicName: "إبراهيم الدوسري",
-    image: "lib/assets/reciters/13.jpg",
-    country: "Saudi Arabia",
+    id: "warsh_Omar_Al-Qazabri",
+    name: "Omar Al-Qazabri",
+    arabicName: "عمر القزابري",
+    image: "lib/assets/reciters/14.jpg",
+    country: "Morocco",
     style: "Warsh - Murattal",
     totalSurahs: 114,
     audioFolder: "warsh/warsh_ibrahim_aldosary_128kbps",
-  ),
-
-  Reciter(
-    id: "warsh_jazaery",
-    name: "Yassin Al-Jazaery",
-    arabicName: "ياسين الجزائري",
-    image: "lib/assets/reciters/14.jpg",
-    country: "Algeria",
-    style: "Warsh - Murattal",
-    totalSurahs: 114,
-    audioFolder: "warsh/warsh_yassin_al_jazaery_64kbps",
+    serverUrl: "https://server9.mp3quran.net/omar_warsh",
   ),
 
 ];

@@ -24,7 +24,7 @@ class SurahVersesBadge extends StatelessWidget {
     return Container(
       height: 40,
       width: 100,
-      padding: EdgeInsets.all(AppSpacing.smallest),
+      padding: EdgeInsets.all(AppSpacing.size8),
       decoration: BoxDecoration(
         color: AppColors.gray400.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),

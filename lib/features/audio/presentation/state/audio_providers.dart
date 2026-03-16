@@ -13,8 +13,8 @@ import 'audio_service.dart';
 
 
 final audioServiceProvider =
-Provider<AudioService>((ref) {
-  final service = AudioService();
+Provider<QuranAudioService >((ref) {
+  final service = QuranAudioService ();
 
   ref.onDispose(() {
     service.dispose();
