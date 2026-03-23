@@ -143,19 +143,21 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {
-                        final repeatNotifier = ref.read(
-                          repeatModeProvider.notifier,
-                        );
+                      onPressed: () async {
+                      final repeatNotifier = ref.read(repeatModeProvider.notifier);
+                      final audio = ref.read(audioServiceProvider);
 
-                        final newMode = switch (repeatNotifier.state) {
-                          RepeatStates.off => RepeatStates.repeatAll,
-                          RepeatStates.repeatAll => RepeatStates.repeatOne,
-                          RepeatStates.repeatOne => RepeatStates.off,
-                        };
+                      final newMode = switch (repeatNotifier.state) {
+                        RepeatStates.off => RepeatStates.repeatAll,
+                        RepeatStates.repeatAll => RepeatStates.repeatOne,
+                        RepeatStates.repeatOne => RepeatStates.off,
+                      };
 
-                        repeatNotifier.state = newMode;
-                      },
+                      repeatNotifier.state = newMode;
+
+
+                      await audio.updateRepeatMode(newMode);
+                    },
                       icon: Icon(
                         switch (ref.watch(repeatModeProvider)) {
                           RepeatStates.off => LucideIcons.repeat,

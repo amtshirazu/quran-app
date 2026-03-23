@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 
@@ -10,10 +11,10 @@ class NextPrayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(AppSpacing.size12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.size16),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,11 +38,15 @@ class NextPrayerCard extends StatelessWidget {
                   Text("Next Prayer",
                       style: TextStyle(
                           color: AppColors.emerald100,
-                          fontSize: 12)),
+                          fontSize: AppSpacing.size12)
+                  ),
                   Text("Dhuhr",
                       style: TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w600)),
+                          fontWeight: FontWeight.w600,
+                        fontSize: AppSpacing.size14,
+                      )
+                  ),
                 ],
               ),
             ],
@@ -52,12 +57,15 @@ class NextPrayerCard extends StatelessWidget {
               Text("12:30 PM",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold)),
+                      fontSize: AppSpacing.size18,
+                      fontWeight: FontWeight.bold)
+              ),
               Text("in 2h 15m",
                   style: TextStyle(
                       color: AppColors.emerald100,
-                      fontSize: 12)),
+                      fontSize: AppSpacing.size12,
+                  )
+              ),
             ],
           )
         ],

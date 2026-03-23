@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/single_paged_render.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../../../core/constants/app_colors.dart';
@@ -80,30 +81,31 @@ class _QuranPagedReaderScreenState
             return Column(
               children: [
                 Expanded(
-                  child: QuranPage(
-                    svgAsset:
-                        "lib/assets/quran/hafs/${pageNumber.toString().padLeft(3, '0')}.svg",
-                    ayahs: ayahs,
-                    onTapAyah: (ayah) {
-                      ref
-                          .read(currentPlayingAyahProvider.notifier)
-                          .state = AyahIdentifier(
-                        surah: ayah.surah,
-                        ayah: ayah.ayah,
-                        page: ayah.page,
-                      );
-                    },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                    child: QuranPage(
+                      svgAsset:
+                          "lib/assets/quran/hafs/${pageNumber.toString().padLeft(3, '0')}.svg",
+                      ayahs: ayahs,
+                      onTapAyah: (ayah) {
+                        ref
+                            .read(currentPlayingAyahProvider.notifier)
+                            .state = AyahIdentifier(
+                          surah: ayah.surah,
+                          ayah: ayah.ayah,
+                          page: ayah.page,
+                        );
+                      },
+                    ),
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical: 8),
-                  child: Row(
+                Row(
                     children: [
                       Expanded(
                         child: Divider(
                           color: AppColors.gray400,
-                          thickness: 2,
+                          thickness: 1,
                         ),
                       ),
 
@@ -112,7 +114,7 @@ class _QuranPagedReaderScreenState
                         child: Text(
                           ayahs.first.page.toString(),
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: AppSpacing.size10,
                             color: AppColors.gray600,
                           ),
                         ),
@@ -121,12 +123,11 @@ class _QuranPagedReaderScreenState
                       Expanded(
                         child: Divider(
                           color: AppColors.gray400,
-                          thickness: 2,
+                          thickness: 1,
                         ),
                       )
                     ],
                   ),
-                ),
               ]
             );
           },

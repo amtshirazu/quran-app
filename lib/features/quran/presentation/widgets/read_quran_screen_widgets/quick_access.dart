@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/surah_of_the_day.dart';
 import '../../../../../core/constants/app_colors.dart';
@@ -45,7 +46,7 @@ class QuickAccess extends ConsumerWidget {
     final surahForToday = surahOftheDay ?? defaultSurahOfTheDay;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.size16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,6 +54,7 @@ class QuickAccess extends ConsumerWidget {
             "Quick Access",
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.gray700,
+              fontSize: AppSpacing.size16,
             ),
           ),
           const SizedBox(height: 8),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 
-import '../../../../../../core/constants/app_spacing.dart';
+import '../../../../../core/constants/app_spacing.dart';
 
 
 
@@ -21,12 +21,12 @@ class ModeSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 225,
+      width: 205,
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(AppSpacing.size8),
         decoration: BoxDecoration(
           color: AppColors.gray700,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppSpacing.size30),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -55,6 +55,7 @@ class ModeSwitcher extends StatelessWidget {
             style: TextStyle(
               color: mode == newMode ? Colors.white : AppColors.gray300,
               fontWeight: FontWeight.w600,
+              fontSize: AppSpacing.size12,
             ),
           ),
         ),

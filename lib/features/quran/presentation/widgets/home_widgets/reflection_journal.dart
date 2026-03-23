@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 
@@ -13,12 +14,12 @@ class ReflectionJournalCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(left: 15, right: 15, bottom: 50 , top: 15),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.size16),
       ),
       clipBehavior: Clip.antiAlias,
       elevation: 6,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.size20),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
@@ -44,7 +45,7 @@ class ReflectionJournalCard extends StatelessWidget {
                   child: const Icon(
                     LucideIcons.notebook,
                     color: Colors.white,
-                    size: 20,
+                    size: 22,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -56,7 +57,7 @@ class ReflectionJournalCard extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: AppSpacing.size16,
                       ),
                     ),
                     SizedBox(height: 2),
@@ -64,7 +65,7 @@ class ReflectionJournalCard extends StatelessWidget {
                       "3 reflections this week",
                       style: TextStyle(
                         color: Colors.white70,
-                        fontSize: 12,
+                        fontSize: AppSpacing.size12,
                       ),
                     ),
                   ],
@@ -82,12 +83,12 @@ class ReflectionJournalCard extends StatelessWidget {
                 padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppSpacing.size12),
                 ),
               ),
               child: const Text(
                 "View All",
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: AppSpacing.size14),
               ),
             ),
           ],

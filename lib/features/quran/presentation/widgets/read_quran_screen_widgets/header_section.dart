@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -20,7 +21,7 @@ class ReadHeaderSection extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 50, 24, 20),
+      padding: const EdgeInsets.fromLTRB(16, 60, 16, 20),
       decoration: const BoxDecoration(
         color: AppColors.emerald600,
       ),
@@ -38,7 +39,7 @@ class ReadHeaderSection extends ConsumerWidget {
                 icon: Icon(
                   LucideIcons.arrowLeft,
                   color: Colors.white,
-                  size: 32,
+                  size: 24,
                 ),
               ),
               SizedBox(width: 16,),
@@ -47,13 +48,16 @@ class ReadHeaderSection extends ConsumerWidget {
                 children: [
                   Text(
                     "Read Quran",
-                    style: textTheme.titleLarge,
+                    style: textTheme.titleLarge?.copyWith(
+                      fontSize: AppSpacing.size20,
+                    ),
                   ),
 
                   Text(
                     "114 Surahs",
                     style: textTheme.titleMedium?.copyWith(
                       color: AppColors.gray400,
+                      fontSize: AppSpacing.size14,
                     ),
                   ),
                 ],
@@ -64,7 +68,7 @@ class ReadHeaderSection extends ConsumerWidget {
           SizedBox(height: 20,),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: SearchField(),
           ),
        ]

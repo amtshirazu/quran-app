@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../domain/models/surah.dart';
 import '../../state/quran_providers.dart';
@@ -42,17 +43,17 @@ class QuickAccessCard extends ConsumerWidget {
         color: Colors.white,
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.size16),
         ),
         clipBehavior: Clip.antiAlias,
 
         child: Padding(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.all(AppSpacing.size12),
           child: Row(
               children: [
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: bgColor,
                     shape: BoxShape.circle,
@@ -60,11 +61,11 @@ class QuickAccessCard extends ConsumerWidget {
                   child: Icon(
                     icon,
                     color: fgColor,
-                    size: 24,
+                    size: 20,
                   ),
                 ),
 
-                SizedBox(width: 6),
+                SizedBox(width: 8),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,6 +75,7 @@ class QuickAccessCard extends ConsumerWidget {
                       label,
                       style: textTheme.bodyMedium?.copyWith(
                         color: AppColors.gray500,
+                        fontSize: AppSpacing.size13,
                       ),
                     ),
                     SizedBox(height: 4),
@@ -81,7 +83,7 @@ class QuickAccessCard extends ConsumerWidget {
                       sublabel,
                       style: textTheme.bodyMedium?.copyWith(
                         color: AppColors.gray900,
-                        fontSize: 12,
+                        fontSize: AppSpacing.size11,
                       ),
                     ),
                   ],

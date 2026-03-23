@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/state/daily_verse_provider.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import '../../state/quran_providers.dart';
 
 
@@ -45,32 +46,43 @@ class DailyVerseCard extends ConsumerWidget {
                     const Icon(
                       LucideIcons.heart,
                       color: Colors.white,
-                      size: 24,
+                      size: 22,
                     ),
                     const SizedBox(width: 10),
                     Text(
                       "Verse of the Day",
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      style: textTheme.headlineLarge?.copyWith(
+                        color: Colors.white,
+                        fontSize: AppSpacing.size18,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Text(
                   ayahWithTranslation.ayah.text,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 22, color: Colors.white),
+                  style: const TextStyle(
+                      fontSize: AppSpacing.size18,
+                      color: Colors.white
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   ayahWithTranslation.translation.text,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.emerald50),
+                  style: const TextStyle(
+                      fontSize: AppSpacing.size14,
+                      color: AppColors.emerald50
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "Surah (${ayahWithTranslation.ayah.surahNumber} : ${ayahWithTranslation.ayah.ayahNumber})",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.emerald50),
+                  style: const TextStyle(fontSize: AppSpacing.size14,
+                      color: AppColors.emerald50,
+                  ),
                 ),
               ],
             ),

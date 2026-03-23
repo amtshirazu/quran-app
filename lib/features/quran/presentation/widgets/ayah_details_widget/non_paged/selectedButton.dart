@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/constants/app_spacing.dart';
 
 
 class SelectedButton extends StatefulWidget {
@@ -38,26 +39,28 @@ class _SelectedButtonState extends State<SelectedButton> {
           });
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
             color: isTapped ? AppColors.gray200 : Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.size12),
             border: Border.all(
               color: AppColors.gray200,
               width: 2,
             ),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
-                size: 24,
+                size: 18,
                 color: AppColors.gray900,
               ),
               SizedBox(width: 8),
               Text(text,
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.gray900,
+                  fontSize:  AppSpacing.size11,
                 ),
                 textAlign: TextAlign.center,
               ),

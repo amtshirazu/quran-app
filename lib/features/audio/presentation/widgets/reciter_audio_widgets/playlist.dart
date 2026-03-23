@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/playlist_card.dart';
+import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/playlist_cards.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../quran/presentation/state/quran_providers.dart';
 import '../../state/audio_providers.dart';

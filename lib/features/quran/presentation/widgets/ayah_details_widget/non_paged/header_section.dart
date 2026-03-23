@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
 import '../../../state/quran_providers.dart';
 
@@ -29,7 +30,11 @@ class AyahHeaderSection extends ConsumerWidget {
               audio.reset();
               context.go("/surahs");
             },
-            icon: Icon(LucideIcons.arrowLeft, color: Colors.white, size: 32),
+            icon: Icon(
+                LucideIcons.arrowLeft,
+                color: Colors.white,
+                size: 24,
+            ),
           ),
           SizedBox(width: 16),
 
@@ -38,13 +43,16 @@ class AyahHeaderSection extends ConsumerWidget {
             children: [
               Text(
                 surahMetadata?.nameEnglish ?? "",
-                style: textTheme.titleLarge,
+                style: textTheme.titleLarge?.copyWith(
+                  fontSize: AppSpacing.size18,
+                ),
               ),
 
               Text(
                 surahMetadata?.translation ?? "",
                 style: textTheme.titleMedium?.copyWith(
                   color: AppColors.gray400,
+                  fontSize: AppSpacing.size14,
                 ),
               ),
             ],
@@ -85,7 +93,7 @@ class AyahHeaderSection extends ConsumerWidget {
             icon: Icon(
                 playerState?.playing == true ? LucideIcons.pause : LucideIcons.play,
                 color: AppColors.gray200,
-                size: 24
+                size: 22,
             ),
           ),
         ],

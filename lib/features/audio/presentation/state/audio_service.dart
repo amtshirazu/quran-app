@@ -15,12 +15,18 @@ class QuranAudioService {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _ayahPlayer = AudioPlayer();
 
+  int? _prevAyahIndex;
+  int? _prevSurahIndex;
+
   final Set<String> _downloadingTasks = {};
 
   Future<void> init(WidgetRef ref) async {
     await configureAudioSession();
 
-    _audioPlayer.currentIndexStream.listen((index) {
+
+
+
+    _ayahPlayer.currentIndexStream.listen((index) async {
       if (index == null) return;
       final current = ref.read(currentPlayingAyahProvider);
       int ayahNumber = index + 1;
@@ -34,40 +40,56 @@ class QuranAudioService {
       }
     });
 
-    _audioPlayer.processingStateStream.listen((state) async {
-      if (state == ProcessingState.completed) {
-        final repeatMode = ref.read(repeatModeProvider);
-        final currentReciter = ref.read(selectedReciterProvider);
-        final currentIndex = ref.read(selectedSurahIndexProvider)!;
-        final surahsAsync = ref.read(surahListProvider);
 
-        if (surahsAsync is AsyncData<List<Surah>>) {
-          final surahs = surahsAsync.value;
+    _audioPlayer.currentIndexStream.listen((index) async {
 
-          if (repeatMode == RepeatStates.repeatAll) {
-            final nextIndex = (currentIndex + 1) % surahs.length;
-            ref.read(selectedSurahIndexProvider.notifier).state = nextIndex;
+      if (index == null) return;
 
-            final nextSurah = surahs[nextIndex];
-            await playSurah(
-              reciter: currentReciter!,
-              surah: nextSurah,
-              allSurahs: surahs,
-            );
-          } else if (repeatMode == RepeatStates.repeatOne) {
-            final surah = surahs[currentIndex];
-            await playSurah(
-              reciter: currentReciter!,
-              surah: surah,
-              allSurahs: surahs,
-            );
-          } else {
-            await _audioPlayer.pause();
-            await _audioPlayer.seek(Duration.zero, index: 0);
-          }
+      _prevSurahIndex = index;
+
+      final surahsAsync = ref.read(surahListProvider);
+      if (surahsAsync is AsyncData<List<Surah>>) {
+        final surahs = surahsAsync.value;
+        if (index >= 0 && index < surahs.length) {
+          ref.read(selectedSurahIndexProvider.notifier).state = index;
         }
       }
     });
+
+
+    _ayahPlayer.positionStream.listen((position) async {
+      final repeatMode = ref.read(repeatModeProvider);
+      final duration = _ayahPlayer.duration;
+
+      if ((repeatMode == RepeatStates.off ||
+          repeatMode == RepeatStates.repeatOne
+          || repeatMode == RepeatStates.repeatAll
+      )  && duration != null) {
+        final finishLine = duration - const Duration(milliseconds: 200);
+
+        if (position >= finishLine) {
+          await _ayahPlayer.pause();
+
+          await _ayahPlayer.seek(Duration.zero);
+        }
+      }
+    });
+
+    _audioPlayer.positionStream.listen((position) async {
+      final repeatMode = ref.read(repeatModeProvider);
+      final duration = _audioPlayer.duration;
+
+      if (repeatMode == RepeatStates.off && duration != null) {
+        final finishLine = duration - const Duration(milliseconds: 200);
+
+        if (position >= finishLine) {
+          await _audioPlayer.pause();
+
+          await _audioPlayer.seek(Duration.zero);
+        }
+      }
+    });
+
 
     _audioPlayer.sequenceStateStream.listen((sequenceState) {
       final currentIndex = sequenceState.currentIndex ?? 0;
@@ -87,6 +109,20 @@ class QuranAudioService {
   bool get hasLoadedSurah => _hasLoadedSurah;
 
   AudioPlayer get player => _audioPlayer;
+
+
+  Future<void> updateRepeatMode(RepeatStates mode) async {
+
+    final loopMode = switch (mode) {
+      RepeatStates.repeatAll => LoopMode.all,
+      RepeatStates.repeatOne => LoopMode.one,
+      RepeatStates.off => LoopMode.off,
+    };
+
+    await _audioPlayer.setLoopMode(loopMode);
+    await _ayahPlayer.setLoopMode(loopMode);
+  }
+
 
   Future<void> play() async {
     await _audioPlayer.play();
@@ -158,39 +194,6 @@ class QuranAudioService {
 
     List<AudioSource> playlistAyahs = [];
 
-    /*final currentAyah = ayah;
-
-    if (currentAyah > 1) {
-      final prevAyah = ayah - 1;
-      playlistAyahs.add(await buildUrl(
-        surah: surah,
-        ayah: prevAyah,
-        reciter: reciter,
-        dirPath: directory.path,
-       ),
-      );
-    }
-
-    playlistAyahs.add(
-       await buildUrl(
-          surah: surah,
-          ayah: ayah,
-          reciter: reciter,
-          dirPath: directory.path,
-       ),
-    );
-
-    if (currentAyah < surah.totalAyahs) {
-      final nextAyah = ayah + 1;
-      playlistAyahs.add(await buildUrl(
-        surah: surah,
-        ayah: nextAyah,
-        reciter: reciter,
-        dirPath: directory.path,
-      ),
-      );
-    }*/
-
     for (int ayahNum = 1; ayahNum <= surah.totalAyahs; ayahNum++) {
       playlistAyahs.add(
         await buildUrl(
@@ -202,8 +205,10 @@ class QuranAudioService {
       );
     }
 
-    await _ayahPlayer.setAudioSources(playlistAyahs, initialIndex: ayah - 1);
-    _ayahPlayer.setLoopMode(LoopMode.off);
+    await _ayahPlayer.setAudioSources(
+        playlistAyahs,
+        initialIndex: ayah - 1,
+    );
     await _ayahPlayer.play();
   }
 
@@ -217,23 +222,9 @@ class QuranAudioService {
     await session.setActive(true);
 
     await _ayahPlayer.stop();
-    await _audioPlayer.pause();
+    await _audioPlayer.stop();
     final directory = await getApplicationDocumentsDirectory();
     final playlistSurahs = allSurahs;
-
-    /*final currentIndex = surah.number - 1;
-
-    List<Surah> playlistSurahs = [];
-
-    if (currentIndex > 0) {
-      playlistSurahs.add(allSurahs[currentIndex - 1]);
-    }
-
-    playlistSurahs.add(allSurahs[currentIndex]);
-
-    if (currentIndex < allSurahs.length - 1) {
-      playlistSurahs.add(allSurahs[currentIndex + 1]);
-    }*/
 
     List<AudioSource> sources = [];
 
@@ -256,6 +247,10 @@ class QuranAudioService {
 
     _startBackgroundDownload(url, localPath);
 
+    final startIndex = playlistSurahs.indexWhere((s) => s.number == surah.number);
+    _prevSurahIndex = startIndex;
+
+    await _audioPlayer.setAudioSources(sources, initialIndex: startIndex);
     await _audioPlayer.play();
   }
 

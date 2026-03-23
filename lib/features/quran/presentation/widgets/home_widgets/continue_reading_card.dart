@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 
 
 
@@ -27,7 +29,7 @@ class ContinueReadingCard extends StatelessWidget {
                 Icon(
                   LucideIcons.bookOpen,
                   color: AppColors.emerald600,
-                  size: 24,
+                  size: 22,
                 ),
 
                 SizedBox(width: 10,),
@@ -36,6 +38,7 @@ class ContinueReadingCard extends StatelessWidget {
                   "Continue Reading",
                   style: textTheme.headlineLarge?.copyWith(
                     color: AppColors.gray900,
+                    fontSize: AppSpacing.size18,
                   ),
                 ),
 
@@ -44,7 +47,7 @@ class ContinueReadingCard extends StatelessWidget {
                 Icon(
                   LucideIcons.chevronRight,
                   color: AppColors.gray600,
-                  size: 24,
+                  size: 20,
                 )
               ],
             ),
@@ -53,7 +56,10 @@ class ContinueReadingCard extends StatelessWidget {
 
             Text(
               "Al-Baqarah • Verse 156",
-              style: TextStyle(color: AppColors.gray600),
+              style: TextStyle(
+                color: AppColors.gray600,
+                fontSize: AppSpacing.size14,
+              ),
             ),
 
             SizedBox(height: 12),
@@ -70,7 +76,10 @@ class ContinueReadingCard extends StatelessWidget {
 
             Text(
               "54% completed",
-              style: TextStyle(color: AppColors.gray600),
+              style: TextStyle(
+                  fontSize: AppSpacing.size14,
+                  color: AppColors.gray600,
+              ),
             ),
           ],
         ),

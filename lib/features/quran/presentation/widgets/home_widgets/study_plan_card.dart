@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 
 
 
@@ -16,11 +17,11 @@ class StudyPlanCard extends StatelessWidget {
       margin: const EdgeInsets.only(left: 15, right: 15),
       elevation: 6,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.size16),
       ),
       clipBehavior: Clip.antiAlias,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.size20),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -40,23 +41,25 @@ class StudyPlanCard extends StatelessWidget {
                 const Icon(
                   LucideIcons.calendar1,
                   color: Colors.white,
-                  size: 24,
+                  size: 22,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   "Your Study Plan",
-                  style: textTheme.headlineLarge,
+                  style: textTheme.headlineLarge?.copyWith(
+                    fontSize: AppSpacing.size18,
+                  ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             const Text(
               "Create a personalized plan for reading, understanding, or memorizing",
               style: TextStyle(
                 color: AppColors.blue100, // blue-50
-                fontSize: 15,
+                  fontSize: AppSpacing.size14,
               ),
             ),
 
@@ -70,7 +73,7 @@ class StudyPlanCard extends StatelessWidget {
                   backgroundColor: Colors.white,
                   foregroundColor: AppColors.blue600,
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -78,7 +81,12 @@ class StudyPlanCard extends StatelessWidget {
                 onPressed: () {
                   // navigate to study-plan
                 },
-                child: const Text("Create Plan"),
+                child: const Text(
+                  "Create Plan",
+                  style: TextStyle(
+                    fontSize: AppSpacing.size14,
+                  ),
+                ),
               ),
             ),
           ],

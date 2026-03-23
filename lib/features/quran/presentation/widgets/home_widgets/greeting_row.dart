@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
+
 
 
 class GreetingRow extends StatelessWidget {
@@ -12,35 +14,39 @@ class GreetingRow extends StatelessWidget {
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               "As-Salamu Alaykum",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: AppSpacing.size16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               "May peace be upon you",
               style: TextStyle(
                 color: AppColors.emerald100,
-                fontSize: 16,
+                fontSize: AppSpacing.size14,
               ),
             ),
           ],
         ),
 
         Container(
-          width: 48,
-          height: 48,
+          width: 65,
+          height: 65,
           decoration: const BoxDecoration(
             color: AppColors.emerald500,
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
-          child: const Text("👤", style: TextStyle(fontSize: 18)),
+          child: const Icon(
+            Icons.person,
+            color: Colors.white,
+            size: 40,
+          ),
         )
       ],
     );

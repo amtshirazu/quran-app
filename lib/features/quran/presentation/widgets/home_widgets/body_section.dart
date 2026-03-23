@@ -22,7 +22,6 @@ class BodySection extends StatelessWidget {
         DailyVerseCard(),
         LifeSituationCard(),
         StudyPlanCard(),
-        SizedBox(height: 1),
         QuickAccess(),
         ReflectionJournalCard(),
       ],

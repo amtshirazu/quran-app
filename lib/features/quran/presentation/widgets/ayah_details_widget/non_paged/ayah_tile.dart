@@ -5,6 +5,7 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
 
+import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
 import '../../../../domain/models/ayah.dart';
 import '../../../../domain/models/translation.dart';
@@ -43,8 +44,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
             Row(
               children: [
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.emerald600,
@@ -52,7 +53,9 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   child: Center(
                     child: Text(
                       "${widget.ayah.ayahNumber}",
-                      style: textTheme.titleLarge,
+                      style: textTheme.titleLarge?.copyWith(
+                        fontSize: AppSpacing.size12,
+                      ),
                     ),
                   ),
                 ),
@@ -67,6 +70,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         icon: Icon(
                           LucideIcons.bookmark,
                           color: AppColors.gray400,
+                          size: 18,
                         )
                     ),
                     IconButton(
@@ -74,6 +78,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         icon: Icon(
                           LucideIcons.share2,
                           color: AppColors.gray400,
+                          size: 18,
                         )
                     ),
                     IconButton(
@@ -91,6 +96,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         icon: Icon(
                           LucideIcons.volume2,
                           color: AppColors.gray400,
+                          size: 18,
                         )
                     ),
                   ],
@@ -107,6 +113,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                 style: textTheme.headlineLarge?.copyWith(
                   color: AppColors.gray900,
                   fontFamily: "Uthmanic",
+                  fontSize: AppSpacing.size18,
                 ),
                 textAlign: TextAlign.right,
                 softWrap: true,
@@ -121,6 +128,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                 widget.translation.text,
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.gray700,
+                  fontSize:  AppSpacing.size12,
                 ),
                 textAlign: TextAlign.left,
                 softWrap: true,

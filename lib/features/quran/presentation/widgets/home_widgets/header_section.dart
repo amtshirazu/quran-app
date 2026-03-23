@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/next_prayer_card.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import 'greeting_row.dart';
 
 
@@ -10,11 +11,11 @@ class HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
+      padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
       decoration: const BoxDecoration(
         color: AppColors.emerald600,
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(28),
+          bottom: Radius.circular(AppSpacing.size28),
         ),
       ),
       child: Column(

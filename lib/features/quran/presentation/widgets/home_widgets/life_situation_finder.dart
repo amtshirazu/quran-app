@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 
 
 
@@ -41,23 +42,25 @@ class LifeSituationCard extends StatelessWidget {
                 Icon(
                   LucideIcons.lightbulb,
                   color: Colors.white,
-                  size: 24,
+                  size: 22,
                 ),
                 SizedBox(width: 8),
                 Text(
                   "How are you feeling?",
-                  style: textTheme.headlineLarge,
+                  style: textTheme.headlineLarge?.copyWith(
+                    fontSize: AppSpacing.size18,
+                  ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             const Text(
               "Find verses that speak to your heart right now",
               style: TextStyle(
                 color: AppColors.emerald50,
-                fontSize: 15,
+                fontSize: AppSpacing.size14,
               ),
             ),
 
@@ -71,7 +74,7 @@ class LifeSituationCard extends StatelessWidget {
                   backgroundColor: Colors.white,
                   foregroundColor: AppColors.purple600,
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -79,7 +82,12 @@ class LifeSituationCard extends StatelessWidget {
                 onPressed: () {
                   // navigate to life-situation
                 },
-                child: const Text("Find Guidance"),
+                child: const Text(
+                  "Find Guidance",
+                  style: TextStyle(
+                    fontSize: AppSpacing.size14,
+                  ),
+                ),
               ),
             ),
           ],

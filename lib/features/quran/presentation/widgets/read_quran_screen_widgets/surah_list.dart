@@ -4,7 +4,7 @@ import 'package:quran_app/core/widgets/Loading.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/Surah_tile.dart';
 import '../../../../../core/constants/app_colors.dart';
-import '../ayah_details_widget/non_paged/mode_switcher.dart';
+import 'mode_switcher.dart';
 
 class SurahList extends ConsumerWidget {
   const SurahList({super.key});
@@ -55,10 +55,21 @@ class SurahList extends ConsumerWidget {
 
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: SurahTile(surah: filteredSurahs[index]),
-                );
+                return
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          SurahTile(surah: filteredSurahs[index]),
+                          if (index != filteredSurahs.length - 1)
+                            const Divider(
+                              height: 1,
+                              thickness: 2,
+                              color: AppColors.gray200,
+                            ),
+                        ],
+                      ),
+                    );
               }, childCount: filteredSurahs.length),
             ),
           ],

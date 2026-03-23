@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 
+import '../../../../../../core/constants/app_spacing.dart';
+
 
 class Basmallah extends StatelessWidget {
   const Basmallah({super.key});
@@ -20,7 +22,7 @@ class Basmallah extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(
               color: AppColors.gray900,
               fontFamily: "Uthmanic",
-              fontSize: 30,
+              fontSize: AppSpacing.size24,
             ),
           ),
           SizedBox(height: 12),
@@ -28,7 +30,7 @@ class Basmallah extends StatelessWidget {
             'In the name of Allah, the Most Gracious, the Most Merciful',
             style: textTheme.titleSmall?.copyWith(
               color: AppColors.gray600,
-              fontSize: 16,
+              fontSize: AppSpacing.size12,
             ),
             textAlign: TextAlign.center,
           ),

@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/quran_paged_reader_screen.dart';
 import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/constants/app_spacing.dart';
 import '../../../state/quran_providers.dart';
 
 
@@ -85,7 +86,7 @@ class SurahNavigationCard extends ConsumerWidget {
                                   const Icon(
                                     LucideIcons.arrowLeft,
                                     color: Colors.white,
-                                    size: 20,
+                                    size: 18,
                                   ),
                                   const SizedBox(width: 8,),
                                   Text(
@@ -93,6 +94,7 @@ class SurahNavigationCard extends ConsumerWidget {
                                     style: textTheme.bodyLarge?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
+                                      fontSize:  AppSpacing.size14,
                                     ),
                                   ),
 
@@ -102,6 +104,7 @@ class SurahNavigationCard extends ConsumerWidget {
                                 previousSurah!.nameEnglish,
                                 style: const TextStyle(
                                   color: Colors.white70,
+                                  fontSize: AppSpacing.size12,
                                 ),
                               ),
                             ],
@@ -132,13 +135,14 @@ class SurahNavigationCard extends ConsumerWidget {
                                     style: textTheme.bodyLarge?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
+                                      fontSize: AppSpacing.size14,
                                       ),
                                     ),
                                    const SizedBox(width: 8,),
                                     const Icon(
                                       LucideIcons.arrowRight,
                                       color: Colors.white,
-                                      size: 20,
+                                      size: 18,
                                     ),
                                  ],
                                ),
@@ -147,6 +151,7 @@ class SurahNavigationCard extends ConsumerWidget {
                                 nextSurah!.nameEnglish,
                                 style: const TextStyle(
                                   color: Colors.white70,
+                                  fontSize: AppSpacing.size12,
                                 ),
                               ),
                             ],

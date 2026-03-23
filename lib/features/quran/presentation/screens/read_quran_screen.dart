@@ -24,8 +24,7 @@ class _ReadQuranScreenState extends State<ReadQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
+      body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -50,7 +49,6 @@ class _ReadQuranScreenState extends State<ReadQuranScreen> {
             ],
           ),
         ),
-      ),
 
       bottomNavigationBar: BottomNavbar(
         currentIndex: selectedIndex,
