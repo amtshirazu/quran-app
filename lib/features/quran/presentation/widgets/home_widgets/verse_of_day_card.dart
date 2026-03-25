@@ -53,7 +53,7 @@ class DailyVerseCard extends ConsumerWidget {
                       "Verse of the Day",
                       style: textTheme.headlineLarge?.copyWith(
                         color: Colors.white,
-                        fontSize: AppSpacing.size18,
+                        fontSize: AppSpacing.size16,
                       ),
                     ),
                   ],
@@ -67,21 +67,22 @@ class DailyVerseCard extends ConsumerWidget {
                       color: Colors.white
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Text(
                   ayahWithTranslation.translation.text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: AppSpacing.size14,
+                      fontSize: AppSpacing.size12,
                       color: AppColors.emerald50
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Surah (${ayahWithTranslation.ayah.surahNumber} : ${ayahWithTranslation.ayah.ayahNumber})",
+                  "Surah ${ayahWithTranslation.surah?.nameEnglish} (${ayahWithTranslation.ayah.surahNumber} : ${ayahWithTranslation.ayah.ayahNumber})",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: AppSpacing.size14,
-                      color: AppColors.emerald50,
+                  style: const TextStyle(
+                    fontSize: AppSpacing.size14,
+                    color: AppColors.emerald50,
                   ),
                 ),
               ],

@@ -26,8 +26,7 @@ class RecitersSelectionPageState extends ConsumerState<RecitersSelectionPage> {
     final reciters = ref.watch(recitersListProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
+      body: Column(
           children: [
         
            QuranAudioHeader(
@@ -63,7 +62,6 @@ class RecitersSelectionPageState extends ConsumerState<RecitersSelectionPage> {
             ),
           ],
         ),
-      ),
 
       bottomNavigationBar: BottomNavbar(
         currentIndex: selectedIndex,

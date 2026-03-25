@@ -7,6 +7,7 @@ import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/player_card_buttons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import '../../../../quran/presentation/state/quran_providers.dart';
 
 class PlayerCard extends ConsumerStatefulWidget {
@@ -38,22 +39,21 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
     final audioPlayer = ref.watch(audioServiceProvider).player;
 
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 15),
+      margin: EdgeInsets.symmetric(horizontal: 15,),
       clipBehavior: Clip.antiAlias,
 
       child: Column(
         children: [
           Container(
-            height: 220,
+            height: 250,
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  AppColors.emerald200,
-                  AppColors.emerald300,
-                  AppColors.emerald200,
+                  AppColors.emerald500,
+                  AppColors.emerald600,
                 ],
               ),
             ),
@@ -65,7 +65,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   Text(
                     selectedAudioSurah!.nameEnglish,
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: AppSpacing.size24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -75,14 +75,25 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   Text(
                     selectedAudioSurah.nameArabic,
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(color: Colors.black, fontSize: 40),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: AppSpacing.size24,
+                    ),
                   ),
                   const SizedBox(height: 6),
-                  Chip(label: Text(selectedAudioSurah.translation)),
-                  const SizedBox(height: 6),
+                  Chip(label: Text(
+                    selectedAudioSurah.translation,
+                    style: TextStyle(
+                      fontSize: AppSpacing.size12,
+                    ),
+                  )),
+                  const SizedBox(height: 20),
                   Text(
                     "Surah ${selectedAudioSurah.number} • ${selectedAudioSurah.totalAyahs} Verses",
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(
+                        fontSize: AppSpacing.size13,
+                        color: AppColors.gray600,
+                    ),
                   ),
                 ],
               ),

@@ -1,19 +1,28 @@
 import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
 import '../../domain/models/ayah.dart';
+import '../../domain/models/surah.dart';
 import '../../domain/models/translation.dart';
 import '../state/quran_providers.dart';
+
 
 class DailyVerse {
   final Ayah ayah;
   final Translation translation;
+  final Surah? surah;
 
-  DailyVerse({required this.ayah, required this.translation});
+  DailyVerse({
+    required this.ayah,
+    required this.translation,
+    required this.surah
+  });
 }
 
 final dailyVerseWithTranslationProvider = FutureProvider<DailyVerse>((ref) async {
   final ayahRepo = ref.watch(ayahRepositoryProvider);
   final translationRepo = ref.watch(translationRepositoryProvider);
+  final surah = ref.watch(surahListProvider).value;
 
   final today = DateTime.now();
   final seed = today.year * 10000 + today.month * 100 + today.day;
@@ -41,5 +50,8 @@ final dailyVerseWithTranslationProvider = FutureProvider<DailyVerse>((ref) async
     ),
   );
 
-  return DailyVerse(ayah: ayah, translation: translation);
+  final currentSurah = surah?.firstWhere((s) => s.number == surahNumber);
+
+
+  return DailyVerse(ayah: ayah, translation: translation, surah: currentSurah);
 });

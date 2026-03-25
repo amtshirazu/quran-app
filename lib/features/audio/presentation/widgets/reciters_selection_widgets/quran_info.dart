@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 
@@ -23,10 +24,13 @@ class QuranAudioInfoCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:  [
-                  Icon(
-                    LucideIcons.bookOpen,
-                    color: AppColors.emerald600,
-                    size: 20,
+                  Container(
+                    margin: EdgeInsetsGeometry.only(top: 5),
+                    child: Icon(
+                      LucideIcons.bookOpen,
+                      color: AppColors.emerald600,
+                      size: 20,
+                    ),
                   ),
                 ]
               ),
@@ -41,7 +45,7 @@ class QuranAudioInfoCard extends StatelessWidget {
                       "About Quran Audio",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: AppSpacing.size14,
                         color: Colors.black,
                       ),
                     ),
@@ -49,9 +53,9 @@ class QuranAudioInfoCard extends StatelessWidget {
                     Text(
                       "Listen to the complete Quran recited by world-renowned reciters. "
                           "Each reciter brings their unique style and melodious voice to the sacred text. "
-                          "Audio files are streamed from Islamic Network's public API.",
+                          "Audio files are streamed from EveryAyah and mp3quran.net's public API.",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppSpacing.size12,
                         color: Colors.black54,
                       ),
                     ),

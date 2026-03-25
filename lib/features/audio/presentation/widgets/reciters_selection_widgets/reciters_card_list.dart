@@ -26,7 +26,7 @@ class RecitersCardList extends ConsumerWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 0.79,
+          childAspectRatio: 0.83,
         ),
       itemBuilder: (context, index) {
           final reciter = filteredReciters[index];

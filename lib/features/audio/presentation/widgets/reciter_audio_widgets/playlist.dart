@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/playlist_cards.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import '../../../../quran/presentation/state/quran_providers.dart';
 import '../../state/audio_providers.dart';
 
@@ -27,11 +28,12 @@ class Playlist extends ConsumerWidget {
           children: [
 
             Container(
-              padding: const EdgeInsets.all(25),
+              margin: const EdgeInsets.only(bottom: 0),
+              padding: const EdgeInsets.all(15),
               child: const Text(
                 "Playlist",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: AppSpacing.size16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),

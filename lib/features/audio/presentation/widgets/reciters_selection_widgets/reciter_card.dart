@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import '../../../domain/models/Reciters.dart';
 import '../../state/audio_providers.dart';
 
@@ -53,9 +54,9 @@ class ReciterCard extends StatelessWidget {
 
                 Positioned(
                   top: 12,
-                  right: 12,
+                  right: 4,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(16),
@@ -63,7 +64,7 @@ class ReciterCard extends StatelessWidget {
                     child: Text(
                       reciter.country,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: AppSpacing.size8,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
@@ -81,7 +82,7 @@ class ReciterCard extends StatelessWidget {
                       Text(
                         reciter.name,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppSpacing.size13,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -94,7 +95,7 @@ class ReciterCard extends StatelessWidget {
                         child: Text(
                           reciter.arabicName,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppSpacing.size12,
                             fontWeight: FontWeight.bold,
                             color: Colors.white70,
                           ),
@@ -121,18 +122,19 @@ class ReciterCard extends StatelessWidget {
                         Text(
                           reciter.style,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: AppSpacing.size11,
                             color: Colors.black,
                           ),
                         ),
 
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 5),
 
                         Text(
-                          "${reciter.totalSurahs} Surahs Available",
+                          "${reciter.totalSurahs} Surahs",
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.black,
+                            fontSize: AppSpacing.size11,
                           ),
                         ),
                       ],

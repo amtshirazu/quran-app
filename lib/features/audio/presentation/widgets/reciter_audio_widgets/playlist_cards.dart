@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../quran/domain/models/surah.dart';
@@ -86,6 +87,7 @@ class PlaylistCard extends ConsumerWidget {
                           ? Colors.white
                           : AppColors.gray900,
                       fontWeight: FontWeight.bold,
+                      fontSize: AppSpacing.size12,
                     ),
                   ),
                 ),
@@ -99,16 +101,16 @@ class PlaylistCard extends ConsumerWidget {
                       Text(
                         surah.nameEnglish,
                         style: const TextStyle(
-                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
+                          fontSize: AppSpacing.size14,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         "${surah.translation} • ${surah.totalAyahs} verses",
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: AppSpacing.size10,
                           color: AppColors.gray400,
                         ),
                       ),

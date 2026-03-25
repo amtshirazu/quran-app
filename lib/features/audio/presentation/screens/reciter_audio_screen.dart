@@ -18,8 +18,7 @@ class ReciterAudioScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: Scrollbar(
+      body: Scrollbar(
           thumbVisibility: true,
           child: CustomScrollView(
             slivers: [
@@ -44,7 +43,6 @@ class ReciterAudioScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

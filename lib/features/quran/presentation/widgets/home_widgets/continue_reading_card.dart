@@ -38,7 +38,7 @@ class ContinueReadingCard extends StatelessWidget {
                   "Continue Reading",
                   style: textTheme.headlineLarge?.copyWith(
                     color: AppColors.gray900,
-                    fontSize: AppSpacing.size18,
+                    fontSize: AppSpacing.size16,
                   ),
                 ),
 
@@ -58,7 +58,7 @@ class ContinueReadingCard extends StatelessWidget {
               "Al-Baqarah • Verse 156",
               style: TextStyle(
                 color: AppColors.gray600,
-                fontSize: AppSpacing.size14,
+                fontSize: AppSpacing.size12,
               ),
             ),
 
@@ -77,7 +77,7 @@ class ContinueReadingCard extends StatelessWidget {
             Text(
               "54% completed",
               style: TextStyle(
-                  fontSize: AppSpacing.size14,
+                  fontSize: AppSpacing.size12,
                   color: AppColors.gray600,
               ),
             ),

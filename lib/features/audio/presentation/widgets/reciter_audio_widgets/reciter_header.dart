@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 import '../../../domain/models/Reciters.dart';
 import '../../state/audio_providers.dart';
 
@@ -19,8 +20,8 @@ class ReciterHeader extends ConsumerWidget {
     if (selectedReciter == null) return const SizedBox.shrink();
 
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      height: 100,
+      color: AppColors.emerald500,
+      height: 160,
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
@@ -35,7 +36,10 @@ class ReciterHeader extends ConsumerWidget {
 
               context.pop();
             },
-            icon: const Icon(LucideIcons.arrowLeft),
+            icon: Icon(
+              LucideIcons.arrowLeft,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 8),
 
@@ -47,7 +51,7 @@ class ReciterHeader extends ConsumerWidget {
                 Text(
                   selectedReciter.name,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: AppSpacing.size18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -61,7 +65,7 @@ class ReciterHeader extends ConsumerWidget {
                     selectedReciter.arabicName,
                     textDirection: TextDirection.rtl,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: AppSpacing.size14,
                       color: AppColors.gray600,
                     ),
                   ),

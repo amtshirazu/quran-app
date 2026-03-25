@@ -48,7 +48,7 @@ class LifeSituationCard extends StatelessWidget {
                 Text(
                   "How are you feeling?",
                   style: textTheme.headlineLarge?.copyWith(
-                    fontSize: AppSpacing.size18,
+                    fontSize: AppSpacing.size16,
                   ),
                 ),
               ],
@@ -60,7 +60,7 @@ class LifeSituationCard extends StatelessWidget {
               "Find verses that speak to your heart right now",
               style: TextStyle(
                 color: AppColors.emerald50,
-                fontSize: AppSpacing.size14,
+                fontSize: AppSpacing.size12,
               ),
             ),
 
@@ -85,7 +85,7 @@ class LifeSituationCard extends StatelessWidget {
                 child: const Text(
                   "Find Guidance",
                   style: TextStyle(
-                    fontSize: AppSpacing.size14,
+                    fontSize: AppSpacing.size12,
                   ),
                 ),
               ),

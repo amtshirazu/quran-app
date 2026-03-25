@@ -47,7 +47,7 @@ class StudyPlanCard extends StatelessWidget {
                 Text(
                   "Your Study Plan",
                   style: textTheme.headlineLarge?.copyWith(
-                    fontSize: AppSpacing.size18,
+                    fontSize: AppSpacing.size16,
                   ),
                 ),
               ],
@@ -58,8 +58,8 @@ class StudyPlanCard extends StatelessWidget {
             const Text(
               "Create a personalized plan for reading, understanding, or memorizing",
               style: TextStyle(
-                color: AppColors.blue100, // blue-50
-                  fontSize: AppSpacing.size14,
+                color: AppColors.blue100,
+                  fontSize: AppSpacing.size12,
               ),
             ),
 
@@ -84,7 +84,7 @@ class StudyPlanCard extends StatelessWidget {
                 child: const Text(
                   "Create Plan",
                   style: TextStyle(
-                    fontSize: AppSpacing.size14,
+                    fontSize: AppSpacing.size12,
                   ),
                 ),
               ),
