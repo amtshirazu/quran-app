@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/playlist_cards.dart';
-import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_spacing.dart';
 import '../../../../quran/presentation/state/quran_providers.dart';
-import '../../state/audio_providers.dart';
 
 class Playlist extends ConsumerWidget {
   const Playlist({super.key, });
@@ -21,15 +19,14 @@ class Playlist extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         clipBehavior: Clip.antiAlias,
-        elevation: 3,
+        elevation: 1,
 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
             Container(
-              margin: const EdgeInsets.only(bottom: 0),
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.only(right: 20, left: 20,top: 15, bottom: 15),
               child: const Text(
                 "Playlist",
                 style: TextStyle(
@@ -62,7 +59,10 @@ class Playlist extends ConsumerWidget {
                   ),
                 ),
 
-                child: PlaylistCard(surahs: surahs)
+                child: SizedBox(
+                  height: 800, // match the Card maxHeight
+                  child: PlaylistCard(surahs: surahs),
+                ),
               ),
             ),
 

@@ -18,7 +18,7 @@ class RecitersCardList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     
     final filteredReciters = ref.watch(filteredRecitersProvider);
-
+    final audioPlayer = ref.read(audioServiceProvider);
 
     return SliverGrid.builder(
       itemCount: filteredReciters.length,
@@ -34,7 +34,9 @@ class RecitersCardList extends ConsumerWidget {
               reciter: filteredReciters[index],
               onTap: () {
                 ref.read(selectedReciterProvider.notifier).state = reciter;
-                context.push('/audioSong');
+                ref.read(selectedSurahIndexProvider.notifier).state = 0;
+                audioPlayer.player.seek(Duration.zero);
+                context.go('/audioSong');
               }
           );
         }

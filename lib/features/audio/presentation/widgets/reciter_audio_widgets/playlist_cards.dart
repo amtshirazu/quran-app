@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
-
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../quran/domain/models/surah.dart';
-import '../../../../quran/presentation/state/quran_providers.dart';
 import '../../state/audio_providers.dart';
 
 
@@ -24,8 +22,7 @@ class PlaylistCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final selectedIndex = ref.watch(selectedSurahIndexProvider);
-    final selectedReciter = ref.watch(selectedReciterProvider);
-    final audioProvider = ref.read(audioServiceProvider);
+    final audioPlayer = ref.read(audioServiceProvider);
 
     return  ListView.builder(
       shrinkWrap: true,
@@ -39,10 +36,12 @@ class PlaylistCard extends ConsumerWidget {
               final reciter = ref.read(selectedReciterProvider);
               if (reciter == null) return;
 
+              audioPlayer.setUserSelecting(true);
               ref.read(selectedSurahIndexProvider.notifier).state = index;
+              await audioPlayer.player.seek(Duration.zero);
 
               try {
-                await audioProvider.playSurah(
+                await audioPlayer.playSurah(
                   reciter: reciter,
                   surah: surah,
                   allSurahs: surahs,
@@ -50,6 +49,9 @@ class PlaylistCard extends ConsumerWidget {
               } catch (e) {
                 debugPrint("Audio error: $e");
               }
+
+              await Future.delayed(const Duration(milliseconds: 150));
+              audioPlayer.setUserSelecting(false);
             },
           child: Container(
             padding: const EdgeInsets.symmetric(

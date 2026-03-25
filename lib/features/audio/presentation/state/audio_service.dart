@@ -15,8 +15,12 @@ class QuranAudioService {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _ayahPlayer = AudioPlayer();
 
-  int? _prevAyahIndex;
-  int? _prevSurahIndex;
+  bool _isUserSelecting = false;
+
+
+  void setUserSelecting(bool value) {
+    _isUserSelecting = value;
+  }
 
   final Set<String> _downloadingTasks = {};
 
@@ -24,34 +28,49 @@ class QuranAudioService {
     await configureAudioSession();
 
 
+    _ayahPlayer.currentIndexStream.listen((index) {
 
-
-    _ayahPlayer.currentIndexStream.listen((index) async {
       if (index == null) return;
       final current = ref.read(currentPlayingAyahProvider);
-      int ayahNumber = index + 1;
 
-      if (current != null) {
+      final sequence = _ayahPlayer.sequence;
+      if (index >= sequence.length) return;
+
+      final source = sequence[index];
+      final mediaItem = source.tag as MediaItem?;
+
+      if (mediaItem != null) {
+        final parts = mediaItem.id.split(':');
+        int surahNum = int.parse(parts[0]);
+        int ayahNum = int.parse(parts[1]);
+
         ref.read(currentPlayingAyahProvider.notifier).state = AyahIdentifier(
-          surah: current.surah,
-          ayah: ayahNumber,
-          page: current.page,
+          surah: surahNum,
+          ayah: ayahNum,
+          page: current!.page,
         );
       }
     });
 
-
-    _audioPlayer.currentIndexStream.listen((index) async {
+    _audioPlayer.currentIndexStream.listen((index) {
+      if (_isUserSelecting) return;
 
       if (index == null) return;
 
-      _prevSurahIndex = index;
+      final sequence = _audioPlayer.sequence;
+      if (sequence == null || index >= sequence.length) return;
 
-      final surahsAsync = ref.read(surahListProvider);
-      if (surahsAsync is AsyncData<List<Surah>>) {
-        final surahs = surahsAsync.value;
-        if (index >= 0 && index < surahs.length) {
-          ref.read(selectedSurahIndexProvider.notifier).state = index;
+      final source = sequence[index];
+      final mediaItem = source.tag as MediaItem?;
+
+      if (mediaItem != null) {
+        int surahNumber = int.parse(mediaItem.id);
+        int actualListIndex = surahNumber - 1;
+
+        final currentSelected = ref.read(selectedSurahIndexProvider);
+
+        if (currentSelected != actualListIndex) {
+          ref.read(selectedSurahIndexProvider.notifier).state = actualListIndex;
         }
       }
     });
@@ -90,18 +109,6 @@ class QuranAudioService {
       }
     });
 
-
-    _audioPlayer.sequenceStateStream.listen((sequenceState) {
-      final currentIndex = sequenceState.currentIndex ?? 0;
-      final surahsAsync = ref.read(surahListProvider);
-
-      if (surahsAsync is AsyncData<List<Surah>>) {
-        final surahs = surahsAsync.value;
-        if (currentIndex >= 0 && currentIndex < surahs.length) {
-          ref.read(selectedSurahIndexProvider.notifier).state = currentIndex;
-        }
-      }
-    });
   }
 
   bool _hasLoadedSurah = false;
@@ -285,9 +292,6 @@ class QuranAudioService {
     _hasLoadedSurah = true;
     _audioPlayer.play();
 
-
-
-
     final surahStr = surah.number.toString().padLeft(3, '0');
     final fileName = "$surahStr.mp3";
     final localPath = "$directory.path/${reciter.audioFolder}/$fileName";
@@ -314,8 +318,6 @@ class QuranAudioService {
   }
 
 
-
-  // Helper to create a single source (Check Cache -> Fallback to URL)
   Future<AudioSource> _buildSingleAudioSource(
     Surah surah,
     Reciter reciter,
@@ -350,7 +352,6 @@ class QuranAudioService {
   }
 
   Future<void> _startBackgroundDownload(String url, String savePath) async {
-    // If this specific path is already being downloaded, exit immediately
     if (_downloadingTasks.contains(savePath)) {
       return;
     }
@@ -388,8 +389,8 @@ class QuranAudioService {
   }
 
   Future<void> reset() async {
-    await _audioPlayer.seek(Duration.zero, index: 0);
     await _audioPlayer.stop();
+    await _audioPlayer.clearAudioSources();
     _hasLoadedSurah = false;
   }
 

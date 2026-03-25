@@ -29,12 +29,13 @@ class ReciterHeader extends ConsumerWidget {
             onPressed: () async {
               final audioProvider = ref.read(audioServiceProvider);
 
+              audioProvider.setUserSelecting(true);
+
                await audioProvider.reset();
 
               ref.read(selectedReciterProvider.notifier).state = null;
-              ref.read(selectedSurahIndexProvider.notifier).state = 0;
 
-              context.pop();
+              context.go('/audioHome');
             },
             icon: Icon(
               LucideIcons.arrowLeft,
