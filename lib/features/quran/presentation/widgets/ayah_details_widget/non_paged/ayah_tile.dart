@@ -7,19 +7,12 @@ import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widge
 
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
+import '../../../../../progress/presentation/state/progress_provider.dart';
 import '../../../../domain/models/ayah.dart';
 import '../../../../domain/models/translation.dart';
 
-
-
-
-
 class AyahTile extends ConsumerStatefulWidget {
-  const AyahTile({
-    super.key,
-    required this.ayah,
-    required this.translation,
-  });
+  const AyahTile({super.key, required this.ayah, required this.translation});
 
   final Ayah ayah;
   final Translation translation;
@@ -29,7 +22,6 @@ class AyahTile extends ConsumerStatefulWidget {
 }
 
 class _AyahTileState extends ConsumerState<AyahTile> {
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -66,45 +58,51 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          LucideIcons.bookmark,
-                          color: AppColors.gray400,
-                          size: 18,
-                        )
+                      onPressed: () {},
+                      icon: Icon(
+                        LucideIcons.bookmark,
+                        color: AppColors.gray400,
+                        size: 18,
+                      ),
                     ),
                     IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          LucideIcons.share2,
-                          color: AppColors.gray400,
-                          size: 18,
-                        )
+                      onPressed: () {},
+                      icon: Icon(
+                        LucideIcons.share2,
+                        color: AppColors.gray400,
+                        size: 18,
+                      ),
                     ),
                     IconButton(
-                        onPressed: () async {
-                           final audio = ref.read(audioServiceProvider);
-                           final defaultReciter = ref.read(defaultReciterProvider);
-                           final selectedSurah = ref.read(selectedSurahProvider);
+                      onPressed: () async {
+                        final audio = ref.read(audioServiceProvider);
+                        final progress = ref.read(progressServiceProvider);
+                        final defaultReciter = ref.read(defaultReciterProvider);
+                        final selectedSurah = ref.read(selectedSurahProvider);
 
-                           await audio.playVerse(
-                             reciter: defaultReciter!,
-                             surah: selectedSurah!,
-                             ayah: widget.ayah.ayahNumber,
-                           );
-                        },
-                        icon: Icon(
-                          LucideIcons.volume2,
-                          color: AppColors.gray400,
-                          size: 18,
-                        )
+                        await audio.playVerse(
+                          reciter: defaultReciter!,
+                          surah: selectedSurah!,
+                          ayah: widget.ayah.ayahNumber,
+                        );
+
+                        await progress.trackAyah(
+                          selectedSurah.number,
+                          widget.ayah.ayahNumber,
+                        );
+                      },
+                      icon: Icon(
+                        LucideIcons.volume2,
+                        color: AppColors.gray400,
+                        size: 18,
+                      ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
 
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
 
             Align(
               alignment: Alignment.centerRight,
@@ -120,7 +118,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               ),
             ),
 
-            SizedBox(height: 8,),
+            SizedBox(height: 8),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -128,38 +126,39 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                 widget.translation.text,
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.gray700,
-                  fontSize:  AppSpacing.size12,
+                  fontSize: AppSpacing.size12,
                 ),
                 textAlign: TextAlign.left,
                 softWrap: true,
               ),
             ),
 
-            SizedBox(height: 8,),
+            SizedBox(height: 8),
 
-            Divider(
-              color: AppColors.gray200,
-              thickness: 1,
-            ),
+            Divider(color: AppColors.gray200, thickness: 1),
 
-            SizedBox(height: 8,),
+            SizedBox(height: 8),
 
             Row(
               children: [
-                Expanded(child: SelectedButton(
+                Expanded(
+                  child: SelectedButton(
                     icon: LucideIcons.bookmarkCheck,
-                    text: "Tafseer")
+                    text: "Tafseer",
+                  ),
                 ),
-                SizedBox(width: 8,),
-                Expanded(child: SelectedButton(
+                SizedBox(width: 8),
+                Expanded(
+                  child: SelectedButton(
                     icon: LucideIcons.messageSquare,
-                    text: "Reflection")
+                    text: "Reflection",
+                  ),
                 ),
               ],
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }

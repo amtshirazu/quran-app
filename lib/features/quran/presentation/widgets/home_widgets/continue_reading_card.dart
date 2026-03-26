@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 
 import '../../../../../core/constants/app_spacing.dart';
+import '../../../../progress/presentation/state/progress_provider.dart';
 
 
 
 
-class ContinueReadingCard extends StatelessWidget {
+class ContinueReadingCard extends ConsumerWidget {
   const ContinueReadingCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final textTheme = Theme.of(context).textTheme;
+    final progressService = ref.watch(progressServiceProvider);
 
     return Card(
       margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),

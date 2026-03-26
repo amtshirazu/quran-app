@@ -5,12 +5,16 @@ import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widge
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
+import '../../../../../progress/presentation/state/progress_provider.dart';
 import '../../../state/quran_providers.dart';
 
 class QuranPagedReaderScreen extends ConsumerStatefulWidget {
   final int initialPage;
 
-  const QuranPagedReaderScreen({super.key, required this.initialPage});
+  const QuranPagedReaderScreen({
+    super.key,
+    required this.initialPage,
+  });
 
   @override
   ConsumerState<QuranPagedReaderScreen> createState() =>
@@ -24,7 +28,6 @@ class _QuranPagedReaderScreenState
   @override
   void initState() {
     super.initState();
-
     controller = PageController(initialPage: widget.initialPage - 1);
 
     controller.addListener(() {
@@ -61,12 +64,17 @@ class _QuranPagedReaderScreenState
 
   @override
   Widget build(BuildContext context) {
-
-
     return PageView.builder(
       controller: controller,
       reverse: true,
       itemCount: 604,
+      onPageChanged: (index) {
+        final progress = ref.read(progressServiceProvider);
+
+        final page = index + 1;
+
+        progress.trackPage(page);
+      },
       itemBuilder: (context, index) {
         final pageNumber = index + 1;
 
