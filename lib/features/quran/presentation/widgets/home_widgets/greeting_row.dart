@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_spacing.dart';
 
@@ -34,18 +35,21 @@ class GreetingRow extends StatelessWidget {
           ],
         ),
 
-        Container(
-          width: 65,
-          height: 65,
-          decoration: const BoxDecoration(
-            color: AppColors.emerald500,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.person,
-            color: Colors.white,
-            size: 40,
+        InkWell(
+          onTap: () => context.go('/profile'),
+          child: Container(
+            width: 65,
+            height: 65,
+            decoration: const BoxDecoration(
+              color: AppColors.emerald500,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: const Icon(
+              Icons.person,
+              color: Colors.white,
+              size: 40,
+            ),
           ),
         )
       ],

@@ -6,6 +6,7 @@ import '../../features/audio/presentation/screens/reciter_audio_screen.dart';
 import '../../features/quran/presentation/screens/home_screen.dart';
 import '../../features/quran/presentation/screens/read_quran_screen.dart';
 import '../../features/quran/presentation/screens/settings_screen.dart';
+import '../../features/progress/presentation/screens/profile_progress_screen.dart';
 
 
 
@@ -38,6 +39,10 @@ class AppRouter {
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileProgressScreen(),
           ),
         ]
       );

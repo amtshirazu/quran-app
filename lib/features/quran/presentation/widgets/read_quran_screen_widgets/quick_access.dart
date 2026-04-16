@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/surah_of_the_day.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../domain/models/surah.dart';
 import 'quick_acces_tile.dart';
-
 
 class QuickAccess extends ConsumerWidget {
   const QuickAccess({super.key});
@@ -15,9 +15,10 @@ class QuickAccess extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final lastRead = ref.watch(selectedSurahProvider);
     final surahListAsync = ref.watch(surahListProvider);
-    Surah? surahOftheDay;
+    final lastReadSurah = ref.watch(lastReadSurahProvider);
+
+    Surah? surahOfTheDay;
 
     final defaultSurahOfTheDay = Surah(
       number: 18,
@@ -37,13 +38,13 @@ class QuickAccess extends ConsumerWidget {
       revelationType: 'Madinan',
     );
 
-    if(surahListAsync is AsyncData<List<Surah>>){
+    if (surahListAsync is AsyncData<List<Surah>>) {
       final surahList = surahListAsync.value;
-      surahOftheDay = getSurahOfTheDay(surahList);
+      surahOfTheDay = getSurahOfTheDay(surahList);
     }
 
-    final surahForLastRead = lastRead ?? defaultLastRead;
-    final surahForToday = surahOftheDay ?? defaultSurahOfTheDay;
+    final surahForLastRead = lastReadSurah ?? defaultLastRead;
+    final surahForToday = surahOfTheDay ?? defaultSurahOfTheDay;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.size16),
@@ -67,7 +68,7 @@ class QuickAccess extends ConsumerWidget {
                   fgColor: AppColors.emerald600,
                   icon: LucideIcons.book,
                   label: "Last Read",
-                  sublabel: lastRead == null ? "Al-Baqara" : lastRead.nameEnglish,
+                  sublabel: surahForLastRead.nameEnglish,
                 ),
               ),
               const SizedBox(width: 8),
@@ -78,7 +79,7 @@ class QuickAccess extends ConsumerWidget {
                   fgColor: AppColors.blue600,
                   icon: LucideIcons.bookOpen,
                   label: "Today",
-                  sublabel: surahOftheDay?.nameEnglish ?? "Al-Kahf",
+                  sublabel: surahForToday.nameEnglish,
                 ),
               ),
             ],

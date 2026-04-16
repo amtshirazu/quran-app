@@ -9,44 +9,66 @@ import '../../../../../progress/presentation/state/progress_provider.dart';
 import '../../../state/quran_providers.dart';
 
 class QuranPagedReaderScreen extends ConsumerStatefulWidget {
-  final int initialPage;
 
   const QuranPagedReaderScreen({
     super.key,
+    required this.controller,
     required this.initialPage,
   });
+
+  final int initialPage;
+  final PageController controller;
 
   @override
   ConsumerState<QuranPagedReaderScreen> createState() =>
       _QuranPagedReaderScreenState();
 }
 
-class _QuranPagedReaderScreenState
-    extends ConsumerState<QuranPagedReaderScreen> {
-  late PageController controller = PageController();
+class _QuranPagedReaderScreenState extends ConsumerState<QuranPagedReaderScreen> {
+
+
 
   @override
-  void initState() {
-    super.initState();
-    controller = PageController(initialPage: widget.initialPage - 1);
+void initState() {
+  super.initState();
 
-    controller.addListener(() {
-      final currentPage = (controller.page?.round() ?? 0) + 1;
+  widget.controller.addListener(_onPageChanged);
 
-      _preloadPages(currentPage);
+  _preloadPages(widget.initialPage);
 
-      final surahNumber = getSurahNumberFromPage(currentPage);
-      final currentSelected = ref.read(selectedSurahProvider);
+  Future.microtask(() async {
+    final progress = ref.read(progressServiceProvider);
 
-      if (currentSelected?.number != surahNumber) {
-        final surahList = ref.read(surahListProvider).value;
-        if (surahList != null) {
-          final newSurah = surahList.firstWhere((s) => s.number == surahNumber);
-          ref.read(selectedSurahProvider.notifier).state = newSurah;
-          ref.read(audioServiceProvider).reset();
-        }
+    await progress.trackPage(widget.initialPage);
+
+    ref.invalidate(lastReadProvider);
+    ref.invalidate(lastReadSurahProvider);
+  });
+}
+
+  void _onPageChanged() {
+    if (!widget.controller.hasClients) return;
+
+    final currentPage = (widget.controller.page?.round() ?? 0) + 1;
+    _preloadPages(currentPage);
+
+    final surahNumber = getSurahNumberFromPage(currentPage);
+    final currentSelected = ref.read(selectedSurahProvider);
+
+    if (currentSelected?.number != surahNumber) {
+      final surahList = ref.read(surahListProvider).value;
+      if (surahList != null) {
+        final newSurah = surahList.firstWhere((s) => s.number == surahNumber);
+        ref.read(selectedSurahProvider.notifier).state = newSurah;
+        ref.read(audioServiceProvider).reset();
       }
-    });
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onPageChanged);
+    super.dispose();
   }
 
   void _preloadPages(int pageNumber) {
@@ -65,7 +87,7 @@ class _QuranPagedReaderScreenState
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      controller: controller,
+      controller: widget.controller,
       reverse: true,
       itemCount: 604,
       onPageChanged: (index) {
@@ -74,6 +96,7 @@ class _QuranPagedReaderScreenState
         final page = index + 1;
 
         progress.trackPage(page);
+        ref.invalidate(lastReadProvider);
       },
       itemBuilder: (context, index) {
         final pageNumber = index + 1;
