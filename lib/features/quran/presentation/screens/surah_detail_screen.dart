@@ -73,7 +73,7 @@ class _SurahDetailScreenState
   if (key?.currentContext != null) {
     Scrollable.ensureVisible(
       key!.currentContext!,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 50),
       curve: Curves.fastOutSlowIn,
       alignment: 0.1,
     );
