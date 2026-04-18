@@ -105,7 +105,43 @@ flutter run
 
 ## 📸 Screenshots
 
-> *(Add your app screenshots here)*
+## 📸 Screenshots
+
+### 🏠 Home & Navigation
+<p align="center">
+  <img src="screenshots/home_1.png" width="220"/>
+  <img src="screenshots/home_2.png" width="220"/>
+  <img src="screenshots/surah_list.png" width="220"/>
+</p>
+
+---
+
+### 📖 Reading Experience
+
+#### Ayah-by-Ayah Mode
+<p align="center">
+  <img src="screenshots/ayah_by_ayah_reading_mode.png" width="260"/>
+</p>
+
+#### Paged Mode
+<p align="center">
+  <img src="screenshots/paged_reading_mode.png" width="260"/>
+</p>
+
+---
+
+### 🎧 Audio Experience
+<p align="center">
+  <img src="screenshots/quran_audio.png" width="220"/>
+  <img src="screenshots/quran_audio_2.png" width="220"/>
+</p>
+
+---
+
+### 📊 Profile & Progress
+<p align="center">
+  <img src="screenshots/Profile_and_progress.png" width="260"/>
+</p>
 
 ---
 
