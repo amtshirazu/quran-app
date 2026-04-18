@@ -105,8 +105,6 @@ flutter run
 
 ## 📸 Screenshots
 
-## 📸 Screenshots
-
 ### 🏠 Home & Navigation
 <p align="center">
   <img src="screenshots/home_1.png" width="220"/>
