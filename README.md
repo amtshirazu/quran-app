@@ -148,7 +148,7 @@ flutter run
 
 ### 📊 Profile & Progress
 <p align="center">
-  <img src="screenshots/Profile_and_progress.png" width="260"/>
+  <img src="screenshots/profile_and_progress.png" width="260"/>
 </p>
 
 ---
