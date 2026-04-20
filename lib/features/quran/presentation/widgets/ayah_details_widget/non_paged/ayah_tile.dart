@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -11,13 +12,8 @@ import '../../../../../progress/presentation/state/progress_provider.dart';
 import '../../../../domain/models/ayah.dart';
 import '../../../../domain/models/translation.dart';
 
-
 class AyahTile extends ConsumerStatefulWidget {
-  const AyahTile({
-    super.key,
-    required this.ayah,
-    required this.translation,
-  });
+  const AyahTile({super.key, required this.ayah, required this.translation});
 
   final Ayah ayah;
   final Translation translation;
@@ -36,35 +32,33 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     return VisibilityDetector(
       key: widget.key ?? Key('ayah-${widget.ayah.ayahNumber}'),
       onVisibilityChanged: (visibilityInfo) async {
-  if (visibilityInfo.visibleFraction >= 0.2 && !_hasBeenTracked) {
-    final progressService = ref.read(progressServiceProvider);
-    final selectedSurah = ref.read(selectedSurahProvider);
+        if (visibilityInfo.visibleFraction >= 0.2 && !_hasBeenTracked) {
+          final progressService = ref.read(progressServiceProvider);
+          final selectedSurah = ref.read(selectedSurahProvider);
 
-    if (selectedSurah == null) return;
+          if (selectedSurah == null) return;
 
-    await progressService.trackAyah(
-      selectedSurah.number,
-      widget.ayah.ayahNumber,
-    );
+          await progressService.trackAyah(
+            selectedSurah.number,
+            widget.ayah.ayahNumber,
+          );
 
-    ref.invalidate(lastReadProvider);
-    ref.invalidate(lastReadSurahProvider);
+          ref.invalidate(lastReadProvider);
+          ref.invalidate(lastReadSurahProvider);
+          ref.invalidate(profileProgressProvider);
 
-    if (mounted) {
-      setState(() {
-        _hasBeenTracked = true;
-      });
-    }
-  }
-},
+          if (mounted) {
+            setState(() {
+              _hasBeenTracked = true;
+            });
+          }
+        }
+      },
       child: Card(
         color: Colors.white,
         elevation: 1,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Column(
             children: [
               Row(
@@ -109,15 +103,13 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       IconButton(
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          final progress =
-                              ref.read(progressServiceProvider);
-                          final defaultReciter =
-                              ref.read(defaultReciterProvider);
-                          final selectedSurah =
-                              ref.read(selectedSurahProvider);
+                          final progress = ref.read(progressServiceProvider);
+                          final defaultReciter = ref.read(
+                            defaultReciterProvider,
+                          );
+                          final selectedSurah = ref.read(selectedSurahProvider);
 
-                          if (defaultReciter == null ||
-                              selectedSurah == null) {
+                          if (defaultReciter == null || selectedSurah == null) {
                             return;
                           }
 
@@ -131,6 +123,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             selectedSurah.number,
                             widget.ayah.ayahNumber,
                           );
+
+                          ref.invalidate(profileProgressProvider);
                         },
                         icon: const Icon(
                           LucideIcons.volume2,
@@ -176,10 +170,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
               const SizedBox(height: 8),
 
-              const Divider(
-                color: AppColors.gray200,
-                thickness: 1,
-              ),
+              const Divider(color: AppColors.gray200, thickness: 1),
 
               const SizedBox(height: 8),
 

@@ -1,4 +1,5 @@
 import 'package:quran_app/features/progress/data/local/database_helper.dart';
+import 'package:quran_app/features/quran/data/repository/paged_repository.dart';
 import '../../../quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 
 class ProgressService {
@@ -19,15 +20,10 @@ class ProgressService {
       'timestamp': now,
     });
 
-    await _updateLastRead(
-      surahId: surahId,
-      ayah: ayah,
-      mode: 'ayah',
-    );
+    await _updateLastRead(surahId: surahId, ayah: ayah, mode: 'ayah');
 
     await _updateStreak();
   }
-
 
   Future<void> trackPage(int page) async {
     final db = await dbHelper.database;
@@ -43,11 +39,7 @@ class ProgressService {
       'timestamp': now,
     });
 
-    await _updateLastRead(
-      surahId: surahId,
-      page: page,
-      mode: 'page',
-    );
+    await _updateLastRead(surahId: surahId, page: page, mode: 'page');
 
     await _updateStreak();
   }
@@ -106,7 +98,7 @@ class ProgressService {
     );
   }
 
-  Future<int> getCurrentStreak() async {
+  Future<int?> getCurrentStreak() async {
     final db = await dbHelper.database;
 
     final result = await db.query('streak', limit: 1);
@@ -151,18 +143,26 @@ class ProgressService {
 
   // ========================= CORE LOGIC =========================
 
-  Future<double> _getSurahProgress(
-    int surahId,
-    int totalAyahs,
-  ) async {
+  Future<double?> getSurahProgress({
+    required int surahId,
+    required int totalAyahs,
+  }) async {
+    final result = await _calculateProgress(surahId, totalAyahs);
+    return result;
+  }
+
+  Future<double?> _calculateProgress(int surahId, int totalAyahs) async {
     final db = await dbHelper.database;
 
-    // 🟢 AYAH PROGRESS
-    final ayahResult = await db.rawQuery('''
+    // AYAH PROGRESS
+    final ayahResult = await db.rawQuery(
+      '''
       SELECT COUNT(DISTINCT ayah) as count
       FROM reading_sessions
       WHERE mode = 'ayah' AND surah_id = ?
-    ''', [surahId]);
+    ''',
+      [surahId],
+    );
 
     final readAyahs = (ayahResult.first['count'] as int?) ?? 0;
 
@@ -171,19 +171,22 @@ class ProgressService {
       ayahProgress = readAyahs / totalAyahs;
     }
 
-    // 🟢 PAGE PROGRESS
+    // PAGE PROGRESS
     final startPage = surahStartPage[surahId] ?? 1;
     final nextStart = surahStartPage[surahId + 1] ?? 605;
     final endPage = nextStart - 1;
 
     final totalPages = endPage - startPage + 1;
 
-    final pageResult = await db.rawQuery('''
+    final pageResult = await db.rawQuery(
+      '''
       SELECT COUNT(DISTINCT page) as count
       FROM reading_sessions
       WHERE mode = 'page'
         AND page BETWEEN ? AND ?
-    ''', [startPage, endPage]);
+    ''',
+      [startPage, endPage],
+    );
 
     final pagesRead = (pageResult.first['count'] as int?) ?? 0;
 
@@ -192,37 +195,66 @@ class ProgressService {
       pageProgress = pagesRead / totalPages;
     }
 
-    // 🟢 COMBINE
-    return ayahProgress > pageProgress
-        ? ayahProgress
-        : pageProgress;
+    // COMBINE
+    return ayahProgress > pageProgress ? ayahProgress : pageProgress;
   }
-
 
   // ========================= STATS =========================
 
   Future<int> getTotalVersesRead() async {
     final db = await dbHelper.database;
 
-    final result = await db.rawQuery('''
-      SELECT COUNT(DISTINCT surah_id || '-' || ayah) as count
-      FROM reading_sessions
-      WHERE mode = 'ayah'
-    ''');
+    // 1. Get ayahs read directly
+    final ayahResult = await db.rawQuery('''
+    SELECT DISTINCT surah_id, ayah
+    FROM reading_sessions
+    WHERE mode = 'ayah'
+  ''');
 
-    return (result.first['count'] as int?) ?? 0;
+    final Set<String> uniqueAyahs = {};
+
+    for (final row in ayahResult) {
+      final surah = row['surah_id'];
+      final ayah = row['ayah'];
+      if (surah != null && ayah != null) {
+        uniqueAyahs.add('$surah-$ayah');
+      }
+    }
+
+    // 2. Get pages read
+    final pageResult = await db.rawQuery('''
+    SELECT DISTINCT page
+    FROM reading_sessions
+    WHERE mode = 'page'
+  ''');
+
+    // 3. Convert pages → ayahs
+    for (final row in pageResult) {
+      final page = row['page'] as int?;
+
+      if (page != null) {
+        final ayahs = await loadPageAyahs(page);
+
+        for (final ayah in ayahs) {
+          uniqueAyahs.add('${ayah.surah}-${ayah.ayah}');
+        }
+      }
+    }
+
+    // 4. Final count
+    return uniqueAyahs.length;
   }
 
-  Future<int> getSurahsCompleted(List<dynamic> surahs) async {
+  Future<int?> getSurahsCompleted(List<dynamic> surahs) async {
     int completedSurahs = 0;
 
     for (final surah in surahs) {
-      final progress = await _getSurahProgress(
-        surah.number,
-        surah.totalAyahs,
+      final progress = await getSurahProgress(
+        surahId: surah.number,
+        totalAyahs: surah.totalAyahs,
       );
 
-      if (progress >= 1.0) {
+      if (progress! >= 1.0) {
         completedSurahs++;
       }
     }
@@ -231,46 +263,10 @@ class ProgressService {
   }
 
   Future<double> getQuranProgress() async {
-  final pageProgress = await _getGlobalPageProgress();
-  final ayahProgress = await _getGlobalAyahProgress();
+    final totalReadAyahs = await getTotalVersesRead();
 
-  final hybrid =
-      0.7 * pageProgress +
-      0.3 * ayahProgress;
+    const totalAyahs = 6236;
 
-  return hybrid.clamp(0.0, 1.0);
-}
-
-
-Future<double> _getGlobalPageProgress() async {
-  final db = await dbHelper.database;
-
-  final result = await db.rawQuery('''
-    SELECT COUNT(DISTINCT page) as count
-    FROM reading_sessions
-    WHERE mode = 'page'
-  ''');
-
-  final pagesRead = (result.first['count'] as int?) ?? 0;
-
-  const totalPages = 604;
-
-  return (pagesRead / totalPages).clamp(0.0, 1.0);
-}
-
-Future<double> _getGlobalAyahProgress() async {
-  final db = await dbHelper.database;
-
-  final result = await db.rawQuery('''
-    SELECT COUNT(DISTINCT surah_id || '-' || ayah) as count
-    FROM reading_sessions
-    WHERE mode = 'ayah'
-  ''');
-
-  final readAyahs = (result.first['count'] as int?) ?? 0;
-
-  const totalAyahs = 6236;
-
-  return (readAyahs / totalAyahs).clamp(0.0, 1.0);
-}
+    return (totalReadAyahs / totalAyahs).clamp(0.0, 1.0);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/single_paged_render.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../../../core/constants/app_colors.dart';
@@ -9,7 +10,6 @@ import '../../../../../progress/presentation/state/progress_provider.dart';
 import '../../../state/quran_providers.dart';
 
 class QuranPagedReaderScreen extends ConsumerStatefulWidget {
-
   const QuranPagedReaderScreen({
     super.key,
     required this.controller,
@@ -24,27 +24,26 @@ class QuranPagedReaderScreen extends ConsumerStatefulWidget {
       _QuranPagedReaderScreenState();
 }
 
-class _QuranPagedReaderScreenState extends ConsumerState<QuranPagedReaderScreen> {
-
-
-
+class _QuranPagedReaderScreenState
+    extends ConsumerState<QuranPagedReaderScreen> {
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  widget.controller.addListener(_onPageChanged);
+    widget.controller.addListener(_onPageChanged);
 
-  _preloadPages(widget.initialPage);
+    _preloadPages(widget.initialPage);
 
-  Future.microtask(() async {
-    final progress = ref.read(progressServiceProvider);
+    Future.microtask(() async {
+      final progress = ref.read(progressServiceProvider);
 
-    await progress.trackPage(widget.initialPage);
+      await progress.trackPage(widget.initialPage);
 
-    ref.invalidate(lastReadProvider);
-    ref.invalidate(lastReadSurahProvider);
-  });
-}
+      ref.invalidate(lastReadProvider);
+      ref.invalidate(lastReadSurahProvider);
+      ref.invalidate(profileProgressProvider);
+    });
+  }
 
   void _onPageChanged() {
     if (!widget.controller.hasClients) return;
@@ -83,7 +82,6 @@ void initState() {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -97,6 +95,7 @@ void initState() {
 
         progress.trackPage(page);
         ref.invalidate(lastReadProvider);
+        ref.invalidate(profileProgressProvider);
       },
       itemBuilder: (context, index) {
         final pageNumber = index + 1;
@@ -113,7 +112,7 @@ void initState() {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     child: QuranPage(
                       svgAsset:
                           "lib/assets/quran/hafs/${pageNumber.toString().padLeft(3, '0')}.svg",
@@ -132,34 +131,28 @@ void initState() {
                 ),
 
                 Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.gray400,
-                          thickness: 1,
+                  children: [
+                    Expanded(
+                      child: Divider(color: AppColors.gray400, thickness: 1),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        ayahs.first.page.toString(),
+                        style: TextStyle(
+                          fontSize: AppSpacing.size10,
+                          color: AppColors.gray600,
                         ),
                       ),
+                    ),
 
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          ayahs.first.page.toString(),
-                          style: TextStyle(
-                            fontSize: AppSpacing.size10,
-                            color: AppColors.gray600,
-                          ),
-                        ),
-                      ),
-
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.gray400,
-                          thickness: 1,
-                        ),
-                      )
-                    ],
-                  ),
-              ]
+                    Expanded(
+                      child: Divider(color: AppColors.gray400, thickness: 1),
+                    ),
+                  ],
+                ),
+              ],
             );
           },
         );
