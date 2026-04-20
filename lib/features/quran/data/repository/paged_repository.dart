@@ -14,4 +14,5 @@ Future<List<PagedAyah>> loadPageAyahs(int pageNumber) async {
   final List<dynamic> jsonList = json.decode(data);
   final ayahs = jsonList.map((e) => PagedAyah.fromJson(e)).toList();
   return ayahs;
+  
 }

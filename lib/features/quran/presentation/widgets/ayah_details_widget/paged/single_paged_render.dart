@@ -32,6 +32,7 @@ class QuranPage extends ConsumerWidget {
 
           if (rect.right > maxDesignX) maxDesignX = rect.right;
           if (rect.bottom > maxDesignY) maxDesignY = rect.bottom;
+
         }
 
         final scaleX = constraints.maxWidth / maxDesignX;

@@ -1,41 +1,38 @@
 import 'package:quran_app/features/progress/data/local/database_helper.dart';
-
 import '../../../quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 
-
-
-
-
 class ProgressService {
-
   final dbHelper = DatabaseHelper.instance;
 
-  Future<void> trackAyah(int surahId, int Ayah) async{
+  // ========================= TRACKING =========================
+
+  Future<void> trackAyah(int surahId, int ayah) async {
     final db = await dbHelper.database;
 
     final now = DateTime.now().toIso8601String();
+
     await db.insert('reading_sessions', {
       'mode': 'ayah',
       'surah_id': surahId,
-      'ayah': Ayah,
-      'page':null,
+      'ayah': ayah,
+      'page': null,
       'timestamp': now,
     });
 
     await _updateLastRead(
       surahId: surahId,
-      ayah: Ayah,
+      ayah: ayah,
       mode: 'ayah',
     );
+
+    await _updateStreak();
   }
 
 
-  // features/progress/data/progress_service.dart
-
   Future<void> trackPage(int page) async {
     final db = await dbHelper.database;
-    final now = DateTime.now().toIso8601String();
 
+    final now = DateTime.now().toIso8601String();
     final surahId = getSurahNumberFromPage(page);
 
     await db.insert('reading_sessions', {
@@ -51,7 +48,75 @@ class ProgressService {
       page: page,
       mode: 'page',
     );
+
+    await _updateStreak();
   }
+
+  // ========================= STREAK =========================
+
+  Future<void> _updateStreak() async {
+    final db = await dbHelper.database;
+
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+
+    final result = await db.query('streak', limit: 1);
+
+    if (result.isEmpty) {
+      await db.insert('streak', {
+        'id': 1,
+        'last_read_date': todayDate.toIso8601String(),
+        'current_streak': 1,
+      });
+      return;
+    }
+
+    final data = result.first;
+
+    final lastReadDateStr = data['last_read_date'] as String?;
+    int currentStreak = (data['current_streak'] as int?) ?? 0;
+
+    if (lastReadDateStr == null) return;
+
+    final lastReadDate = DateTime.parse(lastReadDateStr);
+    final lastDate = DateTime(
+      lastReadDate.year,
+      lastReadDate.month,
+      lastReadDate.day,
+    );
+
+    final difference = todayDate.difference(lastDate).inDays;
+
+    if (difference == 1) {
+      currentStreak += 1;
+    } else if (difference > 1) {
+      currentStreak = 1;
+    } else {
+      return; // same day
+    }
+
+    await db.update(
+      'streak',
+      {
+        'last_read_date': todayDate.toIso8601String(),
+        'current_streak': currentStreak,
+      },
+      where: 'id = ?',
+      whereArgs: [1],
+    );
+  }
+
+  Future<int> getCurrentStreak() async {
+    final db = await dbHelper.database;
+
+    final result = await db.query('streak', limit: 1);
+
+    if (result.isEmpty) return 0;
+
+    return (result.first['current_streak'] as int?) ?? 0;
+  }
+
+  // ========================= LAST READ =========================
 
   Future<void> _updateLastRead({
     int? surahId,
@@ -62,88 +127,42 @@ class ProgressService {
     final db = await dbHelper.database;
 
     await db.delete('last_read');
+
     final now = DateTime.now().toIso8601String();
 
     await db.insert('last_read', {
       'surah_id': surahId,
       'ayah': ayah,
       'page': page,
-      'updated_at': now,
       'mode': mode,
+      'updated_at': now,
     });
   }
-
 
   Future<Map<String, dynamic>?> getLastRead() async {
     final db = await dbHelper.database;
 
     final result = await db.query('last_read', limit: 1);
 
-    if(result.isEmpty) return null;
+    if (result.isEmpty) return null;
+
     return result.first;
   }
 
+  // ========================= CORE LOGIC =========================
 
-  Future<double> getCurrentSurahProgressFromLastRead({
-    required int totalAyahs,
-  }) async {
-
-    final db = dbHelper.database;
-
-    final lastRead = await getLastRead();
-
-    if(lastRead == null) return 0.0;
-
-    final mode  = lastRead['mode'] as String?;
-    final surahId = lastRead['surah_id'] as int?;
-    final ayah = lastRead['ayah'] as int?;
-    final page = lastRead['page'] as int?;
-
-    if(mode == null || surahId == null) return 0.0;
-
-    if(mode == 'ayah') {
-      if(ayah == null || totalAyahs == 0) return 0.0;
-
-      final progress = ayah / totalAyahs;
-      return progress.clamp(0.0, 1.0);
-    }
-
-    // features/progress/data/progress_service.dart
-
-    if (mode == 'page') {
-      if (page == null) return 0.0;
-
-      final int startPage = surahStartPage[surahId] ?? 1;
-
-      final int nextSurahStart = surahStartPage[surahId + 1] ?? 605;
-      final int endPage = nextSurahStart - 1;
-
-      final totalPagesInSurah = endPage - startPage + 1;
-      final pagesRead = page - startPage + 1;
-
-      if (totalPagesInSurah <= 0) return 0.0;
-
-
-      final progress = pagesRead / totalPagesInSurah;
-      return progress.clamp(0.0, 1.0);
-    }
-
-    return 0.0;
-  }
-
-
-  Future<double> getQuranProgress(
-      int surahId,
-      int totalAyahs,
-      ) async {
+  Future<double> _getSurahProgress(
+    int surahId,
+    int totalAyahs,
+  ) async {
     final db = await dbHelper.database;
 
-    // 🟩 AYAH PROGRESS
+    // 🟢 AYAH PROGRESS
     final ayahResult = await db.rawQuery('''
-    SELECT COUNT(DISTINCT ayah) as count
-    FROM reading_sessions
-    WHERE mode = 'ayah' AND surah_id = ?
-  ''', [surahId]);
+      SELECT COUNT(DISTINCT ayah) as count
+      FROM reading_sessions
+      WHERE mode = 'ayah' AND surah_id = ?
+    ''', [surahId]);
 
     final readAyahs = (ayahResult.first['count'] as int?) ?? 0;
 
@@ -152,45 +171,106 @@ class ProgressService {
       ayahProgress = readAyahs / totalAyahs;
     }
 
+    // 🟢 PAGE PROGRESS
     final startPage = surahStartPage[surahId] ?? 1;
-
-
-    final nextSurahStart = surahStartPage[surahId + 1];
-    final endPage = nextSurahStart != null
-        ? nextSurahStart - 1
-        : 604;
+    final nextStart = surahStartPage[surahId + 1] ?? 605;
+    final endPage = nextStart - 1;
 
     final totalPages = endPage - startPage + 1;
 
-
     final pageResult = await db.rawQuery('''
-    SELECT MAX(page) as maxPage
-    FROM reading_sessions
-    WHERE mode = 'page'
-      AND page BETWEEN ? AND ?
-  ''', [startPage, endPage]);
+      SELECT COUNT(DISTINCT page) as count
+      FROM reading_sessions
+      WHERE mode = 'page'
+        AND page BETWEEN ? AND ?
+    ''', [startPage, endPage]);
 
-    final maxPage = pageResult.first['maxPage'] as int?;
+    final pagesRead = (pageResult.first['count'] as int?) ?? 0;
 
     double pageProgress = 0;
-
-    if (maxPage != null && totalPages > 0) {
-      final progressPages = maxPage - startPage + 1;
-
-      if (progressPages > 0) {
-        pageProgress = progressPages / totalPages;
-      }
+    if (totalPages > 0) {
+      pageProgress = pagesRead / totalPages;
     }
 
-
-    final progress = ayahProgress > pageProgress
+    // 🟢 COMBINE
+    return ayahProgress > pageProgress
         ? ayahProgress
         : pageProgress;
-
-    return progress.clamp(0.0, 1.0);
   }
 
 
+  // ========================= STATS =========================
+
+  Future<int> getTotalVersesRead() async {
+    final db = await dbHelper.database;
+
+    final result = await db.rawQuery('''
+      SELECT COUNT(DISTINCT surah_id || '-' || ayah) as count
+      FROM reading_sessions
+      WHERE mode = 'ayah'
+    ''');
+
+    return (result.first['count'] as int?) ?? 0;
+  }
+
+  Future<int> getSurahsCompleted(List<dynamic> surahs) async {
+    int completedSurahs = 0;
+
+    for (final surah in surahs) {
+      final progress = await _getSurahProgress(
+        surah.number,
+        surah.totalAyahs,
+      );
+
+      if (progress >= 1.0) {
+        completedSurahs++;
+      }
+    }
+
+    return completedSurahs;
+  }
+
+  Future<double> getQuranProgress() async {
+  final pageProgress = await _getGlobalPageProgress();
+  final ayahProgress = await _getGlobalAyahProgress();
+
+  final hybrid =
+      0.7 * pageProgress +
+      0.3 * ayahProgress;
+
+  return hybrid.clamp(0.0, 1.0);
+}
 
 
+Future<double> _getGlobalPageProgress() async {
+  final db = await dbHelper.database;
+
+  final result = await db.rawQuery('''
+    SELECT COUNT(DISTINCT page) as count
+    FROM reading_sessions
+    WHERE mode = 'page'
+  ''');
+
+  final pagesRead = (result.first['count'] as int?) ?? 0;
+
+  const totalPages = 604;
+
+  return (pagesRead / totalPages).clamp(0.0, 1.0);
+}
+
+Future<double> _getGlobalAyahProgress() async {
+  final db = await dbHelper.database;
+
+  final result = await db.rawQuery('''
+    SELECT COUNT(DISTINCT surah_id || '-' || ayah) as count
+    FROM reading_sessions
+    WHERE mode = 'ayah'
+  ''');
+
+  final readAyahs = (result.first['count'] as int?) ?? 0;
+
+  const totalAyahs = 6236;
+
+  return (readAyahs / totalAyahs).clamp(0.0, 1.0);
+}
 }
