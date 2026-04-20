@@ -108,18 +108,27 @@ flutter run
 ### 🏠 Home & Navigation
 <p align="center">
   <img src="screenshots/home_1.png" width="220"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="screenshots/home_2.png" width="220"/>
-  <img src="screenshots/surah_list.png" width="220"/>
 </p>
 
 ---
 
 ### 📖 Reading Experience
 
+#### Surah List
+<p align="center">
+  <img src="screenshots/surah_list.png" width="260"/>
+</p>
+
+<br/>
+
 #### Ayah-by-Ayah Mode
 <p align="center">
   <img src="screenshots/ayah_by_ayah_reading_mode.png" width="260"/>
 </p>
+
+<br/>
 
 #### Paged Mode
 <p align="center">
@@ -131,6 +140,7 @@ flutter run
 ### 🎧 Audio Experience
 <p align="center">
   <img src="screenshots/quran_audio.png" width="220"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="screenshots/quran_audio_2.png" width="220"/>
 </p>
 
@@ -138,7 +148,7 @@ flutter run
 
 ### 📊 Profile & Progress
 <p align="center">
-  <img src="screenshots/Profile_and_progress.png" width="260"/>
+  <img src="screenshots/profile_and_progress.png" width="260"/>
 </p>
 
 ---
