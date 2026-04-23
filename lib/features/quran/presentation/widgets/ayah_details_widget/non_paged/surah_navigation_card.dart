@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/quran_paged_reader_screen.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../state/quran_providers.dart';
-
-
-
-
 
 class SurahNavigationCard extends ConsumerWidget {
   const SurahNavigationCard({super.key});
@@ -29,8 +23,9 @@ class SurahNavigationCard extends ConsumerWidget {
       loading: () => const SliverToBoxAdapter(child: SizedBox()),
       error: (_, __) => const SliverToBoxAdapter(child: SizedBox()),
       data: (surahs) {
-        final currentIndex =
-        surahs.indexWhere((s) => s.number == selectedSurah.number);
+        final currentIndex = surahs.indexWhere(
+          (s) => s.number == selectedSurah.number,
+        );
 
         if (currentIndex == -1) {
           return const SliverToBoxAdapter(child: SizedBox());
@@ -39,10 +34,8 @@ class SurahNavigationCard extends ConsumerWidget {
         final hasPrevious = currentIndex > 0;
         final hasNext = currentIndex < surahs.length - 1;
 
-        final previousSurah =
-        hasPrevious ? surahs[currentIndex - 1] : null;
-        final nextSurah =
-        hasNext ? surahs[currentIndex + 1] : null;
+        final previousSurah = hasPrevious ? surahs[currentIndex - 1] : null;
+        final nextSurah = hasNext ? surahs[currentIndex + 1] : null;
 
         return SliverToBoxAdapter(
           child: Padding(
@@ -57,10 +50,7 @@ class SurahNavigationCard extends ConsumerWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   gradient: const LinearGradient(
-                    colors: [
-                      AppColors.emerald500,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.emerald500, AppColors.emerald600],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -68,12 +58,12 @@ class SurahNavigationCard extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     if (hasPrevious)
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            ref.read(selectedSurahProvider.notifier).state = previousSurah;
+                            ref.read(selectedSurahProvider.notifier).state =
+                                previousSurah;
                             context.go("/readAyah");
                           },
                           child: Column(
@@ -88,16 +78,15 @@ class SurahNavigationCard extends ConsumerWidget {
                                     color: Colors.white,
                                     size: 18,
                                   ),
-                                  const SizedBox(width: 8,),
+                                  const SizedBox(width: 8),
                                   Text(
                                     "Previous",
                                     style: textTheme.bodyLarge?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
-                                      fontSize:  AppSpacing.size14,
+                                      fontSize: AppSpacing.size14,
                                     ),
                                   ),
-
                                 ],
                               ),
                               Text(
@@ -112,41 +101,40 @@ class SurahNavigationCard extends ConsumerWidget {
                         ),
                       ),
 
-                    if (hasPrevious && hasNext)
-                      const SizedBox(width: 20),
-
+                    if (hasPrevious && hasNext) const SizedBox(width: 20),
 
                     if (hasNext)
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            ref.read(selectedSurahProvider.notifier).state = nextSurah;
+                            ref.read(selectedSurahProvider.notifier).state =
+                                nextSurah;
                             context.go("/readAyah");
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                               Row(
-                                 mainAxisAlignment: MainAxisAlignment.center,
-                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                 children: [
-                                   Text(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
                                     "Next",
                                     style: textTheme.bodyLarge?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                       fontSize: AppSpacing.size14,
-                                      ),
                                     ),
-                                   const SizedBox(width: 8,),
-                                    const Icon(
-                                      LucideIcons.arrowRight,
-                                      color: Colors.white,
-                                      size: 18,
-                                    ),
-                                 ],
-                               ),
-                              const SizedBox(height: 2,),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    LucideIcons.arrowRight,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
                               Text(
                                 nextSurah!.nameEnglish,
                                 style: const TextStyle(

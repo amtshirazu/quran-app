@@ -4,20 +4,14 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/state/daily_verse_provider.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_spacing.dart';
-import '../../state/quran_providers.dart';
-
-
-
 
 class DailyVerseCard extends ConsumerWidget {
   const DailyVerseCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final textTheme = Theme.of(context).textTheme;
     final ayahAsync = ref.watch(dailyVerseWithTranslationProvider);
-
 
     return Card(
       margin: const EdgeInsets.only(bottom: 25, left: 15, right: 15),
@@ -26,10 +20,7 @@ class DailyVerseCard extends ConsumerWidget {
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.emerald500,
-              AppColors.emerald600,
-            ],
+            colors: [AppColors.emerald500, AppColors.emerald600],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -63,8 +54,8 @@ class DailyVerseCard extends ConsumerWidget {
                   ayahWithTranslation.ayah.text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: AppSpacing.size18,
-                      color: Colors.white
+                    fontSize: AppSpacing.size18,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -72,8 +63,8 @@ class DailyVerseCard extends ConsumerWidget {
                   ayahWithTranslation.translation.text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: AppSpacing.size12,
-                      color: AppColors.emerald50
+                    fontSize: AppSpacing.size12,
+                    color: AppColors.emerald50,
                   ),
                 ),
                 const SizedBox(height: 8),

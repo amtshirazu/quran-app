@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quran_app/features/progress/data/local/progress_service.dart';
+import 'package:quran_app/features/progress/presentation/state/progress_service.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 

@@ -34,2438 +34,2438 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/assets/app_icon.png"
+  image_path: "assets/app_icon.png"
 
 flutter:
   uses-material-design: true
 
   assets:
-    - lib/assets/quran/scripts/
-    - lib/assets/quran/translations/
-    - lib/assets/quran/metadata/
-    - lib/assets/reciters/
-    - lib/assets/quran/hafs/
+    - assets/quran/scripts/
+    - assets/quran/translations/
+    - assets/quran/metadata/
+    - assets/reciters/
+    - assets/quran/hafs/
 
   fonts:
     - family: Indo Park
       fonts:
-        - asset: lib/assets/quran/fonts/indopark.ttf
+        - asset: assets/quran/fonts/indopark.ttf
     - family: Uthmanic
       fonts:
-        - asset: lib/assets/quran/fonts/KFGQPC-Uthman-Naskh-Regular.ttf
+        - asset: assets/quran/fonts/KFGQPC-Uthman-Naskh-Regular.ttf
     - family: QPCPage001
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p1.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p1.ttf
 
     - family: QPCPage002
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p2.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p2.ttf
 
     - family: QPCPage003
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p3.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p3.ttf
 
     - family: QPCPage004
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p4.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p4.ttf
 
     - family: QPCPage005
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p5.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p5.ttf
 
     - family: QPCPage006
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p6.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p6.ttf
 
     - family: QPCPage007
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p7.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p7.ttf
 
     - family: QPCPage008
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p8.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p8.ttf
 
     - family: QPCPage009
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p9.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p9.ttf
 
     - family: QPCPage010
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p10.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p10.ttf
 
     - family: QPCPage011
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p11.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p11.ttf
 
     - family: QPCPage012
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p12.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p12.ttf
 
     - family: QPCPage013
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p13.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p13.ttf
 
     - family: QPCPage014
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p14.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p14.ttf
 
     - family: QPCPage015
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p15.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p15.ttf
 
     - family: QPCPage016
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p16.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p16.ttf
 
     - family: QPCPage017
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p17.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p17.ttf
 
     - family: QPCPage018
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p18.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p18.ttf
 
     - family: QPCPage019
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p19.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p19.ttf
 
     - family: QPCPage020
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p20.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p20.ttf
 
     - family: QPCPage021
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p21.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p21.ttf
 
     - family: QPCPage022
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p22.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p22.ttf
 
     - family: QPCPage023
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p23.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p23.ttf
 
     - family: QPCPage024
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p24.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p24.ttf
 
     - family: QPCPage025
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p25.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p25.ttf
 
     - family: QPCPage026
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p26.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p26.ttf
 
     - family: QPCPage027
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p27.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p27.ttf
 
     - family: QPCPage028
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p28.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p28.ttf
 
     - family: QPCPage029
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p29.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p29.ttf
 
     - family: QPCPage030
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p30.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p30.ttf
 
     - family: QPCPage031
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p31.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p31.ttf
 
     - family: QPCPage032
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p32.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p32.ttf
 
     - family: QPCPage033
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p33.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p33.ttf
 
     - family: QPCPage034
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p34.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p34.ttf
 
     - family: QPCPage035
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p35.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p35.ttf
 
     - family: QPCPage036
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p36.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p36.ttf
 
     - family: QPCPage037
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p37.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p37.ttf
 
     - family: QPCPage038
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p38.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p38.ttf
 
     - family: QPCPage039
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p39.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p39.ttf
 
     - family: QPCPage040
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p40.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p40.ttf
 
     - family: QPCPage041
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p41.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p41.ttf
 
     - family: QPCPage042
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p42.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p42.ttf
 
     - family: QPCPage043
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p43.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p43.ttf
 
     - family: QPCPage044
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p44.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p44.ttf
 
     - family: QPCPage045
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p45.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p45.ttf
 
     - family: QPCPage046
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p46.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p46.ttf
 
     - family: QPCPage047
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p47.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p47.ttf
 
     - family: QPCPage048
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p48.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p48.ttf
 
     - family: QPCPage049
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p49.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p49.ttf
 
     - family: QPCPage050
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p50.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p50.ttf
 
     - family: QPCPage051
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p51.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p51.ttf
 
     - family: QPCPage052
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p52.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p52.ttf
 
     - family: QPCPage053
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p53.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p53.ttf
 
     - family: QPCPage054
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p54.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p54.ttf
 
     - family: QPCPage055
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p55.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p55.ttf
 
     - family: QPCPage056
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p56.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p56.ttf
 
     - family: QPCPage057
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p57.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p57.ttf
 
     - family: QPCPage058
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p58.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p58.ttf
 
     - family: QPCPage059
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p59.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p59.ttf
 
     - family: QPCPage060
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p60.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p60.ttf
 
     - family: QPCPage061
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p61.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p61.ttf
 
     - family: QPCPage062
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p62.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p62.ttf
 
     - family: QPCPage063
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p63.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p63.ttf
 
     - family: QPCPage064
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p64.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p64.ttf
 
     - family: QPCPage065
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p65.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p65.ttf
 
     - family: QPCPage066
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p66.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p66.ttf
 
     - family: QPCPage067
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p67.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p67.ttf
 
     - family: QPCPage068
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p68.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p68.ttf
 
     - family: QPCPage069
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p69.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p69.ttf
 
     - family: QPCPage070
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p70.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p70.ttf
 
     - family: QPCPage071
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p71.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p71.ttf
 
     - family: QPCPage072
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p72.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p72.ttf
 
     - family: QPCPage073
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p73.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p73.ttf
 
     - family: QPCPage074
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p74.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p74.ttf
 
     - family: QPCPage075
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p75.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p75.ttf
 
     - family: QPCPage076
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p76.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p76.ttf
 
     - family: QPCPage077
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p77.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p77.ttf
 
     - family: QPCPage078
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p78.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p78.ttf
 
     - family: QPCPage079
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p79.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p79.ttf
 
     - family: QPCPage080
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p80.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p80.ttf
 
     - family: QPCPage081
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p81.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p81.ttf
 
     - family: QPCPage082
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p82.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p82.ttf
 
     - family: QPCPage083
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p83.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p83.ttf
 
     - family: QPCPage084
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p84.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p84.ttf
 
     - family: QPCPage085
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p85.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p85.ttf
 
     - family: QPCPage086
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p86.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p86.ttf
 
     - family: QPCPage087
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p87.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p87.ttf
 
     - family: QPCPage088
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p88.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p88.ttf
 
     - family: QPCPage089
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p89.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p89.ttf
 
     - family: QPCPage090
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p90.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p90.ttf
 
     - family: QPCPage091
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p91.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p91.ttf
 
     - family: QPCPage092
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p92.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p92.ttf
 
     - family: QPCPage093
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p93.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p93.ttf
 
     - family: QPCPage094
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p94.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p94.ttf
 
     - family: QPCPage095
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p95.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p95.ttf
 
     - family: QPCPage096
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p96.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p96.ttf
 
     - family: QPCPage097
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p97.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p97.ttf
 
     - family: QPCPage098
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p98.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p98.ttf
 
     - family: QPCPage099
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p99.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p99.ttf
 
     - family: QPCPage100
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p100.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p100.ttf
 
     - family: QPCPage101
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p101.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p101.ttf
 
     - family: QPCPage102
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p102.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p102.ttf
 
     - family: QPCPage103
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p103.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p103.ttf
 
     - family: QPCPage104
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p104.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p104.ttf
 
     - family: QPCPage105
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p105.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p105.ttf
 
     - family: QPCPage106
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p106.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p106.ttf
 
     - family: QPCPage107
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p107.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p107.ttf
 
     - family: QPCPage108
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p108.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p108.ttf
 
     - family: QPCPage109
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p109.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p109.ttf
 
     - family: QPCPage110
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p110.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p110.ttf
 
     - family: QPCPage111
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p111.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p111.ttf
 
     - family: QPCPage112
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p112.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p112.ttf
 
     - family: QPCPage113
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p113.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p113.ttf
 
     - family: QPCPage114
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p114.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p114.ttf
 
     - family: QPCPage115
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p115.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p115.ttf
 
     - family: QPCPage116
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p116.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p116.ttf
 
     - family: QPCPage117
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p117.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p117.ttf
 
     - family: QPCPage118
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p118.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p118.ttf
 
     - family: QPCPage119
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p119.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p119.ttf
 
     - family: QPCPage120
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p120.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p120.ttf
 
     - family: QPCPage121
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p121.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p121.ttf
 
     - family: QPCPage122
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p122.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p122.ttf
 
     - family: QPCPage123
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p123.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p123.ttf
 
     - family: QPCPage124
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p124.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p124.ttf
 
     - family: QPCPage125
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p125.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p125.ttf
 
     - family: QPCPage126
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p126.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p126.ttf
 
     - family: QPCPage127
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p127.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p127.ttf
 
     - family: QPCPage128
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p128.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p128.ttf
 
     - family: QPCPage129
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p129.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p129.ttf
 
     - family: QPCPage130
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p130.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p130.ttf
 
     - family: QPCPage131
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p131.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p131.ttf
 
     - family: QPCPage132
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p132.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p132.ttf
 
     - family: QPCPage133
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p133.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p133.ttf
 
     - family: QPCPage134
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p134.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p134.ttf
 
     - family: QPCPage135
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p135.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p135.ttf
 
     - family: QPCPage136
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p136.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p136.ttf
 
     - family: QPCPage137
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p137.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p137.ttf
 
     - family: QPCPage138
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p138.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p138.ttf
 
     - family: QPCPage139
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p139.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p139.ttf
 
     - family: QPCPage140
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p140.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p140.ttf
 
     - family: QPCPage141
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p141.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p141.ttf
 
     - family: QPCPage142
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p142.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p142.ttf
 
     - family: QPCPage143
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p143.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p143.ttf
 
     - family: QPCPage144
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p144.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p144.ttf
 
     - family: QPCPage145
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p145.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p145.ttf
 
     - family: QPCPage146
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p146.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p146.ttf
 
     - family: QPCPage147
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p147.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p147.ttf
 
     - family: QPCPage148
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p148.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p148.ttf
 
     - family: QPCPage149
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p149.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p149.ttf
 
     - family: QPCPage150
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p150.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p150.ttf
 
     - family: QPCPage151
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p151.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p151.ttf
 
     - family: QPCPage152
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p152.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p152.ttf
 
     - family: QPCPage153
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p153.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p153.ttf
 
     - family: QPCPage154
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p154.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p154.ttf
 
     - family: QPCPage155
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p155.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p155.ttf
 
     - family: QPCPage156
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p156.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p156.ttf
 
     - family: QPCPage157
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p157.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p157.ttf
 
     - family: QPCPage158
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p158.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p158.ttf
 
     - family: QPCPage159
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p159.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p159.ttf
 
     - family: QPCPage160
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p160.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p160.ttf
 
     - family: QPCPage161
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p161.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p161.ttf
 
     - family: QPCPage162
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p162.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p162.ttf
 
     - family: QPCPage163
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p163.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p163.ttf
 
     - family: QPCPage164
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p164.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p164.ttf
 
     - family: QPCPage165
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p165.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p165.ttf
 
     - family: QPCPage166
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p166.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p166.ttf
 
     - family: QPCPage167
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p167.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p167.ttf
 
     - family: QPCPage168
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p168.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p168.ttf
 
     - family: QPCPage169
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p169.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p169.ttf
 
     - family: QPCPage170
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p170.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p170.ttf
 
     - family: QPCPage171
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p171.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p171.ttf
 
     - family: QPCPage172
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p172.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p172.ttf
 
     - family: QPCPage173
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p173.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p173.ttf
 
     - family: QPCPage174
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p174.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p174.ttf
 
     - family: QPCPage175
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p175.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p175.ttf
 
     - family: QPCPage176
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p176.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p176.ttf
 
     - family: QPCPage177
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p177.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p177.ttf
 
     - family: QPCPage178
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p178.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p178.ttf
 
     - family: QPCPage179
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p179.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p179.ttf
 
     - family: QPCPage180
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p180.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p180.ttf
 
     - family: QPCPage181
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p181.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p181.ttf
 
     - family: QPCPage182
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p182.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p182.ttf
 
     - family: QPCPage183
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p183.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p183.ttf
 
     - family: QPCPage184
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p184.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p184.ttf
 
     - family: QPCPage185
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p185.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p185.ttf
 
     - family: QPCPage186
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p186.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p186.ttf
 
     - family: QPCPage187
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p187.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p187.ttf
 
     - family: QPCPage188
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p188.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p188.ttf
 
     - family: QPCPage189
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p189.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p189.ttf
 
     - family: QPCPage190
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p190.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p190.ttf
 
     - family: QPCPage191
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p191.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p191.ttf
 
     - family: QPCPage192
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p192.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p192.ttf
 
     - family: QPCPage193
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p193.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p193.ttf
 
     - family: QPCPage194
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p194.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p194.ttf
 
     - family: QPCPage195
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p195.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p195.ttf
 
     - family: QPCPage196
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p196.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p196.ttf
 
     - family: QPCPage197
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p197.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p197.ttf
 
     - family: QPCPage198
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p198.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p198.ttf
 
     - family: QPCPage199
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p199.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p199.ttf
 
     - family: QPCPage200
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p200.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p200.ttf
 
     - family: QPCPage201
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p201.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p201.ttf
 
     - family: QPCPage202
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p202.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p202.ttf
 
     - family: QPCPage203
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p203.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p203.ttf
 
     - family: QPCPage204
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p204.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p204.ttf
 
     - family: QPCPage205
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p205.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p205.ttf
 
     - family: QPCPage206
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p206.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p206.ttf
 
     - family: QPCPage207
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p207.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p207.ttf
 
     - family: QPCPage208
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p208.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p208.ttf
 
     - family: QPCPage209
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p209.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p209.ttf
 
     - family: QPCPage210
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p210.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p210.ttf
 
     - family: QPCPage211
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p211.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p211.ttf
 
     - family: QPCPage212
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p212.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p212.ttf
 
     - family: QPCPage213
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p213.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p213.ttf
 
     - family: QPCPage214
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p214.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p214.ttf
 
     - family: QPCPage215
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p215.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p215.ttf
 
     - family: QPCPage216
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p216.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p216.ttf
 
     - family: QPCPage217
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p217.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p217.ttf
 
     - family: QPCPage218
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p218.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p218.ttf
 
     - family: QPCPage219
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p219.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p219.ttf
 
     - family: QPCPage220
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p220.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p220.ttf
 
     - family: QPCPage221
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p221.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p221.ttf
 
     - family: QPCPage222
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p222.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p222.ttf
 
     - family: QPCPage223
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p223.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p223.ttf
 
     - family: QPCPage224
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p224.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p224.ttf
 
     - family: QPCPage225
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p225.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p225.ttf
 
     - family: QPCPage226
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p226.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p226.ttf
 
     - family: QPCPage227
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p227.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p227.ttf
 
     - family: QPCPage228
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p228.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p228.ttf
 
     - family: QPCPage229
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p229.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p229.ttf
 
     - family: QPCPage230
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p230.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p230.ttf
 
     - family: QPCPage231
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p231.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p231.ttf
 
     - family: QPCPage232
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p232.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p232.ttf
 
     - family: QPCPage233
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p233.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p233.ttf
 
     - family: QPCPage234
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p234.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p234.ttf
 
     - family: QPCPage235
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p235.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p235.ttf
 
     - family: QPCPage236
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p236.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p236.ttf
 
     - family: QPCPage237
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p237.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p237.ttf
 
     - family: QPCPage238
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p238.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p238.ttf
 
     - family: QPCPage239
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p239.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p239.ttf
 
     - family: QPCPage240
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p240.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p240.ttf
 
     - family: QPCPage241
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p241.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p241.ttf
 
     - family: QPCPage242
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p242.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p242.ttf
 
     - family: QPCPage243
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p243.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p243.ttf
 
     - family: QPCPage244
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p244.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p244.ttf
 
     - family: QPCPage245
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p245.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p245.ttf
 
     - family: QPCPage246
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p246.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p246.ttf
 
     - family: QPCPage247
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p247.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p247.ttf
 
     - family: QPCPage248
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p248.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p248.ttf
 
     - family: QPCPage249
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p249.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p249.ttf
 
     - family: QPCPage250
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p250.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p250.ttf
 
     - family: QPCPage251
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p251.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p251.ttf
 
     - family: QPCPage252
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p252.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p252.ttf
 
     - family: QPCPage253
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p253.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p253.ttf
 
     - family: QPCPage254
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p254.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p254.ttf
 
     - family: QPCPage255
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p255.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p255.ttf
 
     - family: QPCPage256
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p256.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p256.ttf
 
     - family: QPCPage257
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p257.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p257.ttf
 
     - family: QPCPage258
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p258.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p258.ttf
 
     - family: QPCPage259
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p259.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p259.ttf
 
     - family: QPCPage260
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p260.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p260.ttf
 
     - family: QPCPage261
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p261.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p261.ttf
 
     - family: QPCPage262
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p262.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p262.ttf
 
     - family: QPCPage263
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p263.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p263.ttf
 
     - family: QPCPage264
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p264.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p264.ttf
 
     - family: QPCPage265
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p265.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p265.ttf
 
     - family: QPCPage266
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p266.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p266.ttf
 
     - family: QPCPage267
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p267.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p267.ttf
 
     - family: QPCPage268
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p268.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p268.ttf
 
     - family: QPCPage269
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p269.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p269.ttf
 
     - family: QPCPage270
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p270.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p270.ttf
 
     - family: QPCPage271
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p271.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p271.ttf
 
     - family: QPCPage272
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p272.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p272.ttf
 
     - family: QPCPage273
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p273.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p273.ttf
 
     - family: QPCPage274
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p274.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p274.ttf
 
     - family: QPCPage275
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p275.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p275.ttf
 
     - family: QPCPage276
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p276.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p276.ttf
 
     - family: QPCPage277
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p277.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p277.ttf
 
     - family: QPCPage278
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p278.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p278.ttf
 
     - family: QPCPage279
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p279.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p279.ttf
 
     - family: QPCPage280
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p280.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p280.ttf
 
     - family: QPCPage281
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p281.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p281.ttf
 
     - family: QPCPage282
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p282.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p282.ttf
 
     - family: QPCPage283
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p283.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p283.ttf
 
     - family: QPCPage284
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p284.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p284.ttf
 
     - family: QPCPage285
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p285.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p285.ttf
 
     - family: QPCPage286
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p286.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p286.ttf
 
     - family: QPCPage287
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p287.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p287.ttf
 
     - family: QPCPage288
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p288.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p288.ttf
 
     - family: QPCPage289
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p289.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p289.ttf
 
     - family: QPCPage290
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p290.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p290.ttf
 
     - family: QPCPage291
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p291.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p291.ttf
 
     - family: QPCPage292
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p292.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p292.ttf
 
     - family: QPCPage293
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p293.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p293.ttf
 
     - family: QPCPage294
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p294.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p294.ttf
 
     - family: QPCPage295
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p295.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p295.ttf
 
     - family: QPCPage296
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p296.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p296.ttf
 
     - family: QPCPage297
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p297.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p297.ttf
 
     - family: QPCPage298
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p298.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p298.ttf
 
     - family: QPCPage299
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p299.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p299.ttf
 
     - family: QPCPage300
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p300.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p300.ttf
 
     - family: QPCPage301
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p301.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p301.ttf
 
     - family: QPCPage302
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p302.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p302.ttf
 
     - family: QPCPage303
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p303.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p303.ttf
 
     - family: QPCPage304
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p304.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p304.ttf
 
     - family: QPCPage305
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p305.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p305.ttf
 
     - family: QPCPage306
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p306.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p306.ttf
 
     - family: QPCPage307
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p307.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p307.ttf
 
     - family: QPCPage308
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p308.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p308.ttf
 
     - family: QPCPage309
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p309.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p309.ttf
 
     - family: QPCPage310
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p310.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p310.ttf
 
     - family: QPCPage311
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p311.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p311.ttf
 
     - family: QPCPage312
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p312.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p312.ttf
 
     - family: QPCPage313
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p313.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p313.ttf
 
     - family: QPCPage314
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p314.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p314.ttf
 
     - family: QPCPage315
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p315.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p315.ttf
 
     - family: QPCPage316
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p316.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p316.ttf
 
     - family: QPCPage317
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p317.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p317.ttf
 
     - family: QPCPage318
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p318.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p318.ttf
 
     - family: QPCPage319
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p319.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p319.ttf
 
     - family: QPCPage320
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p320.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p320.ttf
 
     - family: QPCPage321
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p321.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p321.ttf
 
     - family: QPCPage322
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p322.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p322.ttf
 
     - family: QPCPage323
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p323.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p323.ttf
 
     - family: QPCPage324
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p324.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p324.ttf
 
     - family: QPCPage325
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p325.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p325.ttf
 
     - family: QPCPage326
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p326.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p326.ttf
 
     - family: QPCPage327
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p327.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p327.ttf
 
     - family: QPCPage328
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p328.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p328.ttf
 
     - family: QPCPage329
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p329.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p329.ttf
 
     - family: QPCPage330
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p330.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p330.ttf
 
     - family: QPCPage331
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p331.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p331.ttf
 
     - family: QPCPage332
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p332.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p332.ttf
 
     - family: QPCPage333
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p333.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p333.ttf
 
     - family: QPCPage334
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p334.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p334.ttf
 
     - family: QPCPage335
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p335.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p335.ttf
 
     - family: QPCPage336
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p336.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p336.ttf
 
     - family: QPCPage337
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p337.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p337.ttf
 
     - family: QPCPage338
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p338.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p338.ttf
 
     - family: QPCPage339
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p339.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p339.ttf
 
     - family: QPCPage340
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p340.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p340.ttf
 
     - family: QPCPage341
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p341.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p341.ttf
 
     - family: QPCPage342
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p342.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p342.ttf
 
     - family: QPCPage343
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p343.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p343.ttf
 
     - family: QPCPage344
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p344.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p344.ttf
 
     - family: QPCPage345
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p345.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p345.ttf
 
     - family: QPCPage346
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p346.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p346.ttf
 
     - family: QPCPage347
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p347.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p347.ttf
 
     - family: QPCPage348
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p348.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p348.ttf
 
     - family: QPCPage349
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p349.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p349.ttf
 
     - family: QPCPage350
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p350.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p350.ttf
 
     - family: QPCPage351
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p351.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p351.ttf
 
     - family: QPCPage352
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p352.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p352.ttf
 
     - family: QPCPage353
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p353.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p353.ttf
 
     - family: QPCPage354
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p354.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p354.ttf
 
     - family: QPCPage355
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p355.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p355.ttf
 
     - family: QPCPage356
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p356.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p356.ttf
 
     - family: QPCPage357
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p357.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p357.ttf
 
     - family: QPCPage358
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p358.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p358.ttf
 
     - family: QPCPage359
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p359.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p359.ttf
 
     - family: QPCPage360
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p360.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p360.ttf
 
     - family: QPCPage361
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p361.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p361.ttf
 
     - family: QPCPage362
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p362.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p362.ttf
 
     - family: QPCPage363
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p363.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p363.ttf
 
     - family: QPCPage364
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p364.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p364.ttf
 
     - family: QPCPage365
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p365.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p365.ttf
 
     - family: QPCPage366
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p366.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p366.ttf
 
     - family: QPCPage367
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p367.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p367.ttf
 
     - family: QPCPage368
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p368.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p368.ttf
 
     - family: QPCPage369
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p369.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p369.ttf
 
     - family: QPCPage370
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p370.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p370.ttf
 
     - family: QPCPage371
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p371.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p371.ttf
 
     - family: QPCPage372
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p372.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p372.ttf
 
     - family: QPCPage373
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p373.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p373.ttf
 
     - family: QPCPage374
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p374.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p374.ttf
 
     - family: QPCPage375
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p375.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p375.ttf
 
     - family: QPCPage376
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p376.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p376.ttf
 
     - family: QPCPage377
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p377.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p377.ttf
 
     - family: QPCPage378
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p378.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p378.ttf
 
     - family: QPCPage379
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p379.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p379.ttf
 
     - family: QPCPage380
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p380.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p380.ttf
 
     - family: QPCPage381
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p381.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p381.ttf
 
     - family: QPCPage382
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p382.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p382.ttf
 
     - family: QPCPage383
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p383.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p383.ttf
 
     - family: QPCPage384
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p384.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p384.ttf
 
     - family: QPCPage385
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p385.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p385.ttf
 
     - family: QPCPage386
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p386.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p386.ttf
 
     - family: QPCPage387
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p387.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p387.ttf
 
     - family: QPCPage388
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p388.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p388.ttf
 
     - family: QPCPage389
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p389.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p389.ttf
 
     - family: QPCPage390
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p390.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p390.ttf
 
     - family: QPCPage391
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p391.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p391.ttf
 
     - family: QPCPage392
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p392.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p392.ttf
 
     - family: QPCPage393
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p393.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p393.ttf
 
     - family: QPCPage394
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p394.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p394.ttf
 
     - family: QPCPage395
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p395.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p395.ttf
 
     - family: QPCPage396
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p396.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p396.ttf
 
     - family: QPCPage397
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p397.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p397.ttf
 
     - family: QPCPage398
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p398.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p398.ttf
 
     - family: QPCPage399
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p399.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p399.ttf
 
     - family: QPCPage400
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p400.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p400.ttf
 
     - family: QPCPage401
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p401.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p401.ttf
 
     - family: QPCPage402
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p402.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p402.ttf
 
     - family: QPCPage403
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p403.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p403.ttf
 
     - family: QPCPage404
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p404.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p404.ttf
 
     - family: QPCPage405
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p405.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p405.ttf
 
     - family: QPCPage406
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p406.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p406.ttf
 
     - family: QPCPage407
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p407.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p407.ttf
 
     - family: QPCPage408
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p408.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p408.ttf
 
     - family: QPCPage409
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p409.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p409.ttf
 
     - family: QPCPage410
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p410.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p410.ttf
 
     - family: QPCPage411
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p411.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p411.ttf
 
     - family: QPCPage412
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p412.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p412.ttf
 
     - family: QPCPage413
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p413.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p413.ttf
 
     - family: QPCPage414
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p414.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p414.ttf
 
     - family: QPCPage415
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p415.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p415.ttf
 
     - family: QPCPage416
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p416.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p416.ttf
 
     - family: QPCPage417
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p417.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p417.ttf
 
     - family: QPCPage418
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p418.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p418.ttf
 
     - family: QPCPage419
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p419.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p419.ttf
 
     - family: QPCPage420
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p420.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p420.ttf
 
     - family: QPCPage421
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p421.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p421.ttf
 
     - family: QPCPage422
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p422.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p422.ttf
 
     - family: QPCPage423
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p423.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p423.ttf
 
     - family: QPCPage424
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p424.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p424.ttf
 
     - family: QPCPage425
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p425.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p425.ttf
 
     - family: QPCPage426
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p426.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p426.ttf
 
     - family: QPCPage427
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p427.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p427.ttf
 
     - family: QPCPage428
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p428.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p428.ttf
 
     - family: QPCPage429
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p429.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p429.ttf
 
     - family: QPCPage430
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p430.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p430.ttf
 
     - family: QPCPage431
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p431.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p431.ttf
 
     - family: QPCPage432
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p432.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p432.ttf
 
     - family: QPCPage433
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p433.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p433.ttf
 
     - family: QPCPage434
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p434.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p434.ttf
 
     - family: QPCPage435
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p435.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p435.ttf
 
     - family: QPCPage436
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p436.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p436.ttf
 
     - family: QPCPage437
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p437.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p437.ttf
 
     - family: QPCPage438
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p438.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p438.ttf
 
     - family: QPCPage439
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p439.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p439.ttf
 
     - family: QPCPage440
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p440.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p440.ttf
 
     - family: QPCPage441
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p441.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p441.ttf
 
     - family: QPCPage442
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p442.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p442.ttf
 
     - family: QPCPage443
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p443.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p443.ttf
 
     - family: QPCPage444
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p444.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p444.ttf
 
     - family: QPCPage445
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p445.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p445.ttf
 
     - family: QPCPage446
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p446.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p446.ttf
 
     - family: QPCPage447
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p447.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p447.ttf
 
     - family: QPCPage448
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p448.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p448.ttf
 
     - family: QPCPage449
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p449.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p449.ttf
 
     - family: QPCPage450
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p450.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p450.ttf
 
     - family: QPCPage451
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p451.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p451.ttf
 
     - family: QPCPage452
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p452.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p452.ttf
 
     - family: QPCPage453
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p453.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p453.ttf
 
     - family: QPCPage454
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p454.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p454.ttf
 
     - family: QPCPage455
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p455.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p455.ttf
 
     - family: QPCPage456
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p456.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p456.ttf
 
     - family: QPCPage457
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p457.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p457.ttf
 
     - family: QPCPage458
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p458.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p458.ttf
 
     - family: QPCPage459
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p459.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p459.ttf
 
     - family: QPCPage460
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p460.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p460.ttf
 
     - family: QPCPage461
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p461.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p461.ttf
 
     - family: QPCPage462
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p462.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p462.ttf
 
     - family: QPCPage463
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p463.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p463.ttf
 
     - family: QPCPage464
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p464.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p464.ttf
 
     - family: QPCPage465
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p465.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p465.ttf
 
     - family: QPCPage466
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p466.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p466.ttf
 
     - family: QPCPage467
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p467.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p467.ttf
 
     - family: QPCPage468
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p468.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p468.ttf
 
     - family: QPCPage469
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p469.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p469.ttf
 
     - family: QPCPage470
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p470.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p470.ttf
 
     - family: QPCPage471
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p471.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p471.ttf
 
     - family: QPCPage472
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p472.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p472.ttf
 
     - family: QPCPage473
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p473.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p473.ttf
 
     - family: QPCPage474
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p474.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p474.ttf
 
     - family: QPCPage475
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p475.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p475.ttf
 
     - family: QPCPage476
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p476.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p476.ttf
 
     - family: QPCPage477
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p477.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p477.ttf
 
     - family: QPCPage478
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p478.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p478.ttf
 
     - family: QPCPage479
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p479.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p479.ttf
 
     - family: QPCPage480
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p480.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p480.ttf
 
     - family: QPCPage481
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p481.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p481.ttf
 
     - family: QPCPage482
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p482.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p482.ttf
 
     - family: QPCPage483
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p483.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p483.ttf
 
     - family: QPCPage484
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p484.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p484.ttf
 
     - family: QPCPage485
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p485.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p485.ttf
 
     - family: QPCPage486
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p486.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p486.ttf
 
     - family: QPCPage487
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p487.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p487.ttf
 
     - family: QPCPage488
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p488.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p488.ttf
 
     - family: QPCPage489
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p489.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p489.ttf
 
     - family: QPCPage490
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p490.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p490.ttf
 
     - family: QPCPage491
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p491.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p491.ttf
 
     - family: QPCPage492
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p492.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p492.ttf
 
     - family: QPCPage493
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p493.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p493.ttf
 
     - family: QPCPage494
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p494.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p494.ttf
 
     - family: QPCPage495
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p495.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p495.ttf
 
     - family: QPCPage496
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p496.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p496.ttf
 
     - family: QPCPage497
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p497.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p497.ttf
 
     - family: QPCPage498
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p498.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p498.ttf
 
     - family: QPCPage499
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p499.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p499.ttf
 
     - family: QPCPage500
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p500.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p500.ttf
 
     - family: QPCPage501
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p501.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p501.ttf
 
     - family: QPCPage502
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p502.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p502.ttf
 
     - family: QPCPage503
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p503.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p503.ttf
 
     - family: QPCPage504
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p504.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p504.ttf
 
     - family: QPCPage505
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p505.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p505.ttf
 
     - family: QPCPage506
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p506.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p506.ttf
 
     - family: QPCPage507
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p507.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p507.ttf
 
     - family: QPCPage508
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p508.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p508.ttf
 
     - family: QPCPage509
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p509.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p509.ttf
 
     - family: QPCPage510
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p510.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p510.ttf
 
     - family: QPCPage511
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p511.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p511.ttf
 
     - family: QPCPage512
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p512.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p512.ttf
 
     - family: QPCPage513
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p513.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p513.ttf
 
     - family: QPCPage514
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p514.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p514.ttf
 
     - family: QPCPage515
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p515.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p515.ttf
 
     - family: QPCPage516
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p516.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p516.ttf
 
     - family: QPCPage517
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p517.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p517.ttf
 
     - family: QPCPage518
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p518.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p518.ttf
 
     - family: QPCPage519
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p519.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p519.ttf
 
     - family: QPCPage520
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p520.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p520.ttf
 
     - family: QPCPage521
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p521.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p521.ttf
 
     - family: QPCPage522
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p522.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p522.ttf
 
     - family: QPCPage523
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p523.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p523.ttf
 
     - family: QPCPage524
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p524.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p524.ttf
 
     - family: QPCPage525
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p525.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p525.ttf
 
     - family: QPCPage526
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p526.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p526.ttf
 
     - family: QPCPage527
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p527.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p527.ttf
 
     - family: QPCPage528
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p528.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p528.ttf
 
     - family: QPCPage529
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p529.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p529.ttf
 
     - family: QPCPage530
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p530.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p530.ttf
 
     - family: QPCPage531
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p531.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p531.ttf
 
     - family: QPCPage532
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p532.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p532.ttf
 
     - family: QPCPage533
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p533.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p533.ttf
 
     - family: QPCPage534
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p534.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p534.ttf
 
     - family: QPCPage535
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p535.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p535.ttf
 
     - family: QPCPage536
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p536.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p536.ttf
 
     - family: QPCPage537
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p537.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p537.ttf
 
     - family: QPCPage538
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p538.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p538.ttf
 
     - family: QPCPage539
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p539.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p539.ttf
 
     - family: QPCPage540
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p540.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p540.ttf
 
     - family: QPCPage541
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p541.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p541.ttf
 
     - family: QPCPage542
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p542.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p542.ttf
 
     - family: QPCPage543
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p543.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p543.ttf
 
     - family: QPCPage544
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p544.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p544.ttf
 
     - family: QPCPage545
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p545.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p545.ttf
 
     - family: QPCPage546
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p546.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p546.ttf
 
     - family: QPCPage547
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p547.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p547.ttf
 
     - family: QPCPage548
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p548.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p548.ttf
 
     - family: QPCPage549
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p549.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p549.ttf
 
     - family: QPCPage550
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p550.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p550.ttf
 
     - family: QPCPage551
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p551.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p551.ttf
 
     - family: QPCPage552
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p552.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p552.ttf
 
     - family: QPCPage553
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p553.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p553.ttf
 
     - family: QPCPage554
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p554.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p554.ttf
 
     - family: QPCPage555
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p555.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p555.ttf
 
     - family: QPCPage556
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p556.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p556.ttf
 
     - family: QPCPage557
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p557.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p557.ttf
 
     - family: QPCPage558
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p558.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p558.ttf
 
     - family: QPCPage559
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p559.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p559.ttf
 
     - family: QPCPage560
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p560.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p560.ttf
 
     - family: QPCPage561
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p561.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p561.ttf
 
     - family: QPCPage562
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p562.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p562.ttf
 
     - family: QPCPage563
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p563.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p563.ttf
 
     - family: QPCPage564
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p564.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p564.ttf
 
     - family: QPCPage565
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p565.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p565.ttf
 
     - family: QPCPage566
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p566.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p566.ttf
 
     - family: QPCPage567
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p567.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p567.ttf
 
     - family: QPCPage568
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p568.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p568.ttf
 
     - family: QPCPage569
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p569.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p569.ttf
 
     - family: QPCPage570
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p570.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p570.ttf
 
     - family: QPCPage571
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p571.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p571.ttf
 
     - family: QPCPage572
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p572.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p572.ttf
 
     - family: QPCPage573
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p573.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p573.ttf
 
     - family: QPCPage574
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p574.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p574.ttf
 
     - family: QPCPage575
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p575.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p575.ttf
 
     - family: QPCPage576
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p576.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p576.ttf
 
     - family: QPCPage577
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p577.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p577.ttf
 
     - family: QPCPage578
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p578.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p578.ttf
 
     - family: QPCPage579
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p579.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p579.ttf
 
     - family: QPCPage580
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p580.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p580.ttf
 
     - family: QPCPage581
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p581.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p581.ttf
 
     - family: QPCPage582
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p582.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p582.ttf
 
     - family: QPCPage583
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p583.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p583.ttf
 
     - family: QPCPage584
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p584.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p584.ttf
 
     - family: QPCPage585
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p585.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p585.ttf
 
     - family: QPCPage586
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p586.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p586.ttf
 
     - family: QPCPage587
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p587.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p587.ttf
 
     - family: QPCPage588
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p588.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p588.ttf
 
     - family: QPCPage589
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p589.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p589.ttf
 
     - family: QPCPage590
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p590.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p590.ttf
 
     - family: QPCPage591
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p591.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p591.ttf
 
     - family: QPCPage592
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p592.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p592.ttf
 
     - family: QPCPage593
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p593.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p593.ttf
 
     - family: QPCPage594
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p594.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p594.ttf
 
     - family: QPCPage595
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p595.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p595.ttf
 
     - family: QPCPage596
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p596.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p596.ttf
 
     - family: QPCPage597
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p597.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p597.ttf
 
     - family: QPCPage598
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p598.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p598.ttf
 
     - family: QPCPage599
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p599.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p599.ttf
 
     - family: QPCPage600
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p600.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p600.ttf
 
     - family: QPCPage601
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p601.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p601.ttf
 
     - family: QPCPage602
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p602.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p602.ttf
 
     - family: QPCPage603
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p603.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p603.ttf
 
     - family: QPCPage604
       fonts:
-        - asset: lib/assets/quran/fonts/QPCV2Font.ttf/p604.ttf
+        - asset: assets/quran/fonts/QPCV2Font.ttf/p604.ttf
 

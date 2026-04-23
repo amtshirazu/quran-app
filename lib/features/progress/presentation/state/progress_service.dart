@@ -1,4 +1,4 @@
-import 'package:quran_app/features/progress/data/local/database_helper.dart';
+import 'package:quran_app/core/database/database_helper.dart';
 import 'package:quran_app/features/quran/data/repository/paged_repository.dart';
 import '../../../quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 
@@ -29,17 +29,16 @@ class ProgressService {
     final db = await dbHelper.database;
 
     final now = DateTime.now().toIso8601String();
-    final surahId = getSurahNumberFromPage(page);
 
     await db.insert('reading_sessions', {
       'mode': 'page',
-      'surah_id': surahId,
+      'surah_id': null, // 🔥 FIX
       'ayah': null,
       'page': page,
       'timestamp': now,
     });
 
-    await _updateLastRead(surahId: surahId, page: page, mode: 'page');
+    await _updateLastRead(page: page, mode: 'page');
 
     await _updateStreak();
   }
@@ -154,49 +153,63 @@ class ProgressService {
   Future<double?> _calculateProgress(int surahId, int totalAyahs) async {
     final db = await dbHelper.database;
 
-    // AYAH PROGRESS
+    final Set<int> uniqueAyahs = {};
+
+    // =========================
+    // 1. DIRECT AYAH TRACKING
+    // =========================
     final ayahResult = await db.rawQuery(
       '''
-      SELECT COUNT(DISTINCT ayah) as count
-      FROM reading_sessions
-      WHERE mode = 'ayah' AND surah_id = ?
+    SELECT DISTINCT ayah
+    FROM reading_sessions
+    WHERE mode = 'ayah' AND surah_id = ?
     ''',
       [surahId],
     );
 
-    final readAyahs = (ayahResult.first['count'] as int?) ?? 0;
-
-    double ayahProgress = 0;
-    if (totalAyahs > 0) {
-      ayahProgress = readAyahs / totalAyahs;
+    for (final row in ayahResult) {
+      final ayah = row['ayah'] as int?;
+      if (ayah != null) {
+        uniqueAyahs.add(ayah);
+      }
     }
 
-    // PAGE PROGRESS
-    final startPage = surahStartPage[surahId] ?? 1;
-    final nextStart = surahStartPage[surahId + 1] ?? 605;
-    final endPage = nextStart - 1;
+    final range = surahPageRanges[surahId];
 
-    final totalPages = endPage - startPage + 1;
-
-    final pageResult = await db.rawQuery(
-      '''
-      SELECT COUNT(DISTINCT page) as count
+    if (range != null) {
+      final pageResult = await db.rawQuery(
+        '''
+      SELECT DISTINCT page
       FROM reading_sessions
       WHERE mode = 'page'
         AND page BETWEEN ? AND ?
-    ''',
-      [startPage, endPage],
-    );
+      ''',
+        [range.start, range.end],
+      );
 
-    final pagesRead = (pageResult.first['count'] as int?) ?? 0;
+      for (final row in pageResult) {
+        final page = row['page'] as int?;
 
-    double pageProgress = 0;
-    if (totalPages > 0) {
-      pageProgress = pagesRead / totalPages;
+        if (page != null) {
+          final ayahs = await loadPageAyahs(page);
+
+          for (final ayah in ayahs) {
+            // 🔥 KEY: Only include ayahs of THIS surah
+            if (ayah.surah == surahId) {
+              uniqueAyahs.add(ayah.ayah);
+            }
+          }
+        }
+      }
     }
 
-    // COMBINE
-    return ayahProgress > pageProgress ? ayahProgress : pageProgress;
+    // =========================
+    // 3. FINAL PROGRESS
+    // =========================
+
+    if (totalAyahs == 0) return 0;
+
+    return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
   }
 
   // ========================= STATS =========================

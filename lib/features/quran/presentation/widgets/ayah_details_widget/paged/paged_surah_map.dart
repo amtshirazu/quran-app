@@ -1,31 +1,134 @@
-import '../../../../domain/models/paged.dart';
+class SurahRange {
+  final int start;
+  final int end;
+  SurahRange(this.start, this.end);
+}
 
-
-
-
-Map<int, int> surahStartPage = {
-  1: 1, 2: 2, 3: 50, 4: 77, 5: 106, 6: 128, 7: 151, 8: 177, 9: 187, 10: 208,
-  11: 221, 12: 235, 13: 249, 14: 255, 15: 262, 16: 267, 17: 282, 18: 293, 19: 305, 20: 312,
-  21: 322, 22: 332, 23: 342, 24: 350, 25: 359, 26: 367, 27: 377, 28: 385, 29: 396, 30: 404,
-  31: 411, 32: 415, 33: 418, 34: 428, 35: 434, 36: 440, 37: 446, 38: 453, 39: 458, 40: 467,
-  41: 477, 42: 483, 43: 489, 44: 496, 45: 499, 46: 502, 47: 507, 48: 511, 49: 515, 50: 518,
-  51: 520, 52: 523, 53: 526, 54: 528, 55: 531, 56: 534, 57: 537, 58: 542, 59: 545, 60: 549,
-  61: 551, 62: 553, 63: 554, 64: 556, 65: 558, 66: 560, 67: 562, 68: 564, 69: 566, 70: 568,
-  71: 570, 72: 572, 73: 574, 74: 575, 75: 577, 76: 578, 77: 580, 78: 582, 79: 583, 80: 585,
-  81: 586, 82: 587, 83: 587, 84: 589, 85: 590, 86: 591, 87: 591, 88: 592, 89: 593, 90: 594,
-  91: 595, 92: 595, 93: 596, 94: 596, 95: 597, 96: 597, 97: 598, 98: 598, 99: 599, 100: 599,
-  101: 600, 102: 600, 103: 601, 104: 601, 105: 601, 106: 602, 107: 602, 108: 602, 109: 603, 110: 603,
-  111: 603, 112: 604, 113: 604, 114: 604
+final Map<int, SurahRange> surahPageRanges = {
+  1: SurahRange(1, 1),
+  2: SurahRange(2, 49),
+  3: SurahRange(50, 76),
+  4: SurahRange(77, 105),
+  5: SurahRange(106, 127),
+  6: SurahRange(128, 150),
+  7: SurahRange(151, 176),
+  8: SurahRange(177, 186),
+  9: SurahRange(187, 207),
+  10: SurahRange(208, 220),
+  11: SurahRange(221, 234),
+  12: SurahRange(235, 248),
+  13: SurahRange(249, 254),
+  14: SurahRange(255, 261),
+  15: SurahRange(262, 266),
+  16: SurahRange(267, 281),
+  17: SurahRange(282, 292),
+  18: SurahRange(293, 304),
+  19: SurahRange(305, 311),
+  20: SurahRange(312, 321),
+  21: SurahRange(322, 331),
+  22: SurahRange(332, 341),
+  23: SurahRange(342, 349),
+  24: SurahRange(350, 358),
+  25: SurahRange(359, 366),
+  26: SurahRange(367, 376),
+  27: SurahRange(377, 384),
+  28: SurahRange(385, 395),
+  29: SurahRange(396, 403),
+  30: SurahRange(404, 410),
+  31: SurahRange(411, 414),
+  32: SurahRange(415, 417),
+  33: SurahRange(418, 427),
+  34: SurahRange(428, 433),
+  35: SurahRange(434, 439),
+  36: SurahRange(440, 445),
+  37: SurahRange(446, 452),
+  38: SurahRange(453, 457),
+  39: SurahRange(458, 466),
+  40: SurahRange(467, 476),
+  41: SurahRange(477, 482),
+  42: SurahRange(483, 488),
+  43: SurahRange(489, 495),
+  44: SurahRange(496, 498),
+  45: SurahRange(499, 501),
+  46: SurahRange(502, 506),
+  47: SurahRange(507, 510),
+  48: SurahRange(511, 514),
+  49: SurahRange(515, 517),
+  50: SurahRange(518, 519),
+  51: SurahRange(520, 522),
+  52: SurahRange(523, 525),
+  53: SurahRange(526, 527),
+  54: SurahRange(528, 530),
+  55: SurahRange(531, 533),
+  56: SurahRange(534, 536),
+  57: SurahRange(537, 541),
+  58: SurahRange(542, 544),
+  59: SurahRange(545, 548),
+  60: SurahRange(549, 550),
+  61: SurahRange(551, 552),
+  62: SurahRange(553, 553),
+  63: SurahRange(554, 555),
+  64: SurahRange(556, 557),
+  65: SurahRange(558, 559),
+  66: SurahRange(560, 561),
+  67: SurahRange(562, 563),
+  68: SurahRange(564, 565),
+  69: SurahRange(566, 567),
+  70: SurahRange(568, 569),
+  71: SurahRange(570, 571),
+  72: SurahRange(572, 573),
+  73: SurahRange(574, 574),
+  74: SurahRange(575, 576),
+  75: SurahRange(577, 577),
+  76: SurahRange(578, 579),
+  77: SurahRange(580, 581),
+  78: SurahRange(582, 582),
+  79: SurahRange(583, 584),
+  80: SurahRange(585, 585),
+  81: SurahRange(586, 586),
+  82: SurahRange(587, 587),
+  83: SurahRange(587, 588),
+  84: SurahRange(589, 589),
+  85: SurahRange(590, 590),
+  86: SurahRange(591, 591),
+  87: SurahRange(591, 591),
+  88: SurahRange(592, 592),
+  89: SurahRange(593, 593),
+  90: SurahRange(594, 594),
+  91: SurahRange(595, 595),
+  92: SurahRange(595, 595),
+  93: SurahRange(596, 596),
+  94: SurahRange(596, 596),
+  95: SurahRange(597, 597),
+  96: SurahRange(597, 597),
+  97: SurahRange(598, 598),
+  98: SurahRange(598, 598),
+  99: SurahRange(599, 599),
+  100: SurahRange(599, 599),
+  101: SurahRange(600, 600),
+  102: SurahRange(600, 600),
+  103: SurahRange(601, 601),
+  104: SurahRange(601, 601),
+  105: SurahRange(601, 601),
+  106: SurahRange(602, 602),
+  107: SurahRange(602, 602),
+  108: SurahRange(602, 602),
+  109: SurahRange(603, 603),
+  110: SurahRange(603, 603),
+  111: SurahRange(603, 603),
+  112: SurahRange(604, 604),
+  113: SurahRange(604, 604),
+  114: SurahRange(604, 604),
 };
 
+List<int> getSurahNumbersFromPage(int pageNumber) {
+  List<int> surahsOnPage = [];
 
-int getSurahNumberFromPage(int pageNumber) {
-  int foundSurah = 1;
-
-  surahStartPage.forEach((surahNum, startPage) {
-    if (pageNumber >= startPage) {
-      foundSurah = surahNum;
+  surahPageRanges.forEach((surahNum, range) {
+    if (pageNumber >= range.start && pageNumber <= range.end) {
+      surahsOnPage.add(surahNum);
     }
   });
-  return foundSurah;
+
+  return surahsOnPage;
 }

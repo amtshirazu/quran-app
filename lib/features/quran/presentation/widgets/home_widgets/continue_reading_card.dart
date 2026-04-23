@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../../core/constants/app_spacing.dart';
 import '../../../../progress/presentation/state/progress_provider.dart';
 import '../../state/reading_mode.dart';
@@ -20,15 +20,32 @@ class ContinueReadingCard extends ConsumerWidget {
 
     return lastReadAsync.when(
       data: (lastRead) {
-        if (lastRead == null || lastRead['surah_id'] == null) {
+        // ✅ FIX: allow page mode (no surah_id check)
+        if (lastRead == null) {
           return const EmptyCard();
         }
 
         return surahListAsync.when(
           data: (surahList) {
-            final surah = surahList.firstWhere(
-              (s) => s.number == lastRead['surah_id'],
-            );
+            final mode = lastRead['mode'];
+
+            dynamic surah;
+
+            // =========================
+            // 🔥 RESOLVE SURAH CORRECTLY
+            // =========================
+            if (mode == 'ayah') {
+              surah = surahList.firstWhere(
+                (s) => s.number == lastRead['surah_id'],
+              );
+            } else {
+              final page = lastRead['page'];
+
+              final surahIds = getSurahNumbersFromPage(page);
+              final firstSurahId = surahIds.isNotEmpty ? surahIds.first : 1;
+
+              surah = surahList.firstWhere((s) => s.number == firstSurahId);
+            }
 
             return FutureBuilder<double>(
               future: ref
@@ -40,7 +57,7 @@ class ContinueReadingCard extends ConsumerWidget {
                   .then((value) => value ?? 0.0),
               builder: (context, snapshot) {
                 final progress = snapshot.data ?? 0.0;
-                final mode = lastRead['mode'];
+
                 final displayVal = mode == 'ayah'
                     ? "Verse ${lastRead['ayah']}"
                     : "Page ${lastRead['page']}";
@@ -48,6 +65,7 @@ class ContinueReadingCard extends ConsumerWidget {
                 return InkWell(
                   onTap: () {
                     ref.read(selectedSurahProvider.notifier).state = surah;
+
                     if (mode == 'page') {
                       ref.read(readingModeProvider.notifier).state =
                           ReadingMode.reading;
@@ -55,6 +73,7 @@ class ContinueReadingCard extends ConsumerWidget {
                       ref.read(readingModeProvider.notifier).state =
                           ReadingMode.translation;
                     }
+
                     context.go('/readAyah');
                   },
                   child: _buildCard(

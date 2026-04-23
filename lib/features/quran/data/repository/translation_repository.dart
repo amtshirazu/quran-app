@@ -2,9 +2,6 @@ import '../../domain/models/translation.dart';
 import '../datasource/ayah_local_datasource.dart';
 import '../datasource/translation_local_datasource.dart';
 
-
-
-
 class TranslationRepository {
   final TranslationLocalDatasource datasource;
 
@@ -14,8 +11,9 @@ class TranslationRepository {
     required int surahNumber,
     required String translationFile,
   }) async {
-    final data = await datasource
-        .loadTranslationJson("lib/assets/quran/translations/$translationFile.json");
+    final data = await datasource.loadTranslationJson(
+      "assets/quran/translations/$translationFile.json",
+    );
 
     final filtered = data
         .where((element) => element["surah_number"] == surahNumber)

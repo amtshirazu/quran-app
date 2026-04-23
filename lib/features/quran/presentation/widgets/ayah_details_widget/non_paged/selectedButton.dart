@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 
-
 class SelectedButton extends StatefulWidget {
-  const SelectedButton({
-    super.key,
-    required this.text,
-    required this.icon,
-  });
+  const SelectedButton({super.key, required this.text, required this.icon});
 
   final String text;
   final IconData icon;
@@ -19,12 +13,10 @@ class SelectedButton extends StatefulWidget {
 }
 
 class _SelectedButtonState extends State<SelectedButton> {
-
   bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
     final text = widget.text;
     final icon = widget.icon;
@@ -43,24 +35,18 @@ class _SelectedButtonState extends State<SelectedButton> {
           decoration: BoxDecoration(
             color: isTapped ? AppColors.gray200 : Colors.white,
             borderRadius: BorderRadius.circular(AppSpacing.size12),
-            border: Border.all(
-              color: AppColors.gray200,
-              width: 2,
-            ),
+            border: Border.all(color: AppColors.gray200, width: 2),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 18,
-                color: AppColors.gray900,
-              ),
+              Icon(icon, size: 18, color: AppColors.gray900),
               SizedBox(width: 8),
-              Text(text,
+              Text(
+                text,
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.gray900,
-                  fontSize:  AppSpacing.size11,
+                  fontSize: AppSpacing.size11,
                 ),
                 textAlign: TextAlign.center,
               ),

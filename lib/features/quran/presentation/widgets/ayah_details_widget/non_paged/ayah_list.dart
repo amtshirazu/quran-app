@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import '../../../../../../core/constants/app_spacing.dart';
-import '../../../../../audio/presentation/state/audio_providers.dart';
-import '../../../../../progress/presentation/state/progress_provider.dart';
-import '../../../../domain/models/ayah.dart';
 import '../../../../domain/models/translation.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/ayah_tile.dart';
-
 
 class AyahList extends ConsumerStatefulWidget {
   const AyahList({
@@ -36,10 +27,7 @@ class _AyahListState extends ConsumerState<AyahList> {
     if (_currentSurahNumber == surahNumber) return;
 
     _currentSurahNumber = surahNumber;
-    _ayahParams = {
-      "surahNumber": surahNumber,
-      "script": "uthmani",
-    };
+    _ayahParams = {"surahNumber": surahNumber, "script": "uthmani"};
     _translationParams = {
       "surahNumber": surahNumber,
       "translationFile": "saheeh",
@@ -57,7 +45,9 @@ class _AyahListState extends ConsumerState<AyahList> {
 
     final ayahAsync = ref.watch(ayahListProvider(_ayahParams!));
 
-    final translationAsync = ref.watch(translationListProvider(_translationParams!));
+    final translationAsync = ref.watch(
+      translationListProvider(_translationParams!),
+    );
 
     return ayahAsync.when(
       data: (ayahs) => translationAsync.when(
@@ -67,32 +57,29 @@ class _AyahListState extends ConsumerState<AyahList> {
           });
 
           return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                    final ayah = ayahs[index];
-                  
-                    final translation = translations.firstWhere(
-                      (t) => t.ayahNumber == ayah.ayahNumber,
-                      orElse: () => Translation(
-                        surahNumber: selectedSurah.number,
-                        ayahNumber: ayah.ayahNumber,
-                        text: "Translation not found",
-                      ),
-                    );
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final ayah = ayahs[index];
 
-                    final itemKey = widget.ayahkeys.putIfAbsent(
-                      ayah.ayahNumber,
-                      () => GlobalKey(),
-                    );
+              final translation = translations.firstWhere(
+                (t) => t.ayahNumber == ayah.ayahNumber,
+                orElse: () => Translation(
+                  surahNumber: selectedSurah.number,
+                  ayahNumber: ayah.ayahNumber,
+                  text: "Translation not found",
+                ),
+              );
 
-                    return AyahTile(
-                      key: itemKey,
-                      ayah: ayah,
-                      translation: translation,
-                    );
-                  },
-               childCount: ayahs.length,
-            ),
+              final itemKey = widget.ayahkeys.putIfAbsent(
+                ayah.ayahNumber,
+                () => GlobalKey(),
+              );
+
+              return AyahTile(
+                key: itemKey,
+                ayah: ayah,
+                translation: translation,
+              );
+            }, childCount: ayahs.length),
           );
         },
         loading: () => const SliverToBoxAdapter(

@@ -1,14 +1,11 @@
 import '../domain/models/Reciters.dart';
 
-
-
 final reciters = [
-
   Reciter(
     id: "alafasy",
     name: "Mishary Rashid Alafasy",
     arabicName: "مشاري بن راشد العفاسي",
-    image: "lib/assets/reciters/alafasy.jpg",
+    image: "assets/reciters/alafasy.jpg",
     country: "Kuwait",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -20,7 +17,7 @@ final reciters = [
     id: "shuraym",
     name: "Saud Ash-Shuraym",
     arabicName: "سعود الشريم",
-    image: "lib/assets/reciters/shuraim.jpg",
+    image: "assets/reciters/shuraim.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -32,7 +29,7 @@ final reciters = [
     id: "dussary",
     name: "Yasser Ad-Dussary",
     arabicName: "ياسر الدوسري",
-    image: "lib/assets/reciters/yasser2.jpg",
+    image: "assets/reciters/yasser2.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -44,20 +41,20 @@ final reciters = [
     id: "okasha_kameny",
     name: "Okasha Kameny",
     arabicName: "عكاشة كميني",
-    image: "lib/assets/reciters/kameny.jpg",
+    image: "assets/reciters/kameny.jpg",
     country: "Ghana",
     style: "Al-Bazzi 'an Ibn Kathir",
     totalSurahs: 114,
     audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
-    serverUrl: "https://server16.mp3quran.net/okasha/Rewayat-Albizi-A-n-Ibn-Katheer",
+    serverUrl:
+        "https://server16.mp3quran.net/okasha/Rewayat-Albizi-A-n-Ibn-Katheer",
   ),
-
 
   Reciter(
     id: "islam_sobhi",
     name: "Islam Sobhi",
     arabicName: "إسلام صبحي",
-    image: "lib/assets/reciters/sobhi.jpg",
+    image: "assets/reciters/sobhi.jpg",
     country: "Egypt",
     style: "Hafs 'an Asim",
     totalSurahs: 106,
@@ -69,7 +66,7 @@ final reciters = [
     id: "Abdurrahmaan_As-Sudais",
     name: "Abdurrahmaan As-Sudais",
     arabicName: "عبد الرحمن السديس",
-    image: "lib/assets/reciters/sudais.jpg",
+    image: "assets/reciters/sudais.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -81,7 +78,7 @@ final reciters = [
     id: "abdul_basit_murattal",
     name: "Abdul Basit AbdulSammad",
     arabicName: "عبد الباسط عبد الصمد",
-    image: "lib/assets/reciters/8.jpg",
+    image: "assets/reciters/basit.jpg",
     country: "Egypt",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -93,7 +90,7 @@ final reciters = [
     id: "abdullah_matroud",
     name: "Abdullah Matroud",
     arabicName: "عبدالله المطرود",
-    image: "lib/assets/reciters/matrood.jpg",
+    image: "assets/reciters/matrood.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -105,7 +102,7 @@ final reciters = [
     id: "abdullah_basfar",
     name: "Abdullah Basfar",
     arabicName: "عبدالله بصفر",
-    image: "lib/assets/reciters/basfar.jpg",
+    image: "assets/reciters/basfar.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -117,7 +114,7 @@ final reciters = [
     id: "abu_bakr_shaatree",
     name: "Abu Bakr Ash-Shaatree",
     arabicName: "أبو بكر الشاطري",
-    image: "lib/assets/reciters/shatri.jpg",
+    image: "assets/reciters/shatri.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -129,7 +126,7 @@ final reciters = [
     id: "husary",
     name: "Mahmoud Khalil Al-Husary",
     arabicName: "محمود خليل الحصري",
-    image: "lib/assets/reciters/husry.jpg",
+    image: "assets/reciters/husry.jpg",
     country: "Egypt",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -137,12 +134,11 @@ final reciters = [
     serverUrl: "https://server13.mp3quran.net/husr",
   ),
 
-
   Reciter(
     id: "ali_jaber",
     name: "Ali Jaber",
     arabicName: "علي جابر",
-    image: "lib/assets/reciters/jabir.jpg",
+    image: "assets/reciters/jabir.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -154,7 +150,7 @@ final reciters = [
     id: "maher_muaiqly",
     name: "Maher Al-Muaiqly",
     arabicName: "ماهر المعيقلي",
-    image: "lib/assets/reciters/muaiqly.jpg",
+    image: "assets/reciters/muaiqly.jpg",
     country: "Saudi Arabia",
     style: "Hafs 'an Asim",
     totalSurahs: 114,
@@ -162,17 +158,15 @@ final reciters = [
     serverUrl: "https://server12.mp3quran.net/maher",
   ),
 
-
   Reciter(
     id: "warsh_Omar_Al-Qazabri",
     name: "Omar Al-Qazabri",
     arabicName: "عمر القزابري",
-    image: "lib/assets/reciters/Omar.jpg",
+    image: "assets/reciters/Omar.jpg",
     country: "Morocco",
     style: "Warsh 'an Nafi",
     totalSurahs: 114,
     audioFolder: "warsh/warsh_ibrahim_aldosary_128kbps",
     serverUrl: "https://server9.mp3quran.net/omar_warsh",
   ),
-
 ];

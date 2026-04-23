@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
@@ -30,11 +29,7 @@ class AyahHeaderSection extends ConsumerWidget {
               audio.reset();
               context.go("/surahs");
             },
-            icon: Icon(
-                LucideIcons.arrowLeft,
-                color: Colors.white,
-                size: 24,
-            ),
+            icon: Icon(LucideIcons.arrowLeft, color: Colors.white, size: 24),
           ),
           SizedBox(width: 16),
 
@@ -75,12 +70,11 @@ class AyahHeaderSection extends ConsumerWidget {
                 await audio.seekToStart();
               }
 
-
               final surah = surahs?[selectedSurah!.number - 1];
-              if (!audio.hasLoadedSurah
-                  && reciter != null &&
+              if (!audio.hasLoadedSurah &&
+                  reciter != null &&
                   surah != null &&
-                  surahs != null ) {
+                  surahs != null) {
                 await audio.playSurah(
                   reciter: reciter,
                   surah: surah,
@@ -91,9 +85,11 @@ class AyahHeaderSection extends ConsumerWidget {
               }
             },
             icon: Icon(
-                playerState?.playing == true ? LucideIcons.pause : LucideIcons.play,
-                color: AppColors.gray200,
-                size: 22,
+              playerState?.playing == true
+                  ? LucideIcons.pause
+                  : LucideIcons.play,
+              color: AppColors.gray200,
+              size: 22,
             ),
           ),
         ],

@@ -1,20 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/features/progress/domain/models/profile_progress_state.dart';
 import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-
-class ProfileProgressState {
-  final double progress;
-  final int streak;
-  final int verses;
-  final int surahs;
-
-  ProfileProgressState({
-    required this.progress,
-    required this.streak,
-    required this.verses,
-    required this.surahs,
-  });
-}
 
 final profileProgressProvider = FutureProvider<ProfileProgressState>((
   ref,

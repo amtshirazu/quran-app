@@ -13,7 +13,6 @@ class SurahList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final surahAsync = ref.watch(surahListProvider);
     final searchQuery = ref.watch(searchQueryProvider);
-    final textTheme = Theme.of(context).textTheme;
 
     return surahAsync.when(
       loading: () => SliverToBoxAdapter(
@@ -55,21 +54,20 @@ class SurahList extends ConsumerWidget {
 
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                return
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          SurahTile(surah: filteredSurahs[index]),
-                          if (index != filteredSurahs.length - 1)
-                            const Divider(
-                              height: 1,
-                              thickness: 2,
-                              color: AppColors.gray200,
-                            ),
-                        ],
-                      ),
-                    );
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      SurahTile(surah: filteredSurahs[index]),
+                      if (index != filteredSurahs.length - 1)
+                        const Divider(
+                          height: 1,
+                          thickness: 2,
+                          color: AppColors.gray200,
+                        ),
+                    ],
+                  ),
+                );
               }, childCount: filteredSurahs.length),
             ),
           ],

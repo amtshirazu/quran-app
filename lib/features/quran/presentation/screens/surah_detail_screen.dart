@@ -16,18 +16,14 @@ class SurahDetailScreen extends ConsumerStatefulWidget {
   const SurahDetailScreen({super.key});
 
   @override
-  ConsumerState<SurahDetailScreen> createState() =>
-      _SurahDetailScreenState();
+  ConsumerState<SurahDetailScreen> createState() => _SurahDetailScreenState();
 }
 
-class _SurahDetailScreenState
-    extends ConsumerState<SurahDetailScreen> {
+class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   final ScrollController _scrollController = ScrollController();
-
   final Map<int, GlobalKey> _ayahKeys = {};
 
   PageController? _pageController;
-
   int? _targetAyah;
 
   @override
@@ -41,23 +37,20 @@ class _SurahDetailScreenState
       final progressService = ref.read(progressServiceProvider);
       final lastRead = await progressService.getLastRead();
 
-      var initialPage = surahStartPage[selectedSurah.number]! - 1;
+      final range = surahPageRanges[selectedSurah.number];
+      var initialPage = (range?.start ?? 1) - 1;
 
-      if (lastRead != null &&
-          lastRead['surah_id'] == selectedSurah.number) {
+      if (lastRead != null && lastRead['surah_id'] == selectedSurah.number) {
         final mode = lastRead['mode'];
 
         if (mode == 'ayah') {
           _targetAyah = lastRead['ayah'];
-        } else if (mode == 'page' &&
-            lastRead['page'] is int) {
-          initialPage = lastRead['page'] - 1;
+        } else if (mode == 'page' && lastRead['page'] is int) {
+          initialPage = (lastRead['page'] as int) - 1;
         }
       }
 
-      _pageController = PageController(
-        initialPage: initialPage,
-      );
+      _pageController = PageController(initialPage: initialPage);
 
       if (mounted) {
         setState(() {});
@@ -66,33 +59,34 @@ class _SurahDetailScreenState
   }
 
   void _scrollToAyah(int ayah) {
-  if (!mounted) return;
+    if (!mounted) return;
 
-  final key = _ayahKeys[ayah];
+    final key = _ayahKeys[ayah];
 
-  if (key?.currentContext != null) {
-    Scrollable.ensureVisible(
-      key!.currentContext!,
-      duration: const Duration(milliseconds: 50),
-      curve: Curves.fastOutSlowIn,
-      alignment: 0.1,
-    );
-  } else {
-    _scrollController.animateTo(
-      _scrollController.offset + 100, 
-      duration: const Duration(milliseconds: 50), 
-      curve: Curves.linear
-    ).then((_) {
-       WidgetsBinding.instance.addPostFrameCallback((_) {
-         _scrollToAyah(ayah);
-       });
-    });
+    if (key?.currentContext != null) {
+      Scrollable.ensureVisible(
+        key!.currentContext!,
+        duration: const Duration(milliseconds: 50),
+        curve: Curves.fastOutSlowIn,
+        alignment: 0.1,
+      );
+    } else {
+      _scrollController
+          .animateTo(
+            _scrollController.offset + 100,
+            duration: const Duration(milliseconds: 50),
+            curve: Curves.linear,
+          )
+          .then((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToAyah(ayah);
+            });
+          });
+    }
   }
-}
 
   void _jumpToPage(int? page) {
-    if (page == null ||
-        _pageController == null) return;
+    if (page == null || _pageController == null) return;
 
     _pageController!.jumpToPage(page - 1);
   }
@@ -100,7 +94,6 @@ class _SurahDetailScreenState
   void _onAyahListBuilt() {
     if (_targetAyah != null) {
       _scrollToAyah(_targetAyah!);
-
       _targetAyah = null;
     }
   }
@@ -114,18 +107,11 @@ class _SurahDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final readingMode =
-        ref.watch(readingModeProvider);
-
-    final selectedSurah =
-        ref.watch(selectedSurahProvider);
+    final readingMode = ref.watch(readingModeProvider);
+    final selectedSurah = ref.watch(selectedSurahProvider);
 
     if (selectedSurah == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -134,35 +120,24 @@ class _SurahDetailScreenState
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.emerald50,
-              Colors.white,
-            ],
+            colors: [AppColors.emerald50, Colors.white],
           ),
         ),
         child: Column(
           children: [
             AyahHeaderSection(),
 
-            if (readingMode ==
-                ReadingMode.translation)
+            if (readingMode == ReadingMode.translation)
               Expanded(
                 child: CustomScrollView(
                   controller: _scrollController,
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: SurahInfo(),
-                    ),
+                    SliverToBoxAdapter(child: SurahInfo()),
 
-                    if (selectedSurah.number != 1 &&
-                        selectedSurah.number != 9)
-                      SliverToBoxAdapter(
-                        child: Basmallah(),
-                      ),
+                    if (selectedSurah.number != 1 && selectedSurah.number != 9)
+                      SliverToBoxAdapter(child: Basmallah()),
 
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 10),
-                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
                     AyahList(
                       ayahkeys: _ayahKeys,
@@ -176,13 +151,11 @@ class _SurahDetailScreenState
             else
               Expanded(
                 child: _pageController == null
-                    ? const Center(
-                        child:
-                            CircularProgressIndicator(),
-                      )
+                    ? const Center(child: CircularProgressIndicator())
                     : QuranPagedReaderScreen(
                         controller: _pageController!,
-                        initialPage: surahStartPage[selectedSurah.number]!,
+                        initialPage:
+                            (surahPageRanges[selectedSurah.number]?.start ?? 1),
                       ),
               ),
           ],

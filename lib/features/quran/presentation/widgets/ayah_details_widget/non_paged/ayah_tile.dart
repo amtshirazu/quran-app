@@ -24,6 +24,7 @@ class AyahTile extends ConsumerStatefulWidget {
 
 class _AyahTileState extends ConsumerState<AyahTile> {
   bool _hasBeenTracked = false;
+  bool isBookmarked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +85,19 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                   Row(
                     children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          LucideIcons.bookmark,
-                          color: AppColors.gray400,
-                          size: 18,
+                      Container(
+                        color: isBookmarked ? Colors.yellow : null,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isBookmarked = !isBookmarked;
+                            });
+                          },
+                          icon: const Icon(
+                            LucideIcons.bookmark,
+                            color: AppColors.gray400,
+                            size: 18,
+                          ),
                         ),
                       ),
                       IconButton(

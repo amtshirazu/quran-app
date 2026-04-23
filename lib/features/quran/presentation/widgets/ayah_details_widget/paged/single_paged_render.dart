@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../domain/models/paged.dart';
-import '../../../state/quran_providers.dart';
 import 'polygon_utils.dart';
-import 'ayah_highlight_painter.dart';
 
 class QuranPage extends ConsumerWidget {
   final String svgAsset;
@@ -32,17 +30,13 @@ class QuranPage extends ConsumerWidget {
 
           if (rect.right > maxDesignX) maxDesignX = rect.right;
           if (rect.bottom > maxDesignY) maxDesignY = rect.bottom;
-
         }
 
         final scaleX = constraints.maxWidth / maxDesignX;
         final scaleY = constraints.maxHeight / maxDesignY;
 
-        final playingAyah = ref.watch(currentPlayingAyahProvider);
-
         return Stack(
           children: [
-
             SvgPicture.asset(
               svgAsset,
               fit: BoxFit.contain,
@@ -51,10 +45,7 @@ class QuranPage extends ConsumerWidget {
             ),
 
             ...ayahs.map((ayah) {
-
               final rect = polygonToRect(ayah.polygon);
-
-              final isHighlighted = false ;
 
               return Positioned(
                 left: rect.left * scaleX,
@@ -66,13 +57,11 @@ class QuranPage extends ConsumerWidget {
                   onTap: () => onTapAyah(ayah),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isHighlighted ? Colors.yellow.withOpacity(0.35) : Colors.transparent,
-                      border: Border.all(
-                        color: isHighlighted ? Colors.yellow : Colors.transparent,
-                        width: 2,
-                      ),
+                      color: Colors.yellow.withOpacity(0.35),
+
+                      border: Border.all(color: Colors.yellow, width: 2),
                     ),
-                  )
+                  ),
                 ),
               );
             }),
