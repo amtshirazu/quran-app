@@ -35,8 +35,7 @@ class _QuranPagedReaderScreenState
 
     Future.microtask(() async {
       final progress = ref.read(progressServiceProvider);
-
-      await progress.trackPage(widget.initialPage);
+      progress.trackPage(widget.initialPage);
 
       ref.invalidate(lastReadProvider);
       ref.invalidate(lastReadSurahProvider);
@@ -55,7 +54,7 @@ class _QuranPagedReaderScreenState
     pageAyahsAsync.whenData((ayahs) {
       if (ayahs.isEmpty) return;
 
-      // 🔥 Get dominant surah (first ayah on page)
+      //  Get dominant surah (first ayah on page)
       final surahNumber = ayahs.first.surah;
 
       final currentSelected = ref.read(selectedSurahProvider);

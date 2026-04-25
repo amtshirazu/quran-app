@@ -54,8 +54,8 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE bookmarks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      surah_id INTEGER NOT NULL,
-      ayah_number INTEGER NOT NULL,
+      surah_id INTEGER ,
+      ayah_number INTEGER,
       page INTEGER,
       note TEXT,
       created_at TEXT NOT NULL

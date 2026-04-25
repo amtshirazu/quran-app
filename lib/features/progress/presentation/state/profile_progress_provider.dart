@@ -29,9 +29,32 @@ final profileProgressProvider = FutureProvider<ProfileProgressState>((
 // Static providers (these are fine as-is)
 final profileNameProvider = Provider<String>((ref) => 'Abdullah');
 
-final profileSinceProvider = Provider<String>(
-  (ref) => 'Reading since Jan 2026',
-);
+final profileSinceProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(progressServiceProvider);
+
+  final firstDate = await service.getFirstReadingDate();
+
+  if (firstDate == null) {
+    return 'Start your journey today';
+  }
+
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  return 'Reading since ${months[firstDate.month - 1]} ${firstDate.year}';
+});
 
 final motivationTitleProvider = Provider<String>((ref) => 'Keep Going!');
 

@@ -14,6 +14,8 @@ import '../../domain/models/paged.dart';
 import '../../domain/models/surah.dart';
 import '../../domain/models/translation.dart';
 
+final shouldResumeLastReadProvider = StateProvider<bool>((ref) => false);
+
 final surahRepositoryProvider = Provider<SurahMetadataRepository>((ref) {
   return SurahMetadataRepository(surahs: SurahLocalDatasource());
 });

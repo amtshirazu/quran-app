@@ -140,17 +140,77 @@ class ProgressService {
     return result.first;
   }
 
-  // ========================= CORE LOGIC =========================
-
   Future<double?> getSurahProgress({
     required int surahId,
     required int totalAyahs,
   }) async {
-    final result = await _calculateProgress(surahId, totalAyahs);
+    final result = await _calculateSingleSurahProgress(surahId, totalAyahs);
     return result;
   }
 
-  Future<double?> _calculateProgress(int surahId, int totalAyahs) async {
+  Future<double?> _calculateSingleSurahProgress(
+    int surahId,
+    int totalAyahs,
+  ) async {
+    final lastRead = await getLastRead();
+
+    if (lastRead == null) return 0.0;
+
+    final mode = lastRead['mode'];
+
+    // AYAH MODE
+    if (mode == 'ayah') {
+      final ayah = lastRead['ayah'] ?? 0;
+      return (ayah / totalAyahs).clamp(0.0, 1.0);
+    }
+
+    // PAGE MODE
+    if (mode == 'page') {
+      final page = lastRead['page'];
+
+      if (page == null) return 0.0;
+
+      final range = surahPageRanges[surahId];
+      if (range == null) return 0.0;
+
+      int countedAyahs = 0;
+
+      // 1. FULL previous pages + current page verses sum
+      for (int p = range.start; p <= page; p++) {
+        final ayahs = await loadPageAyahs(p);
+
+        countedAyahs += ayahs.where((a) => a.surah == surahId).length;
+      }
+
+      return (countedAyahs / totalAyahs).clamp(0.0, 1.0);
+    }
+
+    return 0.0;
+  }
+
+  // ========================= STATS =========================
+
+  Future<int?> getSurahsCompleted(List<dynamic> surahs) async {
+    int completedSurahs = 0;
+
+    for (final surah in surahs) {
+      final progress = await _calculateSurahsProgress(
+        surahId: surah.number,
+        totalAyahs: surah.totalAyahs,
+      );
+
+      if (progress! >= 1.0) {
+        completedSurahs++;
+      }
+    }
+
+    return completedSurahs;
+  }
+
+  Future<double?> _calculateSurahsProgress({
+    required int surahId,
+    required int totalAyahs,
+  }) async {
     final db = await dbHelper.database;
 
     final Set<int> uniqueAyahs = {};
@@ -174,6 +234,7 @@ class ProgressService {
       }
     }
 
+    // ayah tracking based on pages read
     final range = surahPageRanges[surahId];
 
     if (range != null) {
@@ -194,7 +255,7 @@ class ProgressService {
           final ayahs = await loadPageAyahs(page);
 
           for (final ayah in ayahs) {
-            // 🔥 KEY: Only include ayahs of THIS surah
+            // Only include ayahs of THIS surah
             if (ayah.surah == surahId) {
               uniqueAyahs.add(ayah.ayah);
             }
@@ -203,16 +264,19 @@ class ProgressService {
       }
     }
 
-    // =========================
-    // 3. FINAL PROGRESS
-    // =========================
-
     if (totalAyahs == 0) return 0;
 
-    return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
+    final result = (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
+    return result;
   }
 
-  // ========================= STATS =========================
+  Future<double> getQuranProgress() async {
+    final totalReadAyahs = await getTotalVersesRead();
+
+    const totalAyahs = 6236;
+
+    return (totalReadAyahs / totalAyahs).clamp(0.0, 1.0);
+  }
 
   Future<int> getTotalVersesRead() async {
     final db = await dbHelper.database;
@@ -258,28 +322,31 @@ class ProgressService {
     return uniqueAyahs.length;
   }
 
-  Future<int?> getSurahsCompleted(List<dynamic> surahs) async {
-    int completedSurahs = 0;
+  Future<DateTime?> getFirstReadingDate() async {
+    final db = await dbHelper.database;
 
-    for (final surah in surahs) {
-      final progress = await getSurahProgress(
-        surahId: surah.number,
-        totalAyahs: surah.totalAyahs,
-      );
+    final result = await db.rawQuery('''
+    SELECT timestamp
+    FROM reading_sessions
+    ORDER BY timestamp ASC
+    LIMIT 1
+  ''');
 
-      if (progress! >= 1.0) {
-        completedSurahs++;
-      }
-    }
+    if (result.isEmpty) return null;
 
-    return completedSurahs;
+    final raw = result.first['timestamp'] as String?;
+    if (raw == null) return null;
+
+    return DateTime.tryParse(raw);
   }
 
-  Future<double> getQuranProgress() async {
-    final totalReadAyahs = await getTotalVersesRead();
+  Future<void> clearAllReadingHistory() async {
+    final db = await dbHelper.database;
 
-    const totalAyahs = 6236;
+    // Delete all rows from reading_sessions
+    await db.delete('reading_sessions');
 
-    return (totalReadAyahs / totalAyahs).clamp(0.0, 1.0);
+    // Also clear last_read so the UI doesn't try to resume a deleted session
+    await db.delete('last_read');
   }
 }

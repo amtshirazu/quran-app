@@ -34,12 +34,39 @@ class QuranProgressCard extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Quran Progress',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Colors.black87,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Overall completion',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey, // Add this explicitly
+                ),
+              ),
+              Text(
+                "${progress.round()}%",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.emerald600,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress / 100,
             backgroundColor: AppColors.emerald200,

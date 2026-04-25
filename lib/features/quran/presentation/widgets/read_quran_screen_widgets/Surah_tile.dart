@@ -10,17 +10,8 @@ import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_
 import '../../../../../core/constants/app_spacing.dart';
 import '../../../domain/models/surah.dart';
 
-
-
-
-
-
-
 class SurahTile extends ConsumerWidget {
-  const SurahTile({
-    super.key,
-    required this.surah,
-  });
+  const SurahTile({super.key, required this.surah});
 
   final Surah surah;
 
@@ -33,6 +24,7 @@ class SurahTile extends ConsumerWidget {
         onTap: () {
           ref.read(searchQueryProvider.notifier).state = "";
           ref.read(selectedSurahProvider.notifier).state = surah;
+          ref.read(shouldResumeLastReadProvider.notifier).state = false;
           context.push("/readAyah");
         },
         child: Card(
@@ -40,7 +32,8 @@ class SurahTile extends ConsumerWidget {
           elevation: 0,
           margin: EdgeInsets.zero,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero, // Optional: makes corners square so they connect perfectly
+            borderRadius: BorderRadius
+                .zero, // Optional: makes corners square so they connect perfectly
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -52,51 +45,50 @@ class SurahTile extends ConsumerWidget {
 
                 Expanded(
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          surah.nameEnglish,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: AppColors.gray900,
-                            fontSize: AppSpacing.size14,
-                          ),
-                        ),
-                        Text(
-                          surah.translation,
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: AppColors.gray600,
-                            fontSize: AppSpacing.size12,
-                          ),
-                        )
-                      ],
-                  ),
-                ),
-
-                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        surah.nameArabic,
+                        surah.nameEnglish,
                         style: textTheme.titleMedium?.copyWith(
                           color: AppColors.gray900,
                           fontSize: AppSpacing.size14,
                         ),
                       ),
-                      SizedBox(height: 4,),
-                      Row(
-                        children: [
-                          SurahVersesBadge(totalAyahs: surah.totalAyahs),
-                          SizedBox(width: 4,),
-                          Icon(
-                            LucideIcons.chevronRight,
-                            color: AppColors.gray400,
-                          ),
-                        ],
+                      Text(
+                        surah.translation,
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: AppColors.gray600,
+                          fontSize: AppSpacing.size12,
+                        ),
                       ),
-                    ]
+                    ],
+                  ),
                 ),
 
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      surah.nameArabic,
+                      style: textTheme.titleMedium?.copyWith(
+                        color: AppColors.gray900,
+                        fontSize: AppSpacing.size14,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Row(
+                      children: [
+                        SurahVersesBadge(totalAyahs: surah.totalAyahs),
+                        SizedBox(width: 4),
+                        Icon(
+                          LucideIcons.chevronRight,
+                          color: AppColors.gray400,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

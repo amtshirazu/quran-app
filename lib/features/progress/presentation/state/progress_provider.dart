@@ -7,11 +7,13 @@ final progressServiceProvider = Provider<ProgressService>((ref) {
   return ProgressService();
 });
 
+// Provides the last read information, including surah_id, ayah, page, and mode (ayah/page)
 final lastReadProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
   final service = ref.watch(progressServiceProvider);
   return await service.getLastRead();
 });
 
+// provides us with the surah object of the last read surah (if available)
 final lastReadSurahProvider = Provider<Surah?>((ref) {
   final surahListAsync = ref.watch(surahListProvider);
   final lastReadAsync = ref.watch(lastReadProvider);

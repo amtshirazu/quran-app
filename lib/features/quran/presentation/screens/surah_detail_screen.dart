@@ -23,6 +23,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   final ScrollController _scrollController = ScrollController();
   final Map<int, GlobalKey> _ayahKeys = {};
 
+  int? _initialPageForReader;
   PageController? _pageController;
   int? _targetAyah;
 
@@ -34,27 +35,33 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
       final selectedSurah = ref.read(selectedSurahProvider);
       if (selectedSurah == null) return;
 
-      final progressService = ref.read(progressServiceProvider);
-      final lastRead = await progressService.getLastRead();
+      // Check if we should actually resume
+      final shouldResume = ref.read(shouldResumeLastReadProvider);
 
       final range = surahPageRanges[selectedSurah.number];
-      var initialPage = (range?.start ?? 1) - 1;
+      var initialPage = (range?.start ?? 1);
 
-      if (lastRead != null && lastRead['surah_id'] == selectedSurah.number) {
-        final mode = lastRead['mode'];
+      if (shouldResume) {
+        final progressService = ref.read(progressServiceProvider);
+        final lastRead = await progressService.getLastRead();
 
-        if (mode == 'ayah') {
-          _targetAyah = lastRead['ayah'];
-        } else if (mode == 'page' && lastRead['page'] is int) {
-          initialPage = (lastRead['page'] as int) - 1;
+        if (lastRead != null) {
+          final mode = lastRead['mode'];
+          if (mode == 'ayah' && lastRead['surah_id'] == selectedSurah.number) {
+            _targetAyah = lastRead['ayah'];
+          } else if (mode == 'page' && lastRead['page'] is int) {
+            initialPage = lastRead['page'];
+          }
         }
       }
 
-      _pageController = PageController(initialPage: initialPage);
+      // After logic is done, reset the flag so next visits from surah list start at 1
+      ref.read(shouldResumeLastReadProvider.notifier).state = false;
 
-      if (mounted) {
-        setState(() {});
-      }
+      _initialPageForReader = initialPage;
+      _pageController = PageController(initialPage: initialPage - 1);
+
+      if (mounted) setState(() {});
     });
   }
 
@@ -83,12 +90,6 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
             });
           });
     }
-  }
-
-  void _jumpToPage(int? page) {
-    if (page == null || _pageController == null) return;
-
-    _pageController!.jumpToPage(page - 1);
   }
 
   void _onAyahListBuilt() {
@@ -150,12 +151,12 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
               )
             else
               Expanded(
-                child: _pageController == null
+                child:
+                    (_pageController == null || _initialPageForReader == null)
                     ? const Center(child: CircularProgressIndicator())
                     : QuranPagedReaderScreen(
                         controller: _pageController!,
-                        initialPage:
-                            (surahPageRanges[selectedSurah.number]?.start ?? 1),
+                        initialPage: _initialPageForReader!,
                       ),
               ),
           ],

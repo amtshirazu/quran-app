@@ -57,9 +57,9 @@ class QuranPage extends ConsumerWidget {
                   onTap: () => onTapAyah(ayah),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.yellow.withOpacity(0.35),
+                      color: Colors.transparent,
 
-                      border: Border.all(color: Colors.yellow, width: 2),
+                      border: Border.all(color: Colors.transparent),
                     ),
                   ),
                 ),

@@ -20,7 +20,7 @@ class ContinueReadingCard extends ConsumerWidget {
 
     return lastReadAsync.when(
       data: (lastRead) {
-        // ✅ FIX: allow page mode (no surah_id check)
+        // FIX: allow page mode (no surah_id check)
         if (lastRead == null) {
           return const EmptyCard();
         }
@@ -31,9 +31,7 @@ class ContinueReadingCard extends ConsumerWidget {
 
             dynamic surah;
 
-            // =========================
-            // 🔥 RESOLVE SURAH CORRECTLY
-            // =========================
+            // RESOLVE SURAH CORRECTLY
             if (mode == 'ayah') {
               surah = surahList.firstWhere(
                 (s) => s.number == lastRead['surah_id'],
@@ -65,6 +63,8 @@ class ContinueReadingCard extends ConsumerWidget {
                 return InkWell(
                   onTap: () {
                     ref.read(selectedSurahProvider.notifier).state = surah;
+                    ref.read(shouldResumeLastReadProvider.notifier).state =
+                        true;
 
                     if (mode == 'page') {
                       ref.read(readingModeProvider.notifier).state =
