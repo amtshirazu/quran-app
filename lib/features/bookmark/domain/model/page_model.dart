@@ -3,7 +3,7 @@ import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 class PageBookmarkUI {
   final Bookmark bookmark;
   final String surahName;
-  final String juz;
+  final int juz;
   final String arabicPreview;
 
   PageBookmarkUI({
