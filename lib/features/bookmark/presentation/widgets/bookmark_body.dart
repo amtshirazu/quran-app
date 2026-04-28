@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/bookmark/domain/model/page_model.dart';
-import 'package:quran_app/features/bookmark/domain/model/view_model.dart';
+import 'package:quran_app/features/bookmark/domain/model/verse_model.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/ayah_bookmark_card.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/domain/model/page_model.dart';
-import 'package:quran_app/features/bookmark/domain/model/view_model.dart';
+import 'package:quran_app/features/bookmark/domain/model/verse_model.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
