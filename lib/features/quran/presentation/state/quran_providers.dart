@@ -152,6 +152,22 @@ final currentPlayingPageProvider = Provider<int?>((ref) {
 
 final currentPageProvider = StateProvider<int>((ref) => 0);
 
+final currentPageSurahProvider = FutureProvider<Surah?>((ref) async {
+  final currentPage = ref.watch(currentPageProvider);
+  if (currentPage < 1 || currentPage > 604) return null;
+
+  final surahList = await ref.watch(surahListProvider.future);
+  final pageAyahs = await ref.watch(pageAyahsProvider(currentPage).future);
+  if (pageAyahs.isEmpty) return null;
+
+  final firstAyahSurahId = pageAyahs.first.surah;
+  for (final surah in surahList) {
+    if (surah.number == firstAyahSurahId) return surah;
+  }
+
+  return null;
+});
+
 final surahProgressProvider =
     FutureProvider.family<double, ({int surahId, int totalAyahs})>((
       ref,
