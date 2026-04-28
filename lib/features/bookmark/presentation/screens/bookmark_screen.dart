@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_body.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_header.dart';
 
 class BookmarkScreen extends ConsumerStatefulWidget {
@@ -21,7 +22,12 @@ class BookmarkScreenState extends ConsumerState<BookmarkScreen> {
             colors: [Color(0xFFFFF8E1), Colors.white],
           ),
         ),
-        child: Column(children: [BookmarkHeader()]),
+        child: Column(
+          children: [
+            BookmarkHeader(),
+            Expanded(child: BookmarkBody()),
+          ],
+        ),
       ),
     );
   }

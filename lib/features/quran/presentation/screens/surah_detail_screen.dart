@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../progress/presentation/state/progress_provider.dart';
 import '../state/reading_mode.dart';
 import '../widgets/ayah_details_widget/non_paged/ayah_list.dart';
 import '../widgets/ayah_details_widget/non_paged/basmallah.dart';
-import '../widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../widgets/ayah_details_widget/paged/quran_paged_reader_screen.dart';
 import '../widgets/ayah_details_widget/non_paged/surah_navigation_card.dart';
 import '../widgets/ayah_details_widget/non_paged/surah_info.dart';
@@ -21,48 +21,64 @@ class SurahDetailScreen extends ConsumerStatefulWidget {
 
 class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   final ScrollController _scrollController = ScrollController();
-
   final Map<int, GlobalKey> _ayahKeys = {};
 
-  int? _initialPageForReader;
   PageController? _pageController;
   int? _targetAyah;
 
   int? _currentSurahForKeys;
+  bool _initialized = false;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _scrollController.dispose();
+    _pageController?.dispose();
+    super.dispose();
+  }
 
-    Future.microtask(() async {
+  void _initOnce() {
+    if (_initialized) return;
+    _initialized = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final selectedSurah = ref.read(selectedSurahProvider);
       if (selectedSurah == null) return;
 
       _resetKeysIfNeeded(selectedSurah.number);
 
-      final shouldResume = ref.read(shouldResumeLastReadProvider);
-
       final range = surahPageRanges[selectedSurah.number];
-      var initialPage = (range?.start ?? 1);
+      int initialPage = range?.start ?? 1;
 
-      if (shouldResume) {
-        final progressService = ref.read(progressServiceProvider);
-        final lastRead = await progressService.getLastRead();
+      /// 🔥 1. BOOKMARK JUMP (highest priority)
+      final jumpPage = ref.read(jumpToPageProvider);
+      if (jumpPage != null) {
+        initialPage = jumpPage;
+        ref.read(jumpToPageProvider.notifier).state = null;
+      } else {
+        /// 🔥 2. LAST READ ONLY IF NO JUMP
+        final shouldResume = ref.read(shouldResumeLastReadProvider);
 
-        if (lastRead != null) {
-          final mode = lastRead['mode'];
+        if (shouldResume) {
+          final progressService = ref.read(progressServiceProvider);
+          final lastRead = await progressService.getLastRead();
 
-          if (mode == 'ayah' && lastRead['surah_id'] == selectedSurah.number) {
-            _targetAyah = lastRead['ayah'];
-          } else if (mode == 'page' && lastRead['page'] is int) {
-            initialPage = lastRead['page'];
+          if (lastRead != null) {
+            final mode = lastRead['mode'];
+
+            if (mode == 'ayah' &&
+                lastRead['surah_id'] == selectedSurah.number) {
+              _targetAyah = lastRead['ayah'];
+            } else if (mode == 'page' && lastRead['page'] is int) {
+              initialPage = lastRead['page'];
+            }
           }
         }
+
+        ref.read(shouldResumeLastReadProvider.notifier).state = false;
       }
 
-      ref.read(shouldResumeLastReadProvider.notifier).state = false;
-
-      _initialPageForReader = initialPage;
+      /// 🔥 3. CREATE CONTROLLER SAFELY
+      _pageController?.dispose();
       _pageController = PageController(initialPage: initialPage - 1);
 
       if (mounted) setState(() {});
@@ -111,14 +127,9 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    _pageController?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _initOnce();
+
     final readingMode = ref.watch(readingModeProvider);
     final selectedSurah = ref.watch(selectedSurahProvider);
 
@@ -147,7 +158,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
                     SliverToBoxAdapter(child: SurahInfo()),
 
                     if (selectedSurah.number != 1 && selectedSurah.number != 9)
-                      SliverToBoxAdapter(child: Basmallah()),
+                      const SliverToBoxAdapter(child: Basmallah()),
 
                     const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
@@ -162,12 +173,12 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
               )
             else
               Expanded(
-                child:
-                    (_pageController == null || _initialPageForReader == null)
+                child: _pageController == null
                     ? const Center(child: CircularProgressIndicator())
                     : QuranPagedReaderScreen(
                         controller: _pageController!,
-                        initialPage: _initialPageForReader!,
+                        initialPage:
+                            _pageController!.initialPage + 1, // safe fallback
                       ),
               ),
           ],

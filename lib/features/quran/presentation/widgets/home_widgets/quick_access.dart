@@ -35,8 +35,8 @@ class QuickAccess extends StatelessWidget {
             route: "/audioHome",
           ),
           QuickAccessCard(
-            bgColor: AppColors.purple100,
-            fgColor: AppColors.purple600,
+            bgColor: AppColors.amber100,
+            fgColor: AppColors.amber600,
             icon: LucideIcons.bookmark,
             text: "Bookmarks",
             route: "/bookmarks",

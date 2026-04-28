@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
+import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
+import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
@@ -80,12 +83,37 @@ class SurahHeaderSection extends ConsumerWidget {
                     final selectedSurah = ref.read(selectedSurahProvider);
                     if (selectedSurah == null) return;
 
-                    final toggle = ref.read(pageBookmarkActionProvider);
+                    final bookmarks = await ref.read(bookmarksProvider.future);
 
-                    await toggle(page: currentPage);
+                    Bookmark? existingBookmark;
+                    try {
+                      existingBookmark = bookmarks.firstWhere(
+                        (b) =>
+                            b.type == BookmarkType.page &&
+                            b.page == currentPage,
+                      );
+                    } catch (_) {
+                      existingBookmark = null;
+                    }
 
-                    final data = await ref.read(bookmarksProvider.future);
-                    print(data);
+                    final note = await showBookmarkDialog(
+                      context,
+                      title: "Add Bookmark",
+                      subtitle:
+                          "${selectedSurah.nameEnglish} • Page $currentPage",
+                      initialNote: existingBookmark?.note,
+                    );
+
+                    if (note == null) return;
+
+                    final service = ref.read(bookmarkServiceProvider);
+
+                    await service.addOrUpdatePageBookmark(
+                      page: currentPage,
+                      note: note,
+                    );
+
+                    ref.invalidate(bookmarksProvider);
                   },
                   icon: Icon(
                     isBookmarked

@@ -13,7 +13,6 @@ class BottomNavbar extends StatelessWidget {
   final Function(int) onTap;
   final int currentIndex;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +24,6 @@ class BottomNavbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           _NavItem(
             icon: LucideIcons.book,
             text: "Home",
@@ -34,10 +32,10 @@ class BottomNavbar extends StatelessWidget {
           ),
 
           _NavItem(
-              icon: LucideIcons.bookOpen,
-              text: "Read",
-              onTap: () => onTap(1),
-              isActive: currentIndex == 1,
+            icon: LucideIcons.bookOpen,
+            text: "Read",
+            onTap: () => onTap(1),
+            isActive: currentIndex == 1,
           ),
 
           _NavItem(
@@ -60,8 +58,7 @@ class BottomNavbar extends StatelessWidget {
             onTap: () => onTap(4),
             isActive: currentIndex == 4,
           ),
-
-        ]
+        ],
       ),
     );
   }
@@ -69,7 +66,6 @@ class BottomNavbar extends StatelessWidget {
 
 class _NavItem extends StatelessWidget {
   const _NavItem({
-    super.key,
     required this.icon,
     required this.text,
     required this.onTap,
@@ -91,17 +87,11 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-              icon,
-              color: color,
-              size: 18,
-          ),
+          Icon(icon, color: color, size: 18),
           SizedBox(height: 4),
           Text(
-              text,
-              style: TextStyle(
-              color: color,
-              fontSize: AppSpacing.size10),
+            text,
+            style: TextStyle(color: color, fontSize: AppSpacing.size10),
           ),
         ],
       ),

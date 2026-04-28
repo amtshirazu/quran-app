@@ -1,5 +1,4 @@
 import '../../domain/models/translation.dart';
-import '../datasource/ayah_local_datasource.dart';
 import '../datasource/translation_local_datasource.dart';
 
 class TranslationRepository {

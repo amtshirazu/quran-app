@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
-
 import '../../../../../core/constants/app_spacing.dart';
 
-
-
-
-
 class ModeSwitcher extends StatelessWidget {
-  const ModeSwitcher({
-    super.key,
-    required this.mode,
-    required this.onChanged
-  });
+  const ModeSwitcher({super.key, required this.mode, required this.onChanged});
 
   final ReadingMode mode;
   final Function(ReadingMode) onChanged;
@@ -40,13 +31,14 @@ class ModeSwitcher extends StatelessWidget {
   }
 
   Widget buildButton(String text, ReadingMode newMode) {
-
     return GestureDetector(
       onTap: () => onChanged(newMode),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical : 8),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: mode == newMode ? AppColors.emerald500.withOpacity(0.5): Colors.transparent,
+          color: mode == newMode
+              ? AppColors.emerald500.withOpacity(0.5)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Center(
@@ -59,7 +51,7 @@ class ModeSwitcher extends StatelessWidget {
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

@@ -4,11 +4,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
-import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 
-class EmptyBookmarksState extends ConsumerWidget {
-  const EmptyBookmarksState({super.key});
+class EmptyBookmarksCard extends ConsumerWidget {
+  const EmptyBookmarksCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,8 +27,6 @@ class EmptyBookmarksState extends ConsumerWidget {
         icon = LucideIcons.bookmark;
         themeColor = const Color(0xFFD97706); // Orange
         buttonText = "Browse Surahs";
-        ref.read(readingModeProvider.notifier).state = ReadingMode
-            .translation; // Set reading mode to translation when exploring verses
         break;
       case BookmarkTab.pages:
         title = "No Page Bookmarks";
@@ -41,8 +37,6 @@ class EmptyBookmarksState extends ConsumerWidget {
           0xFFD97706,
         ); // Emerald/Green (as per your image)
         buttonText = "Start Reading";
-        ref.read(readingModeProvider.notifier).state = ReadingMode
-            .reading; // Set reading mode to translation when exploring pages
         break;
       default: // BookmarkTab.all
         title = "No Bookmarks Yet";

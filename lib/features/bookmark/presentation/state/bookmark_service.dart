@@ -98,9 +98,10 @@ class BookmarkService {
     return await db.delete('bookmarks');
   }
 
-  Future<void> toggleVerseBookmark({
+  Future<void> addOrUpdateVerseBookmark({
     required int surahId,
     required int ayahNumber,
+    required String note,
   }) async {
     final db = await _databaseHelper.database;
 
@@ -111,24 +112,30 @@ class BookmarkService {
     );
 
     if (existing.isNotEmpty) {
-      await db.delete(
+      // UPDATE bookmark
+      await db.update(
         'bookmarks',
-        where: 'type = ? AND surah_id = ? AND ayah_number = ?',
-        whereArgs: [BookmarkType.verse, surahId, ayahNumber],
+        {'note': note, 'created_at': DateTime.now().toIso8601String()},
+        where: 'id = ?',
+        whereArgs: [existing.first['id']],
       );
     } else {
+      // INSERT
       await db.insert('bookmarks', {
         'surah_id': surahId,
         'ayah_number': ayahNumber,
         'page': null,
-        'note': null,
+        'note': note,
         'type': BookmarkType.verse,
         'created_at': DateTime.now().toIso8601String(),
       });
     }
   }
 
-  Future<void> togglePageBookmark({required int page}) async {
+  Future<void> addOrUpdatePageBookmark({
+    required int page,
+    required String note,
+  }) async {
     final db = await _databaseHelper.database;
 
     final existing = await db.query(
@@ -138,17 +145,20 @@ class BookmarkService {
     );
 
     if (existing.isNotEmpty) {
-      await db.delete(
+      // UPDATE bookmark
+      await db.update(
         'bookmarks',
-        where: 'type = ? AND page = ?',
-        whereArgs: [BookmarkType.page, page],
+        {'note': note, 'created_at': DateTime.now().toIso8601String()},
+        where: 'id = ?',
+        whereArgs: [existing.first['id']],
       );
     } else {
+      // INSERT
       await db.insert('bookmarks', {
         'surah_id': null,
         'ayah_number': null,
         'page': page,
-        'note': null,
+        'note': note,
         'type': BookmarkType.page,
         'created_at': DateTime.now().toIso8601String(),
       });

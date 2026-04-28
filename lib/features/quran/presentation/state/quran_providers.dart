@@ -18,6 +18,8 @@ import '../../domain/models/translation.dart';
 
 final shouldResumeLastReadProvider = StateProvider<bool>((ref) => false);
 
+final jumpToPageProvider = StateProvider<int?>((ref) => null);
+
 final surahRepositoryProvider = Provider<SurahMetadataRepository>((ref) {
   return SurahMetadataRepository(surahs: SurahLocalDatasource());
 });

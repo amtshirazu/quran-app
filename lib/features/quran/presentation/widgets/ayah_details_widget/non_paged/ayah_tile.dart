@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
-import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
+import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
+import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -46,7 +48,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     return VisibilityDetector(
       key: Key('visibility-${widget.ayah.ayahNumber}'),
       onVisibilityChanged: (visibilityInfo) async {
-        if (visibilityInfo.visibleFraction >= 0.2 && !_hasBeenTracked) {
+        if (visibilityInfo.visibleFraction >= 0.6 && !_hasBeenTracked) {
           final progressService = ref.read(progressServiceProvider);
           final selectedSurah = ref.read(selectedSurahProvider);
 
@@ -58,8 +60,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
           );
 
           ref.invalidate(lastReadProvider);
-          ref.invalidate(lastReadSurahProvider);
-          ref.invalidate(profileProgressProvider);
 
           if (mounted) {
             setState(() {
@@ -103,15 +103,45 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           final selectedSurah = ref.read(selectedSurahProvider);
                           if (selectedSurah == null) return;
 
-                          final toggle = ref.read(verseBookmarkActionProvider);
-
-                          await toggle(
-                            surahId: selectedSurah.number,
-                            ayahNumber: widget.ayah.ayahNumber,
+                          // 👇 STEP 1: fetch bookmarks
+                          final bookmarks = await ref.read(
+                            bookmarksProvider.future,
                           );
 
-                          final data = await ref.read(bookmarksProvider.future);
-                          print(data);
+                          Bookmark? existingBookmark;
+
+                          try {
+                            existingBookmark = bookmarks.firstWhere(
+                              (b) =>
+                                  b.type == BookmarkType.verse &&
+                                  b.surahId == selectedSurah.number &&
+                                  b.ayahNumber == widget.ayah.ayahNumber,
+                            );
+                          } catch (_) {
+                            existingBookmark = null;
+                          }
+
+                          // open dialog with existing note
+                          final note = await showBookmarkDialog(
+                            context,
+                            title: "Add Bookmark",
+                            subtitle:
+                                "${selectedSurah.nameEnglish} • Verse ${widget.ayah.ayahNumber}",
+                            initialNote: existingBookmark?.note,
+                          );
+
+                          if (note == null) return;
+
+                          // save (insert or update)
+                          final service = ref.read(bookmarkServiceProvider);
+
+                          await service.addOrUpdateVerseBookmark(
+                            surahId: selectedSurah.number,
+                            ayahNumber: widget.ayah.ayahNumber,
+                            note: note,
+                          );
+
+                          ref.invalidate(bookmarksProvider);
                         },
                         icon: Icon(
                           isBookmarked
@@ -135,7 +165,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       IconButton(
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          final progress = ref.read(progressServiceProvider);
                           final defaultReciter = ref.read(
                             defaultReciterProvider,
                           );
@@ -150,13 +179,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             surah: selectedSurah,
                             ayah: widget.ayah.ayahNumber,
                           );
-
-                          await progress.trackAyah(
-                            selectedSurah.number,
-                            widget.ayah.ayahNumber,
-                          );
-
-                          ref.invalidate(profileProgressProvider);
                         },
                         icon: const Icon(
                           LucideIcons.volume2,

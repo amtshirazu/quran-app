@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-
-
-
 
 class PlayerCardButtons extends StatelessWidget {
-  const PlayerCardButtons({
-    super.key,
-    required this.icon,
-    required this.text,
-  });
+  const PlayerCardButtons({super.key, required this.icon, required this.text});
 
   final IconData icon;
   final String text;
@@ -18,13 +10,8 @@ class PlayerCardButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: () {},
-      icon: Icon(
-        icon,
-        size: 24,
-      ),
-      label: Text(
-        text,
-      ),
+      icon: Icon(icon, size: 24),
+      label: Text(text),
     );
   }
 }
