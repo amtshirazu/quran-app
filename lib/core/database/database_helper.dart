@@ -58,6 +58,7 @@ class DatabaseHelper {
       ayah_number INTEGER,
       page INTEGER,
       note TEXT,
+      type TEXT NOT NULL,
       created_at TEXT NOT NULL
     )
     ''');

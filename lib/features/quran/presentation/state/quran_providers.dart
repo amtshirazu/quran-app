@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
+import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
 import 'package:quran_app/features/quran/data/datasource/ayah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/datasource/surah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/repository/quran_metadata.dart';
 import 'package:quran_app/features/quran/data/repository/quran_repository.dart';
+import 'package:quran_app/features/quran/domain/models/continueReadingData.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../data/datasource/translation_local_datasource.dart';
 import '../../data/repository/paged_repository.dart';
 import '../../data/repository/translation_repository.dart';
@@ -144,4 +146,73 @@ class AyahIdentifier {
 final currentPlayingPageProvider = Provider<int?>((ref) {
   final playing = ref.watch(currentPlayingAyahProvider);
   return playing?.page;
+});
+
+final currentPageProvider = StateProvider<int>((ref) => 0);
+
+final surahProgressProvider =
+    FutureProvider.family<double, ({int surahId, int totalAyahs})>((
+      ref,
+      data,
+    ) async {
+      final service = ref.watch(progressServiceProvider);
+
+      final result = await service.getSurahProgress(
+        surahId: data.surahId,
+        totalAyahs: data.totalAyahs,
+      );
+
+      return result ?? 0.0;
+    });
+
+final lastReadResolvedSurahProvider = FutureProvider<Surah?>((ref) async {
+  final lastRead = await ref.watch(lastReadProvider.future);
+  final surahList = await ref.watch(surahListProvider.future);
+
+  if (lastRead == null) return null;
+
+  final mode = lastRead['mode'] as String;
+
+  if (mode == 'ayah') {
+    return surahList.firstWhere((s) => s.number == lastRead['surah_id']);
+  }
+
+  final page = lastRead['page'] as int?;
+
+  if (page == null) return null;
+
+  final surahIds = getSurahNumbersFromPage(page);
+
+  final id = surahIds.isNotEmpty ? surahIds.first : 1;
+
+  return surahList.firstWhere((s) => s.number == id);
+});
+
+final continueReadingProvider = FutureProvider<ContinueReadingData?>((
+  ref,
+) async {
+  final lastRead = await ref.watch(lastReadProvider.future);
+  if (lastRead == null) return null;
+
+  final resolvedSurah = await ref.watch(lastReadResolvedSurahProvider.future);
+  if (resolvedSurah == null) return null;
+
+  final mode = lastRead['mode'] as String;
+
+  final progress = await ref.watch(
+    surahProgressProvider((
+      surahId: resolvedSurah.number,
+      totalAyahs: resolvedSurah.totalAyahs,
+    )).future,
+  );
+
+  final displayText = mode == 'ayah'
+      ? "Verse ${lastRead['ayah']}"
+      : "Page ${lastRead['page']}";
+
+  return ContinueReadingData(
+    surah: resolvedSurah,
+    displayText: displayText,
+    progress: progress,
+  );
 });

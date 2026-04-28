@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/header_section.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../progress/presentation/state/progress_provider.dart';
 import '../state/reading_mode.dart';
@@ -21,11 +21,14 @@ class SurahDetailScreen extends ConsumerStatefulWidget {
 
 class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   final ScrollController _scrollController = ScrollController();
+
   final Map<int, GlobalKey> _ayahKeys = {};
 
   int? _initialPageForReader;
   PageController? _pageController;
   int? _targetAyah;
+
+  int? _currentSurahForKeys;
 
   @override
   void initState() {
@@ -35,7 +38,8 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
       final selectedSurah = ref.read(selectedSurahProvider);
       if (selectedSurah == null) return;
 
-      // Check if we should actually resume
+      _resetKeysIfNeeded(selectedSurah.number);
+
       final shouldResume = ref.read(shouldResumeLastReadProvider);
 
       final range = surahPageRanges[selectedSurah.number];
@@ -47,6 +51,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
         if (lastRead != null) {
           final mode = lastRead['mode'];
+
           if (mode == 'ayah' && lastRead['surah_id'] == selectedSurah.number) {
             _targetAyah = lastRead['ayah'];
           } else if (mode == 'page' && lastRead['page'] is int) {
@@ -55,7 +60,6 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         }
       }
 
-      // After logic is done, reset the flag so next visits from surah list start at 1
       ref.read(shouldResumeLastReadProvider.notifier).state = false;
 
       _initialPageForReader = initialPage;
@@ -63,6 +67,13 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
       if (mounted) setState(() {});
     });
+  }
+
+  void _resetKeysIfNeeded(int surahNumber) {
+    if (_currentSurahForKeys != surahNumber) {
+      _ayahKeys.clear();
+      _currentSurahForKeys = surahNumber;
+    }
   }
 
   void _scrollToAyah(int ayah) {
@@ -73,15 +84,15 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     if (key?.currentContext != null) {
       Scrollable.ensureVisible(
         key!.currentContext!,
-        duration: const Duration(milliseconds: 50),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.fastOutSlowIn,
         alignment: 0.1,
       );
     } else {
       _scrollController
           .animateTo(
-            _scrollController.offset + 100,
-            duration: const Duration(milliseconds: 50),
+            _scrollController.offset + 120,
+            duration: const Duration(milliseconds: 200),
             curve: Curves.linear,
           )
           .then((_) {
@@ -126,7 +137,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         ),
         child: Column(
           children: [
-            AyahHeaderSection(),
+            SurahHeaderSection(mode: readingMode, controller: _pageController),
 
             if (readingMode == ReadingMode.translation)
               Expanded(

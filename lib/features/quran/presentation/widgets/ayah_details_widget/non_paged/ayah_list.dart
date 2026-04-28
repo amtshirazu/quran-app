@@ -27,7 +27,9 @@ class _AyahListState extends ConsumerState<AyahList> {
     if (_currentSurahNumber == surahNumber) return;
 
     _currentSurahNumber = surahNumber;
+
     _ayahParams = {"surahNumber": surahNumber, "script": "uthmani"};
+
     _translationParams = {
       "surahNumber": surahNumber,
       "translationFile": "saheeh",
@@ -37,6 +39,7 @@ class _AyahListState extends ConsumerState<AyahList> {
   @override
   Widget build(BuildContext context) {
     final selectedSurah = ref.watch(selectedSurahProvider);
+
     if (selectedSurah == null) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
@@ -44,7 +47,6 @@ class _AyahListState extends ConsumerState<AyahList> {
     _updateParams(selectedSurah.number);
 
     final ayahAsync = ref.watch(ayahListProvider(_ayahParams!));
-
     final translationAsync = ref.watch(
       translationListProvider(_translationParams!),
     );
@@ -69,6 +71,9 @@ class _AyahListState extends ConsumerState<AyahList> {
                 ),
               );
 
+              ///  SAFE KEY CREATION (to avoid GlobalKey duplication)
+              ///  We store the keys in a map in the parent widget, and assign them to the AyahTiles.
+              /// This way, when the list is rebuilt, we reuse the same keys for the same ayahs, avoiding duplication and ensuring that the state of each tile is preserved correctly.
               final itemKey = widget.ayahkeys.putIfAbsent(
                 ayah.ayahNumber,
                 () => GlobalKey(),
@@ -85,16 +90,13 @@ class _AyahListState extends ConsumerState<AyahList> {
         loading: () => const SliverToBoxAdapter(
           child: Center(child: CircularProgressIndicator()),
         ),
-        error: (error, stack) => SliverToBoxAdapter(
-          child: Center(child: Text('Error loading translations: $error')),
-        ),
+        error: (e, _) =>
+            SliverToBoxAdapter(child: Text("Translation error: $e")),
       ),
       loading: () => const SliverToBoxAdapter(
         child: Center(child: CircularProgressIndicator()),
       ),
-      error: (error, stack) => SliverToBoxAdapter(
-        child: Center(child: Text('Error loading ayahs: $error')),
-      ),
+      error: (e, _) => SliverToBoxAdapter(child: Text("Ayah error: $e")),
     );
   }
 }

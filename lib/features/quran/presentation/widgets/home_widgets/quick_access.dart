@@ -5,8 +5,6 @@ import 'package:quran_app/features/quran/presentation/widgets/home_widgets/quick
 
 import '../../../../../core/constants/app_colors.dart';
 
-
-
 class QuickAccess extends StatelessWidget {
   const QuickAccess({super.key});
 
@@ -41,7 +39,7 @@ class QuickAccess extends StatelessWidget {
             fgColor: AppColors.purple600,
             icon: LucideIcons.bookmark,
             text: "Bookmarks",
-            route: "/surahs",
+            route: "/bookmarks",
           ),
           QuickAccessCard(
             bgColor: AppColors.pink100,

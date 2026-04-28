@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../../core/constants/app_spacing.dart';
 import '../../../../progress/presentation/state/progress_provider.dart';
 import '../../state/reading_mode.dart';
@@ -15,80 +14,33 @@ class ContinueReadingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lastReadAsync = ref.watch(lastReadProvider);
-    final surahListAsync = ref.watch(surahListProvider);
+    final continueReadingAsync = ref.watch(continueReadingProvider);
 
-    return lastReadAsync.when(
-      data: (lastRead) {
-        // FIX: allow page mode (no surah_id check)
-        if (lastRead == null) {
-          return const EmptyCard();
-        }
+    return continueReadingAsync.when(
+      data: (data) {
+        if (data == null) return const EmptyCard();
 
-        return surahListAsync.when(
-          data: (surahList) {
-            final mode = lastRead['mode'];
+        return InkWell(
+          onTap: () {
+            ref.read(selectedSurahProvider.notifier).state = data.surah;
+            ref.read(shouldResumeLastReadProvider.notifier).state = true;
 
-            dynamic surah;
+            final lastRead = ref.read(lastReadProvider).asData?.value;
+            final mode = lastRead?['mode'];
 
-            // RESOLVE SURAH CORRECTLY
-            if (mode == 'ayah') {
-              surah = surahList.firstWhere(
-                (s) => s.number == lastRead['surah_id'],
-              );
-            } else {
-              final page = lastRead['page'];
+            ref.read(readingModeProvider.notifier).state = mode == 'page'
+                ? ReadingMode.reading
+                : ReadingMode.translation;
 
-              final surahIds = getSurahNumbersFromPage(page);
-              final firstSurahId = surahIds.isNotEmpty ? surahIds.first : 1;
-
-              surah = surahList.firstWhere((s) => s.number == firstSurahId);
-            }
-
-            return FutureBuilder<double>(
-              future: ref
-                  .read(progressServiceProvider)
-                  .getSurahProgress(
-                    surahId: surah.number,
-                    totalAyahs: surah.totalAyahs,
-                  )
-                  .then((value) => value ?? 0.0),
-              builder: (context, snapshot) {
-                final progress = snapshot.data ?? 0.0;
-
-                final displayVal = mode == 'ayah'
-                    ? "Verse ${lastRead['ayah']}"
-                    : "Page ${lastRead['page']}";
-
-                return InkWell(
-                  onTap: () {
-                    ref.read(selectedSurahProvider.notifier).state = surah;
-                    ref.read(shouldResumeLastReadProvider.notifier).state =
-                        true;
-
-                    if (mode == 'page') {
-                      ref.read(readingModeProvider.notifier).state =
-                          ReadingMode.reading;
-                    } else {
-                      ref.read(readingModeProvider.notifier).state =
-                          ReadingMode.translation;
-                    }
-
-                    context.go('/readAyah');
-                  },
-                  child: _buildCard(
-                    subtitle: "${surah.nameEnglish} • $displayVal",
-                    progress: progress,
-                  ),
-                );
-              },
-            );
+            context.go('/readAyah');
           },
-          loading: () => const SizedBox.shrink(),
-          error: (_, __) => const EmptyCard(),
+          child: _buildCard(
+            subtitle: "${data.surah.nameEnglish} • ${data.displayText}",
+            progress: data.progress,
+          ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const SizedBox.shrink(),
       error: (_, __) => const EmptyCard(),
     );
   }

@@ -17,7 +17,6 @@ class QuranAudioService {
 
   bool _isUserSelecting = false;
 
-
   void setUserSelecting(bool value) {
     _isUserSelecting = value;
   }
@@ -27,9 +26,7 @@ class QuranAudioService {
   Future<void> init(WidgetRef ref) async {
     await configureAudioSession();
 
-
     _ayahPlayer.currentIndexStream.listen((index) {
-
       if (index == null) return;
       final current = ref.read(currentPlayingAyahProvider);
 
@@ -75,15 +72,14 @@ class QuranAudioService {
       }
     });
 
-
     _ayahPlayer.positionStream.listen((position) async {
       final repeatMode = ref.read(repeatModeProvider);
       final duration = _ayahPlayer.duration;
 
       if ((repeatMode == RepeatStates.off ||
-          repeatMode == RepeatStates.repeatOne
-          || repeatMode == RepeatStates.repeatAll
-      )  && duration != null) {
+              repeatMode == RepeatStates.repeatOne ||
+              repeatMode == RepeatStates.repeatAll) &&
+          duration != null) {
         final finishLine = duration - const Duration(milliseconds: 200);
 
         if (position >= finishLine) {
@@ -108,7 +104,6 @@ class QuranAudioService {
         }
       }
     });
-
   }
 
   bool _hasLoadedSurah = false;
@@ -117,9 +112,7 @@ class QuranAudioService {
 
   AudioPlayer get player => _audioPlayer;
 
-
   Future<void> updateRepeatMode(RepeatStates mode) async {
-
     final loopMode = switch (mode) {
       RepeatStates.repeatAll => LoopMode.all,
       RepeatStates.repeatOne => LoopMode.one,
@@ -129,7 +122,6 @@ class QuranAudioService {
     await _audioPlayer.setLoopMode(loopMode);
     await _ayahPlayer.setLoopMode(loopMode);
   }
-
 
   Future<void> play() async {
     await _audioPlayer.play();
@@ -191,7 +183,6 @@ class QuranAudioService {
     required Surah surah,
     required int ayah,
   }) async {
-
     final session = await AudioSession.instance;
     await session.setActive(true);
     _audioPlayer.stop();
@@ -200,19 +191,38 @@ class QuranAudioService {
     final directory = await getApplicationDocumentsDirectory();
     final currentAyahIndex = ayah - 1;
 
-
     List<Future<AudioSource>> windowFutures = [];
 
     if (currentAyahIndex > 0) {
-      windowFutures.add(buildUrl(surah: surah, ayah: ayah - 1, reciter: reciter, dirPath: directory.path));
+      windowFutures.add(
+        buildUrl(
+          surah: surah,
+          ayah: ayah - 1,
+          reciter: reciter,
+          dirPath: directory.path,
+        ),
+      );
     }
 
-    windowFutures.add(buildUrl(surah: surah, ayah: ayah, reciter: reciter, dirPath: directory.path));
+    windowFutures.add(
+      buildUrl(
+        surah: surah,
+        ayah: ayah,
+        reciter: reciter,
+        dirPath: directory.path,
+      ),
+    );
 
     if (currentAyahIndex < surah.totalAyahs - 1) {
-      windowFutures.add(buildUrl(surah: surah, ayah: ayah + 1, reciter: reciter, dirPath: directory.path));
+      windowFutures.add(
+        buildUrl(
+          surah: surah,
+          ayah: ayah + 1,
+          reciter: reciter,
+          dirPath: directory.path,
+        ),
+      );
     }
-
 
     final windowSources = await Future.wait(windowFutures);
 
@@ -223,24 +233,37 @@ class QuranAudioService {
 
     _ayahPlayer.play();
 
-    _fillRestOfAyahPlaylist(windowSources, surah, currentAyahIndex, reciter, directory.path);
+    _fillRestOfAyahPlaylist(
+      windowSources,
+      surah,
+      currentAyahIndex,
+      reciter,
+      directory.path,
+    );
   }
 
   void _fillRestOfAyahPlaylist(
-      List<AudioSource> playlist,
-      Surah surah,
-      int currentIdx,
-      Reciter reciter,
-      String path
-      ) async {
+    List<AudioSource> playlist,
+    Surah surah,
+    int currentIdx,
+    Reciter reciter,
+    String path,
+  ) async {
     for (int i = 1; i <= surah.totalAyahs; i++) {
       int indexInList = i - 1;
 
-      if (indexInList == currentIdx || indexInList == currentIdx - 1 || indexInList == currentIdx + 1) {
+      if (indexInList == currentIdx ||
+          indexInList == currentIdx - 1 ||
+          indexInList == currentIdx + 1) {
         continue;
       }
 
-      final source = await buildUrl(surah: surah, ayah: i, reciter: reciter, dirPath: path);
+      final source = await buildUrl(
+        surah: surah,
+        ayah: i,
+        reciter: reciter,
+        dirPath: path,
+      );
 
       if (indexInList < currentIdx - 1) {
         playlist.insert(indexInList, source);
@@ -255,7 +278,6 @@ class QuranAudioService {
     required Surah surah,
     required List<Surah> allSurahs,
   }) async {
-
     final session = await AudioSession.instance;
     await session.setActive(true);
 
@@ -266,23 +288,29 @@ class QuranAudioService {
     final currentIndex = allSurahs.indexWhere((s) => s.number == surah.number);
 
     final prevIdx = currentIndex > 0 ? currentIndex - 1 : null;
-    final nextIdx = currentIndex < allSurahs.length - 1 ? currentIndex + 1 : null;
-
+    final nextIdx = currentIndex < allSurahs.length - 1
+        ? currentIndex + 1
+        : null;
 
     List<Future<AudioSource>> windowFutures = [];
 
     if (prevIdx != null) {
-      windowFutures.add(_buildSingleAudioSource(allSurahs[prevIdx], reciter, directory.path));
+      windowFutures.add(
+        _buildSingleAudioSource(allSurahs[prevIdx], reciter, directory.path),
+      );
     }
 
-    windowFutures.add(_buildSingleAudioSource(allSurahs[currentIndex], reciter, directory.path));
+    windowFutures.add(
+      _buildSingleAudioSource(allSurahs[currentIndex], reciter, directory.path),
+    );
 
     if (nextIdx != null) {
-      windowFutures.add(_buildSingleAudioSource(allSurahs[nextIdx], reciter, directory.path));
+      windowFutures.add(
+        _buildSingleAudioSource(allSurahs[nextIdx], reciter, directory.path),
+      );
     }
 
     final windowSources = await Future.wait(windowFutures);
-
 
     await _audioPlayer.setAudioSources(
       windowSources,
@@ -299,13 +327,25 @@ class QuranAudioService {
 
     _startBackgroundDownload(url, localPath);
 
-    _fillRestOfSurahPlaylist(windowSources, allSurahs, currentIndex, reciter, directory.path);
+    _fillRestOfSurahPlaylist(
+      windowSources,
+      allSurahs,
+      currentIndex,
+      reciter,
+      directory.path,
+    );
   }
 
-
-  void _fillRestOfSurahPlaylist(List<AudioSource> playlist, List<Surah> all, int currentIdx, Reciter reciter, String path) async {
+  void _fillRestOfSurahPlaylist(
+    List<AudioSource> playlist,
+    List<Surah> all,
+    int currentIdx,
+    Reciter reciter,
+    String path,
+  ) async {
     for (int i = 0; i < all.length; i++) {
-      if (i == currentIdx || i == currentIdx - 1 || i == currentIdx + 1) continue;
+      if (i == currentIdx || i == currentIdx - 1 || i == currentIdx + 1)
+        continue;
 
       final source = await _buildSingleAudioSource(all[i], reciter, path);
 
@@ -316,7 +356,6 @@ class QuranAudioService {
       }
     }
   }
-
 
   Future<AudioSource> _buildSingleAudioSource(
     Surah surah,
@@ -401,8 +440,6 @@ class QuranAudioService {
   Future<void> configureAudioSession() async {
     final session = await AudioSession.instance;
 
-    await session.configure(
-      const AudioSessionConfiguration.music(),
-    );
+    await session.configure(const AudioSessionConfiguration.music());
   }
 }

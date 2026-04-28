@@ -1,21 +1,13 @@
-
-
-
+import 'package:quran_app/features/quran/domain/models/surah.dart';
 
 class ContinueReadingData {
-  final int surahId;
-  final String surahName;
-  final int? ayah;
-  final int? page;
-  final String mode;
+  final Surah surah;
+  final String displayText;
   final double progress;
 
   ContinueReadingData({
-    required this.surahId,
-    required this.surahName,
-    required this.mode,
+    required this.surah,
+    required this.displayText,
     required this.progress,
-    this.ayah,
-    this.page,
   });
 }

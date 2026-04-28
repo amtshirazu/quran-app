@@ -19,7 +19,7 @@ class ProfileProgressScreen extends ConsumerWidget {
     final progressAsync = ref.watch(profileProgressProvider);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.emerald50,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

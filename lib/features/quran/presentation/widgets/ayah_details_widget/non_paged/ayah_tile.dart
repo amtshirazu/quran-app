@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
@@ -24,14 +25,26 @@ class AyahTile extends ConsumerStatefulWidget {
 
 class _AyahTileState extends ConsumerState<AyahTile> {
   bool _hasBeenTracked = false;
-  bool isBookmarked = false;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    final selectedSurah = ref.watch(selectedSurahProvider);
+
+    if (selectedSurah == null) {
+      return const SizedBox.shrink();
+    }
+
+    final isBookmarked = ref.watch(
+      isAyahBookmarkedProvider((
+        surahId: selectedSurah.number,
+        ayahNumber: widget.ayah.ayahNumber,
+      )),
+    );
+
     return VisibilityDetector(
-      key: widget.key ?? Key('ayah-${widget.ayah.ayahNumber}'),
+      key: Key('visibility-${widget.ayah.ayahNumber}'),
       onVisibilityChanged: (visibilityInfo) async {
         if (visibilityInfo.visibleFraction >= 0.2 && !_hasBeenTracked) {
           final progressService = ref.read(progressServiceProvider);
@@ -85,19 +98,30 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                   Row(
                     children: [
-                      Container(
-                        color: isBookmarked ? Colors.yellow : null,
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isBookmarked = !isBookmarked;
-                            });
-                          },
-                          icon: const Icon(
-                            LucideIcons.bookmark,
-                            color: AppColors.gray400,
-                            size: 18,
-                          ),
+                      IconButton(
+                        onPressed: () async {
+                          final selectedSurah = ref.read(selectedSurahProvider);
+                          if (selectedSurah == null) return;
+
+                          final toggle = ref.read(verseBookmarkActionProvider);
+
+                          await toggle(
+                            surahId: selectedSurah.number,
+                            ayahNumber: widget.ayah.ayahNumber,
+                          );
+
+                          final data = await ref.read(bookmarksProvider.future);
+                          print(data);
+                        },
+                        icon: Icon(
+                          isBookmarked
+                              ? LucideIcons.bookmarkCheck
+                              : LucideIcons.bookmark,
+                          color: isBookmarked
+                              ? Colors
+                                    .amber // yellow
+                              : AppColors.gray400,
+                          size: 18,
                         ),
                       ),
                       IconButton(
