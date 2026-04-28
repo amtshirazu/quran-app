@@ -2,7 +2,7 @@ class PagedAyah {
   final int surah;
   final int ayah;
   final int page;
-  final String juz;
+  final int juz;
   final String polygon;
 
   PagedAyah({
@@ -15,11 +15,11 @@ class PagedAyah {
 
   factory PagedAyah.fromJson(Map<String, dynamic> json) {
     return PagedAyah(
-      surah: json['surahNumber'],
-      ayah: json['ayahNumber'],
-      page: json['page_number'],
-      juz: json['juz'],
-      polygon: json['polygon'],
+      surah: (json['surahNumber'] as num).toInt(),
+      ayah: (json['ayahNumber'] as num).toInt(),
+      page: (json['page_number'] as num).toInt(),
+      juz: (json['juz'] as num).toInt(),
+      polygon: json['polygon'] as String,
     );
   }
 }
