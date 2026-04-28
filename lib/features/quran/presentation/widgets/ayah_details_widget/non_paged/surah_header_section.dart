@@ -25,7 +25,8 @@ class SurahHeaderSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final surahMetadata = ref.watch(selectedSurahProvider);
+    final selectedSurah = ref.watch(selectedSurahProvider);
+    final currentPageSurahAsync = ref.watch(currentPageSurahProvider);
     final textTheme = Theme.of(context).textTheme;
     final audio = ref.read(audioServiceProvider);
     final playerState = ref.watch(audioStreamProvider).value;
@@ -35,6 +36,10 @@ class SurahHeaderSection extends ConsumerWidget {
     final isBookmarked = ref.watch(
       isPageBookmarkedProvider((page: currentPage)),
     );
+
+    final headerSurah = mode == ReadingMode.reading
+        ? currentPageSurahAsync.asData?.value ?? selectedSurah
+        : selectedSurah;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 60, 24, 40),
@@ -55,14 +60,14 @@ class SurahHeaderSection extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                surahMetadata?.nameEnglish ?? "",
+                headerSurah?.nameEnglish ?? "",
                 style: textTheme.titleLarge?.copyWith(
                   fontSize: AppSpacing.size18,
                 ),
               ),
 
               Text(
-                surahMetadata?.translation ?? "",
+                headerSurah?.translation ?? "",
                 style: textTheme.titleMedium?.copyWith(
                   color: AppColors.gray400,
                   fontSize: AppSpacing.size14,
