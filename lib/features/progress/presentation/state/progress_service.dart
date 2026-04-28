@@ -4,6 +4,8 @@ import '../../../quran/presentation/widgets/ayah_details_widget/paged/paged_sura
 
 class ProgressService {
   final dbHelper = DatabaseHelper.instance;
+  static const int _minQuranPage = 1;
+  static const int _maxQuranPage = 604;
 
   // ========================= TRACKING =========================
 
@@ -26,6 +28,8 @@ class ProgressService {
   }
 
   Future<void> trackPage(int page) async {
+    if (page < _minQuranPage || page > _maxQuranPage) return;
+
     final db = await dbHelper.database;
 
     final now = DateTime.now().toIso8601String();
@@ -160,6 +164,7 @@ class ProgressService {
 
     // AYAH MODE
     if (mode == 'ayah') {
+      if (lastRead['surah_id'] != surahId) return 0.0;
       final ayah = lastRead['ayah'] ?? 0;
       return (ayah / totalAyahs).clamp(0.0, 1.0);
     }
@@ -169,14 +174,17 @@ class ProgressService {
       final page = lastRead['page'];
 
       if (page == null) return 0.0;
+      if (page < _minQuranPage || page > _maxQuranPage) return 0.0;
 
       final range = surahPageRanges[surahId];
       if (range == null) return 0.0;
+      if (page < range.start) return 0.0;
 
       int countedAyahs = 0;
+      final cappedEnd = page > range.end ? range.end : page;
 
       // 1. FULL previous pages + current page verses sum
-      for (int p = range.start; p <= page; p++) {
+      for (int p = range.start; p <= cappedEnd; p++) {
         final ayahs = await loadPageAyahs(p);
 
         countedAyahs += ayahs.where((a) => a.surah == surahId).length;
@@ -251,7 +259,9 @@ class ProgressService {
       for (final row in pageResult) {
         final page = row['page'] as int?;
 
-        if (page != null) {
+        if (page != null &&
+            page >= _minQuranPage &&
+            page <= _maxQuranPage) {
           final ayahs = await loadPageAyahs(page);
 
           for (final ayah in ayahs) {
@@ -309,7 +319,7 @@ class ProgressService {
     for (final row in pageResult) {
       final page = row['page'] as int?;
 
-      if (page != null) {
+      if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
         final ayahs = await loadPageAyahs(page);
 
         for (final ayah in ayahs) {
