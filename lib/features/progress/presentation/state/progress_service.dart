@@ -120,13 +120,23 @@ class ProgressService {
     required String mode,
   }) async {
     final db = await dbHelper.database;
-
-    await db.delete('last_read');
+    final activeSurah = await _resolveActiveSurahForEntry(
+      mode: mode,
+      surahId: surahId,
+      page: page,
+    );
+    if (activeSurah != null) {
+      await db.delete(
+        'last_read',
+        where: 'surah_id IS NOT NULL AND surah_id != ?',
+        whereArgs: [activeSurah],
+      );
+    }
 
     final now = DateTime.now().toIso8601String();
 
     await db.insert('last_read', {
-      'surah_id': surahId,
+      'surah_id': activeSurah ?? surahId,
       'ayah': ayah,
       'page': page,
       'mode': mode,
@@ -137,7 +147,11 @@ class ProgressService {
   Future<Map<String, dynamic>?> getLastRead() async {
     final db = await dbHelper.database;
 
-    final result = await db.query('last_read', limit: 1);
+    final result = await db.query(
+      'last_read',
+      orderBy: 'updated_at DESC, id DESC',
+      limit: 1,
+    );
 
     if (result.isEmpty) return null;
 
@@ -156,32 +170,44 @@ class ProgressService {
     int surahId,
     int totalAyahs,
   ) async {
-    final lastRead = await getLastRead();
-
-    if (lastRead == null) return 0.0;
-
-    final mode = lastRead['mode'];
+    final db = await dbHelper.database;
+    final rows = await db.query(
+      'last_read',
+      where: 'surah_id = ?',
+      whereArgs: [surahId],
+      orderBy: 'updated_at DESC, id DESC',
+    );
+    if (rows.isEmpty) return 0.0;
+    final mode = rows.first['mode'];
 
     // AYAH MODE
     if (mode == 'ayah') {
-      if (lastRead['surah_id'] != surahId) return 0.0;
-      final ayah = lastRead['ayah'] ?? 0;
-      return (ayah / totalAyahs).clamp(0.0, 1.0);
+      final uniqueAyahs = <int>{};
+      for (final row in rows) {
+        final ayah = row['ayah'] as int?;
+        if (ayah != null) uniqueAyahs.add(ayah);
+      }
+      return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
     }
 
     // PAGE MODE
     if (mode == 'page') {
-      final page = lastRead['page'];
-
-      if (page == null) return 0.0;
-      if (page < _minQuranPage || page > _maxQuranPage) return 0.0;
+      final uniquePages = <int>{};
+      for (final row in rows) {
+        final page = row['page'] as int?;
+        if (page != null) uniquePages.add(page);
+      }
+      if (uniquePages.isEmpty) return 0.0;
+      final sortedPages = uniquePages.toList()..sort();
+      final lastPage = sortedPages.last;
+      if (lastPage < _minQuranPage || lastPage > _maxQuranPage) return 0.0;
 
       final range = surahPageRanges[surahId];
       if (range == null) return 0.0;
-      if (page < range.start) return 0.0;
+      if (lastPage < range.start) return 0.0;
 
       int countedAyahs = 0;
-      final cappedEnd = page > range.end ? range.end : page;
+      final cappedEnd = lastPage > range.end ? range.end : lastPage;
 
       // 1. FULL previous pages + current page verses sum
       for (int p = range.start; p <= cappedEnd; p++) {
@@ -194,6 +220,36 @@ class ProgressService {
     }
 
     return 0.0;
+  }
+
+  Future<int?> resolveActiveSurah({
+    required String mode,
+    int? surahId,
+    int? page,
+  }) async {
+    return _resolveActiveSurahForEntry(mode: mode, surahId: surahId, page: page);
+  }
+
+  Future<int?> _resolveActiveSurahForEntry({
+    required String mode,
+    int? surahId,
+    int? page,
+  }) async {
+    if (mode == 'ayah') return surahId;
+    if (mode != 'page' || page == null) return null;
+
+    final surahsOnPage = getSurahNumbersFromPage(page);
+    if (surahsOnPage.isEmpty) return null;
+
+    final pageAyahs = await loadPageAyahs(page);
+    if (pageAyahs.isEmpty) return surahsOnPage.first;
+
+    final firstAyah = pageAyahs.first;
+    if (firstAyah.ayah == 1 && surahsOnPage.contains(firstAyah.surah)) {
+      return firstAyah.surah;
+    }
+    if (surahsOnPage.length >= 2) return surahsOnPage[1];
+    return surahsOnPage.first;
   }
 
   // ========================= STATS =========================

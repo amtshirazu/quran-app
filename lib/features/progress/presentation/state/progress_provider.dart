@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/progress/presentation/state/progress_service.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 
 final progressServiceProvider = Provider<ProgressService>((ref) {
   return ProgressService();
@@ -24,18 +23,7 @@ final lastReadSurahProvider = Provider<Surah?>((ref) {
 
   if (surahList == null || lastReadData == null) return null;
 
-  final mode = lastReadData['mode'] as String?;
-  int? id = lastReadData['surah_id'] as int?;
-
-  if (mode == 'page') {
-    final page = lastReadData['page'] as int?;
-    if (page != null) {
-      final surahIds = getSurahNumbersFromPage(page);
-      if (surahIds.isNotEmpty) {
-        id = surahIds.first;
-      }
-    }
-  }
+  final id = lastReadData['surah_id'] as int?;
 
   if (id == null) return null;
 
