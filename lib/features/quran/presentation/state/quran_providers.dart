@@ -160,7 +160,15 @@ final currentPageSurahProvider = FutureProvider<Surah?>((ref) async {
   final pageAyahs = await ref.watch(pageAyahsProvider(currentPage).future);
   if (pageAyahs.isEmpty) return null;
 
-  final firstAyahSurahId = pageAyahs.first.surah;
+  final surahIds = getSurahNumbersFromPage(currentPage);
+  int firstAyahSurahId = pageAyahs.first.surah;
+  if (!(pageAyahs.first.ayah == 1 && surahIds.contains(firstAyahSurahId))) {
+    if (surahIds.length >= 2) {
+      firstAyahSurahId = surahIds[1];
+    } else if (surahIds.isNotEmpty) {
+      firstAyahSurahId = surahIds.first;
+    }
+  }
   for (final surah in surahList) {
     if (surah.number == firstAyahSurahId) return surah;
   }
@@ -190,20 +198,14 @@ final lastReadResolvedSurahProvider = FutureProvider<Surah?>((ref) async {
   if (lastRead == null) return null;
 
   final mode = lastRead['mode'] as String;
-
-  if (mode == 'ayah') {
-    return surahList.firstWhere((s) => s.number == lastRead['surah_id']);
-  }
-
-  final page = lastRead['page'] as int?;
-
-  if (page == null) return null;
-
-  final surahIds = getSurahNumbersFromPage(page);
-
-  final id = surahIds.isNotEmpty ? surahIds.first : 1;
-
-  return surahList.firstWhere((s) => s.number == id);
+  final service = ref.watch(progressServiceProvider);
+  final activeSurahId = await service.resolveActiveSurah(
+    mode: mode,
+    surahId: lastRead['surah_id'] as int?,
+    page: lastRead['page'] as int?,
+  );
+  if (activeSurahId == null) return null;
+  return surahList.firstWhere((s) => s.number == activeSurahId);
 });
 
 final continueReadingProvider = FutureProvider<ContinueReadingData?>((
