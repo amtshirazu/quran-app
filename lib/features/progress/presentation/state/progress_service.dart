@@ -47,27 +47,6 @@ class ProgressService {
     await _updateStreak();
   }
 
-  Future<void> _updateLastRead({
-    int? surahId,
-    int? ayah,
-    int? page,
-    required String mode,
-  }) async {
-    final db = await dbHelper.database;
-
-    await db.delete('last_read');
-
-    final now = DateTime.now().toIso8601String();
-
-    await db.insert('last_read', {
-      'surah_id': surahId,
-      'ayah': ayah,
-      'page': page,
-      'mode': mode,
-      'updated_at': now,
-    });
-  }
-
   // ========================= STREAK =========================
 
   Future<void> _updateStreak() async {
@@ -176,7 +155,6 @@ class ProgressService {
 
     if (result.isEmpty) return null;
 
-    print('Last read: ${result.first}');
     return result.first;
   }
 
@@ -231,7 +209,6 @@ class ProgressService {
       int countedAyahs = 0;
       final cappedEnd = lastPage > range.end ? range.end : lastPage;
 
-      // 1. FULL previous pages + current page verses sum
       for (int p = range.start; p <= cappedEnd; p++) {
         final ayahs = await loadPageAyahs(p);
 
