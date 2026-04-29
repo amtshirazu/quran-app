@@ -60,6 +60,7 @@ class _QuranPagedReaderScreenState
   Widget build(BuildContext context) {
     return PageView.builder(
       controller: widget.controller,
+      reverse: true,
       itemCount: 604,
       onPageChanged: (index) {
         final progress = ref.read(progressServiceProvider);

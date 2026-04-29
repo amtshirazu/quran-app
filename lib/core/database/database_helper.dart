@@ -34,7 +34,7 @@ class DatabaseHelper {
 
     await db.execute('''
     CREATE TABLE last_read (
-      id INTEGER PRIMARY KEY,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       surah_id INTEGER,
       ayah INTEGER,
       page INTEGER,

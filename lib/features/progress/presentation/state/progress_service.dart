@@ -47,6 +47,27 @@ class ProgressService {
     await _updateStreak();
   }
 
+  Future<void> _updateLastRead({
+    int? surahId,
+    int? ayah,
+    int? page,
+    required String mode,
+  }) async {
+    final db = await dbHelper.database;
+
+    await db.delete('last_read');
+
+    final now = DateTime.now().toIso8601String();
+
+    await db.insert('last_read', {
+      'surah_id': surahId,
+      'ayah': ayah,
+      'page': page,
+      'mode': mode,
+      'updated_at': now,
+    });
+  }
+
   // ========================= STREAK =========================
 
   Future<void> _updateStreak() async {
@@ -113,27 +134,6 @@ class ProgressService {
 
   // ========================= LAST READ =========================
 
-  Future<void> _updateLastRead({
-    int? surahId,
-    int? ayah,
-    int? page,
-    required String mode,
-  }) async {
-    final db = await dbHelper.database;
-
-    await db.delete('last_read');
-
-    final now = DateTime.now().toIso8601String();
-
-    await db.insert('last_read', {
-      'surah_id': surahId,
-      'ayah': ayah,
-      'page': page,
-      'mode': mode,
-      'updated_at': now,
-    });
-  }
-
   Future<Map<String, dynamic>?> getLastRead() async {
     final db = await dbHelper.database;
 
@@ -141,6 +141,7 @@ class ProgressService {
 
     if (result.isEmpty) return null;
 
+    print('Last read: ${result.first}');
     return result.first;
   }
 
@@ -259,9 +260,7 @@ class ProgressService {
       for (final row in pageResult) {
         final page = row['page'] as int?;
 
-        if (page != null &&
-            page >= _minQuranPage &&
-            page <= _maxQuranPage) {
+        if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
           final ayahs = await loadPageAyahs(page);
 
           for (final ayah in ayahs) {
