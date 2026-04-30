@@ -4,7 +4,7 @@ import 'package:quran_app/features/quran/presentation/state/quran_providers.dart
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../progress/presentation/state/progress_provider.dart';
+import '../../../progress/presentation/state/last_read_provider.dart';
 import '../state/reading_mode.dart';
 import '../widgets/ayah_details_widget/non_paged/ayah_list.dart';
 import '../widgets/ayah_details_widget/non_paged/basmallah.dart';

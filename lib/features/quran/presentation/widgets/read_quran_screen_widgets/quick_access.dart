@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
-import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/surah_of_the_day.dart';
 import '../../../../../core/constants/app_colors.dart';
@@ -14,9 +14,8 @@ class QuickAccess extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final surahListAsync = ref.watch(surahListProvider);
-    final lastReadSurah = ref.watch(lastReadSurahProvider);
+    final lastReadSurahAsync = ref.watch(lastReadResolvedSurahProvider);
 
     Surah? surahOfTheDay;
 
@@ -43,7 +42,12 @@ class QuickAccess extends ConsumerWidget {
       surahOfTheDay = getSurahOfTheDay(surahList);
     }
 
-    final surahForLastRead = lastReadSurah ?? defaultLastRead;
+    final surahForLastRead = lastReadSurahAsync.when(
+      data: (surah) => surah ?? defaultLastRead,
+      loading: () => defaultLastRead,
+      error: (_, __) => defaultLastRead,
+    );
+
     final surahForToday = surahOfTheDay ?? defaultSurahOfTheDay;
 
     return Padding(

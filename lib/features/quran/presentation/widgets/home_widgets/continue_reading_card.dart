@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import '../../../../../core/constants/app_spacing.dart';
-import '../../../../progress/presentation/state/progress_provider.dart';
+import '../../../../progress/presentation/state/last_read_provider.dart';
 import '../../state/reading_mode.dart';
 import 'empty_card.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/progress/domain/models/profile_progress_state.dart';
-import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/quran/domain/models/continueReadingData.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 
 final profileProgressProvider = FutureProvider<ProfileProgressState>((
@@ -61,3 +62,47 @@ final motivationTitleProvider = Provider<String>((ref) => 'Keep Going!');
 final motivationSubtitleProvider = Provider<String>(
   (ref) => "You're doing amazing. Continue your journey with the Quran.",
 );
+
+final surahProgressProvider =
+    FutureProvider.family<double, ({int surahId, int totalAyahs})>((
+      ref,
+      data,
+    ) async {
+      final service = ref.watch(progressServiceProvider);
+
+      final result = await service.getSurahProgress(
+        surahId: data.surahId,
+        totalAyahs: data.totalAyahs,
+      );
+
+      return result ?? 0.0;
+    });
+
+final continueReadingProvider = FutureProvider<ContinueReadingData?>((
+  ref,
+) async {
+  final lastRead = await ref.watch(lastReadProvider.future);
+  if (lastRead == null) return null;
+
+  final resolvedSurah = await ref.watch(lastReadResolvedSurahProvider.future);
+  if (resolvedSurah == null) return null;
+
+  final mode = lastRead['mode'] as String;
+
+  final progress = await ref.watch(
+    surahProgressProvider((
+      surahId: resolvedSurah.number,
+      totalAyahs: resolvedSurah.totalAyahs,
+    )).future,
+  );
+
+  final displayText = mode == 'ayah'
+      ? "Verse ${lastRead['ayah']}"
+      : "Page ${lastRead['page']}";
+
+  return ContinueReadingData(
+    surah: resolvedSurah,
+    displayText: displayText,
+    progress: progress,
+  );
+});

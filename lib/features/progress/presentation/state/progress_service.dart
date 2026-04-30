@@ -125,13 +125,6 @@ class ProgressService {
       surahId: surahId,
       page: page,
     );
-    if (activeSurah != null) {
-      await db.delete(
-        'last_read',
-        where: 'surah_id IS NOT NULL AND surah_id != ?',
-        whereArgs: [activeSurah],
-      );
-    }
 
     final now = DateTime.now().toIso8601String();
 
@@ -142,6 +135,12 @@ class ProgressService {
       'mode': mode,
       'updated_at': now,
     });
+  }
+
+  // clear last_read when mode changes to ensure only ayah or page data are stored in last_read
+  Future<void> clearLastRead() async {
+    final db = await dbHelper.database;
+    await db.delete('last_read');
   }
 
   Future<Map<String, dynamic>?> getLastRead() async {
@@ -171,54 +170,62 @@ class ProgressService {
     int totalAyahs,
   ) async {
     final db = await dbHelper.database;
+
     final rows = await db.query(
       'last_read',
       where: 'surah_id = ?',
       whereArgs: [surahId],
-      orderBy: 'updated_at DESC, id DESC',
     );
+
     if (rows.isEmpty) return 0.0;
+
+    final Set<int> uniqueAyahs = {};
+
+    // 🔥 Since mode is uniform, just read it once
     final mode = rows.first['mode'];
 
+    // =========================
     // AYAH MODE
+    // =========================
     if (mode == 'ayah') {
-      final uniqueAyahs = <int>{};
       for (final row in rows) {
         final ayah = row['ayah'] as int?;
-        if (ayah != null) uniqueAyahs.add(ayah);
+        if (ayah != null) {
+          uniqueAyahs.add(ayah);
+        }
       }
-      return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
     }
-
+    // =========================
     // PAGE MODE
-    if (mode == 'page') {
-      final uniquePages = <int>{};
+    // =========================
+    else if (mode == 'page') {
+      // Avoid duplicate page loads
+      final Set<int> uniquePages = {};
+
       for (final row in rows) {
         final page = row['page'] as int?;
-        if (page != null) uniquePages.add(page);
-      }
-      if (uniquePages.isEmpty) return 0.0;
-      final sortedPages = uniquePages.toList()..sort();
-      final lastPage = sortedPages.last;
-      if (lastPage < _minQuranPage || lastPage > _maxQuranPage) return 0.0;
-
-      final range = surahPageRanges[surahId];
-      if (range == null) return 0.0;
-      if (lastPage < range.start) return 0.0;
-
-      int countedAyahs = 0;
-      final cappedEnd = lastPage > range.end ? range.end : lastPage;
-
-      for (int p = range.start; p <= cappedEnd; p++) {
-        final ayahs = await loadPageAyahs(p);
-
-        countedAyahs += ayahs.where((a) => a.surah == surahId).length;
+        if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
+          uniquePages.add(page);
+        }
       }
 
-      return (countedAyahs / totalAyahs).clamp(0.0, 1.0);
+      for (final page in uniquePages) {
+        final ayahs = await loadPageAyahs(page);
+
+        for (final ayah in ayahs) {
+          if (ayah.surah == surahId) {
+            uniqueAyahs.add(ayah.ayah);
+          }
+        }
+      }
     }
 
-    return 0.0;
+    // =========================
+    // FINAL PROGRESS
+    // =========================
+    if (totalAyahs == 0) return 0.0;
+
+    return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
   }
 
   Future<int?> resolveActiveSurah({
@@ -238,20 +245,48 @@ class ProgressService {
     int? surahId,
     int? page,
   }) async {
+    // =========================
+    // AYAH MODE
+    // =========================
     if (mode == 'ayah') return surahId;
+
+    // =========================
+    // INVALID PAGE CASE
+    // =========================
     if (mode != 'page' || page == null) return null;
 
     final surahsOnPage = getSurahNumbersFromPage(page);
+
     if (surahsOnPage.isEmpty) return null;
 
+    // =========================
+    // 🔥 NEW FIX: SINGLE SURAH PAGE
+    // =========================
+    if (surahsOnPage.length == 1) {
+      return surahsOnPage.first;
+    }
+
+    // =========================
+    // MULTIPLE SURAHS ON PAGE
+    // =========================
     final pageAyahs = await loadPageAyahs(page);
-    if (pageAyahs.isEmpty) return surahsOnPage.first;
+
+    if (pageAyahs.isEmpty) {
+      return surahsOnPage.first;
+    }
 
     final firstAyah = pageAyahs.first;
+
+    // If page starts with a new surah (ayah 1)
     if (firstAyah.ayah == 1 && surahsOnPage.contains(firstAyah.surah)) {
       return firstAyah.surah;
     }
-    if (surahsOnPage.length >= 2) return surahsOnPage[1];
+
+    // Otherwise, assume continuation → second surah
+    if (surahsOnPage.length >= 2) {
+      return surahsOnPage[1];
+    }
+
     return surahsOnPage.first;
   }
 

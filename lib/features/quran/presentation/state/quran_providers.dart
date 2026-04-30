@@ -1,13 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
-import 'package:quran_app/features/progress/presentation/state/progress_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
 import 'package:quran_app/features/quran/data/datasource/ayah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/datasource/surah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/repository/quran_metadata.dart';
 import 'package:quran_app/features/quran/data/repository/quran_repository.dart';
-import 'package:quran_app/features/quran/domain/models/continueReadingData.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
-import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../data/datasource/translation_local_datasource.dart';
 import '../../data/repository/paged_repository.dart';
 import '../../data/repository/translation_repository.dart';
@@ -154,85 +152,26 @@ final currentPageProvider = StateProvider<int>((ref) => 0);
 
 final currentPageSurahProvider = FutureProvider<Surah?>((ref) async {
   final currentPage = ref.watch(currentPageProvider);
-  if (currentPage < 1 || currentPage > 604) return null;
+  int minPage = 1;
+  int maxPage = 604;
 
-  final surahList = await ref.watch(surahListProvider.future);
-  final pageAyahs = await ref.watch(pageAyahsProvider(currentPage).future);
-  if (pageAyahs.isEmpty) return null;
+  if (currentPage < minPage || currentPage > maxPage) return null;
 
-  final surahIds = getSurahNumbersFromPage(currentPage);
-  int firstAyahSurahId = pageAyahs.first.surah;
-  if (!(pageAyahs.first.ayah == 1 && surahIds.contains(firstAyahSurahId))) {
-    if (surahIds.length >= 2) {
-      firstAyahSurahId = surahIds[1];
-    } else if (surahIds.isNotEmpty) {
-      firstAyahSurahId = surahIds.first;
-    }
-  }
-  for (final surah in surahList) {
-    if (surah.number == firstAyahSurahId) return surah;
-  }
-
-  return null;
-});
-
-final surahProgressProvider =
-    FutureProvider.family<double, ({int surahId, int totalAyahs})>((
-      ref,
-      data,
-    ) async {
-      final service = ref.watch(progressServiceProvider);
-
-      final result = await service.getSurahProgress(
-        surahId: data.surahId,
-        totalAyahs: data.totalAyahs,
-      );
-
-      return result ?? 0.0;
-    });
-
-final lastReadResolvedSurahProvider = FutureProvider<Surah?>((ref) async {
-  final lastRead = await ref.watch(lastReadProvider.future);
-  final surahList = await ref.watch(surahListProvider.future);
-
-  if (lastRead == null) return null;
-
-  final mode = lastRead['mode'] as String;
   final service = ref.watch(progressServiceProvider);
-  final activeSurahId = await service.resolveActiveSurah(
-    mode: mode,
-    surahId: lastRead['surah_id'] as int?,
-    page: lastRead['page'] as int?,
-  );
-  if (activeSurahId == null) return null;
-  return surahList.firstWhere((s) => s.number == activeSurahId);
-});
 
-final continueReadingProvider = FutureProvider<ContinueReadingData?>((
-  ref,
-) async {
-  final lastRead = await ref.watch(lastReadProvider.future);
-  if (lastRead == null) return null;
-
-  final resolvedSurah = await ref.watch(lastReadResolvedSurahProvider.future);
-  if (resolvedSurah == null) return null;
-
-  final mode = lastRead['mode'] as String;
-
-  final progress = await ref.watch(
-    surahProgressProvider((
-      surahId: resolvedSurah.number,
-      totalAyahs: resolvedSurah.totalAyahs,
-    )).future,
+  // Use your centralized logic
+  final surahId = await service.resolveActiveSurah(
+    mode: 'page',
+    page: currentPage,
   );
 
-  final displayText = mode == 'ayah'
-      ? "Verse ${lastRead['ayah']}"
-      : "Page ${lastRead['page']}";
+  if (surahId == null) return null;
 
-  return ContinueReadingData(
-    surah: resolvedSurah,
-    displayText: displayText,
-    progress: progress,
-  );
+  final surahList = await ref.watch(surahListProvider.future);
+
+  try {
+    return surahList.firstWhere((s) => s.number == surahId);
+  } catch (_) {
+    return null;
+  }
 });

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/single_paged_render.dart';
 import '../../../../../../core/constants/app_colors.dart';
-import '../../../../../progress/presentation/state/progress_provider.dart';
+import '../../../../../progress/presentation/state/last_read_provider.dart';
 import '../../../state/quran_providers.dart';
 
 class QuranPagedReaderScreen extends ConsumerStatefulWidget {
@@ -33,7 +33,8 @@ class _QuranPagedReaderScreenState
       final progress = ref.read(progressServiceProvider);
 
       progress.trackPage(widget.initialPage);
-      ref.read(currentPageProvider.notifier).state = widget.initialPage;
+      ref.read(currentPageProvider.notifier).state = widget
+          .initialPage; // may need to be deleted for surah_header section to work well
 
       ref.invalidate(lastReadProvider);
     });
