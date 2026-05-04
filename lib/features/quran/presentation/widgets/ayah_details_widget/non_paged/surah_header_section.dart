@@ -7,6 +7,8 @@ import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
@@ -33,9 +35,9 @@ class SurahHeaderSection extends ConsumerWidget {
 
     final currentPage = ref.watch(currentPageProvider);
 
-    final isBookmarked = ref.watch(
-      isPageBookmarkedProvider((page: currentPage)),
-    );
+    final isBookmarked = currentPage != null
+        ? ref.watch(isPageBookmarkedProvider((page: currentPage)))
+        : false;
 
     final headerSurah = mode == ReadingMode.reading
         ? currentPageSurahAsync.asData?.value ?? selectedSurah
@@ -50,6 +52,9 @@ class SurahHeaderSection extends ConsumerWidget {
           IconButton(
             onPressed: () {
               audio.reset();
+              ref.invalidate(lastReadProvider);
+              ref.invalidate(surahProgressProvider);
+              ref.read(currentPageSurahIdProvider.notifier).state = null;
               context.go("/surahs");
             },
             icon: Icon(LucideIcons.arrowLeft, color: Colors.white, size: 24),
@@ -85,8 +90,7 @@ class SurahHeaderSection extends ConsumerWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () async {
-                    final selectedSurah = ref.read(selectedSurahProvider);
-                    if (selectedSurah == null) return;
+                    if (currentPage == null) return;
 
                     final bookmarks = await ref.read(bookmarksProvider.future);
 
@@ -105,8 +109,9 @@ class SurahHeaderSection extends ConsumerWidget {
                       context,
                       title: "Add Bookmark",
                       subtitle:
-                          "${selectedSurah.nameEnglish} • Page $currentPage",
+                          "${headerSurah?.nameEnglish} • Page $currentPage",
                       initialNote: existingBookmark?.note,
+                      isPageMode: true,
                     );
 
                     if (note == null) return;
@@ -116,6 +121,7 @@ class SurahHeaderSection extends ConsumerWidget {
                     await service.addOrUpdatePageBookmark(
                       page: currentPage,
                       note: note,
+                      surahId: headerSurah!.number,
                     );
 
                     ref.invalidate(bookmarksProvider);
@@ -138,7 +144,6 @@ class SurahHeaderSection extends ConsumerWidget {
                 onPressed: () async {
                   final reciter = ref.read(defaultReciterProvider);
                   final surahs = ref.read(surahListProvider).value;
-                  final selectedSurah = ref.read(selectedSurahProvider);
 
                   if (playerState?.playing == true) {
                     await audio.pause();
@@ -150,7 +155,7 @@ class SurahHeaderSection extends ConsumerWidget {
                     await audio.seekToStart();
                   }
 
-                  final surah = surahs?[selectedSurah!.number - 1];
+                  final surah = surahs?[headerSurah!.number - 1];
                   if (!audio.hasLoadedSurah &&
                       reciter != null &&
                       surah != null &&

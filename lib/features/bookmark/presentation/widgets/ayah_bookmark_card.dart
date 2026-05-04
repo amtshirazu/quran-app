@@ -16,9 +16,24 @@ class VerseBookmarkCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final b = data.bookmark;
 
+    // Precise colors from image_54be28.png
+    const colorMidGray = Color(0xFF4A4A4A);
+    const colorDeepGray = Color(0xFF111827);
+    const colorAmberBG = Color(0xFFFFEFA7);
+    const colorDeepGoldText = Color(0xFF936312);
+    const colorNoteBG = Color(0xFFFFF9E5);
+    const colorBrownText = Color(0xFF8B5E3C);
+    const colorLightGrayBorder = Color(0xFFD4D4D8);
+
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0, // Set to 0 to match the flat look of the image
+      color: Colors.white, // White card background as requested
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: colorLightGrayBorder.withOpacity(0.5),
+        ), // Subtle border
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,22 +48,32 @@ class VerseBookmarkCard extends ConsumerWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.amber.shade100,
-                    borderRadius: BorderRadius.circular(20),
+                    color: colorAmberBG, // Updated to image_54be28.png color
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     "${data.surah.nameEnglish} ${b.ayahNumber}",
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 12,
+                      color:
+                          colorDeepGoldText, // Updated to image_54be28.png color
                     ),
                   ),
                 ),
                 const Spacer(),
+                // Adjusted Trash Icon styling to match the image
                 IconButton(
-                  icon: const Icon(LucideIcons.trash2, size: 20),
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(
+                    LucideIcons.trash2,
+                    size: 18,
+                    color: colorMidGray,
+                  ),
+                  color: colorLightGrayBorder,
                   onPressed: () {
                     ref.read(bookmarkServiceProvider).deleteBookmark(b.id!);
+                    ref.invalidate(verseBookmarkUIProvider);
                   },
                 ),
               ],
@@ -62,10 +87,12 @@ class VerseBookmarkCard extends ConsumerWidget {
               child: Text(
                 data.arabic,
                 textAlign: TextAlign.right,
+                textDirection: TextDirection.rtl,
                 style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.black87,
                   fontSize: 22,
                   fontFamily: 'Uthmani',
+                  height: 1.4,
                 ),
               ),
             ),
@@ -73,31 +100,62 @@ class VerseBookmarkCard extends ConsumerWidget {
             const SizedBox(height: 10),
 
             // TRANSLATION
-            Text(data.translation, style: const TextStyle(color: Colors.grey)),
+            Text(
+              data.translation,
+              style: const TextStyle(
+                color: colorMidGray, // Updated to image_54be28.png color
+                fontSize: 14,
+                height: 1.5,
+              ),
+            ),
 
             const SizedBox(height: 12),
 
             // NOTE
             if (b.note != null && b.note!.isNotEmpty)
               Container(
-                padding: const EdgeInsets.all(10),
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
+                  color: colorNoteBG, // Updated to image_54be28.png color
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text("📝 ${b.note!}"),
+                child: Text(
+                  "📝 ${b.note!}",
+                  style: const TextStyle(
+                    color: colorBrownText, // Updated to image_54be28.png color
+                    fontSize: 14,
+                  ),
+                ),
               ),
 
             const SizedBox(height: 12),
 
-            OutlinedButton(
-              onPressed: () {
-                ref.read(readingModeProvider.notifier).state =
-                    ReadingMode.translation;
-                ref.read(selectedSurahProvider.notifier).state = data.surah;
-                context.go('/readAyahs');
-              },
-              child: const Text("Read Full Surah"),
+            // BUTTON
+            SizedBox(
+              height: 36,
+              child: OutlinedButton(
+                onPressed: () {
+                  ref.read(readingModeProvider.notifier).state =
+                      ReadingMode.translation;
+                  ref.read(selectedSurahProvider.notifier).state = data.surah;
+                  context.go('/readAyah');
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: colorLightGrayBorder),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  "Read Full Surah",
+                  style: TextStyle(
+                    color: colorDeepGray, // Updated to image_54be28.png color
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

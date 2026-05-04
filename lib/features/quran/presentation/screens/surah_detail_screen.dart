@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+//import 'package:quran_app/core/database/database_helper.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../progress/presentation/state/last_read_provider.dart';
 import '../state/reading_mode.dart';
 import '../widgets/ayah_details_widget/non_paged/ayah_list.dart';
 import '../widgets/ayah_details_widget/non_paged/basmallah.dart';
@@ -41,6 +43,15 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     _initialized = true;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final progress = ref.read(progressServiceProvider);
+      // ONE unified streak trigger
+      await progress.updateStreak();
+
+      // final dbHelper = DatabaseHelper.instance;
+      // final db = await dbHelper.database;
+      // final result = await db.query('streak', limit: 1);
+      // print(result);
+
       final selectedSurah = ref.read(selectedSurahProvider);
       if (selectedSurah == null) return;
 
@@ -59,8 +70,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         final shouldResume = ref.read(shouldResumeLastReadProvider);
 
         if (shouldResume) {
-          final progressService = ref.read(progressServiceProvider);
-          final lastRead = await progressService.getLastRead();
+          final lastRead = ref.read(lastReadProvider).asData?.value;
 
           if (lastRead != null) {
             final mode = lastRead['mode'];
@@ -175,11 +185,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
               Expanded(
                 child: _pageController == null
                     ? const Center(child: CircularProgressIndicator())
-                    : QuranPagedReaderScreen(
-                        controller: _pageController!,
-                        initialPage:
-                            _pageController!.initialPage + 1, // safe fallback
-                      ),
+                    : QuranPagedReaderScreen(controller: _pageController!),
               ),
           ],
         ),

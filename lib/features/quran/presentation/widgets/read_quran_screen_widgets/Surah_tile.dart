@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/surah_verse_number_badge.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/surah_verses_badge.dart';
@@ -21,9 +22,12 @@ class SurahTile extends ConsumerWidget {
 
     return Material(
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          final progressService = ref.read(progressServiceProvider);
+          await progressService.clearLastRead();
           ref.read(searchQueryProvider.notifier).state = "";
           ref.read(selectedSurahProvider.notifier).state = surah;
+          // ref.read(currentPageProvider.notifier).state = surah.number;
           ref.read(shouldResumeLastReadProvider.notifier).state = false;
           context.push("/readAyah");
         },

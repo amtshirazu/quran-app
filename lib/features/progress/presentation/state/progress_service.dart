@@ -23,8 +23,6 @@ class ProgressService {
     });
 
     await _updateLastRead(surahId: surahId, ayah: ayah, mode: 'ayah');
-
-    await _updateStreak();
   }
 
   Future<void> trackPage(int page) async {
@@ -43,13 +41,11 @@ class ProgressService {
     });
 
     await _updateLastRead(page: page, mode: 'page');
-
-    await _updateStreak();
   }
 
   // ========================= STREAK =========================
 
-  Future<void> _updateStreak() async {
+  Future<void> updateStreak() async {
     final db = await dbHelper.database;
 
     final today = DateTime.now();
@@ -73,7 +69,7 @@ class ProgressService {
 
     if (lastReadDateStr == null) return;
 
-    final lastReadDate = DateTime.parse(lastReadDateStr);
+    final lastReadDate = DateTime.parse(lastReadDateStr).toLocal();
     final lastDate = DateTime(
       lastReadDate.year,
       lastReadDate.month,
@@ -125,7 +121,6 @@ class ProgressService {
       surahId: surahId,
       page: page,
     );
-
     final now = DateTime.now().toIso8601String();
 
     await db.insert('last_read', {
@@ -171,11 +166,7 @@ class ProgressService {
   ) async {
     final db = await dbHelper.database;
 
-    final rows = await db.query(
-      'last_read',
-      where: 'surah_id = ?',
-      whereArgs: [surahId],
-    );
+    final rows = await db.query('last_read');
 
     if (rows.isEmpty) return 0.0;
 

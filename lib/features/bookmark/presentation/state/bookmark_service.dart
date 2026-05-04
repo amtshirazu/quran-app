@@ -135,6 +135,7 @@ class BookmarkService {
   Future<void> addOrUpdatePageBookmark({
     required int page,
     required String note,
+    required int surahId,
   }) async {
     final db = await _databaseHelper.database;
 
@@ -155,7 +156,7 @@ class BookmarkService {
     } else {
       // INSERT
       await db.insert('bookmarks', {
-        'surah_id': null,
+        'surah_id': surahId,
         'ayah_number': null,
         'page': page,
         'note': note,

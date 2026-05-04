@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
-import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/data/datasource/ayah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/datasource/surah_local_datasource.dart';
 import 'package:quran_app/features/quran/data/repository/quran_metadata.dart';
@@ -148,29 +148,22 @@ final currentPlayingPageProvider = Provider<int?>((ref) {
   return playing?.page;
 });
 
-final currentPageProvider = StateProvider<int>((ref) => 0);
+//used to determine the bookmark state of the current page
+final currentPageProvider = StateProvider<int?>((ref) => 0);
 
+//surah id of current page
+final currentPageSurahIdProvider = StateProvider<int?>((ref) => null);
+
+// used to display the current page's surah in the SurahHeaderSection
 final currentPageSurahProvider = FutureProvider<Surah?>((ref) async {
-  final currentPage = ref.watch(currentPageProvider);
-  int minPage = 1;
-  int maxPage = 604;
+  final activeSurahId = ref.watch(currentPageSurahIdProvider);
 
-  if (currentPage < minPage || currentPage > maxPage) return null;
-
-  final service = ref.watch(progressServiceProvider);
-
-  // Use your centralized logic
-  final surahId = await service.resolveActiveSurah(
-    mode: 'page',
-    page: currentPage,
-  );
-
-  if (surahId == null) return null;
+  if (activeSurahId == null) return null;
 
   final surahList = await ref.watch(surahListProvider.future);
 
   try {
-    return surahList.firstWhere((s) => s.number == surahId);
+    return surahList.firstWhere((s) => s.number == activeSurahId);
   } catch (_) {
     return null;
   }

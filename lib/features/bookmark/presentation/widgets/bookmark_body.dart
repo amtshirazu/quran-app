@@ -10,6 +10,8 @@ import 'package:quran_app/features/bookmark/presentation/widgets/ayah_bookmark_c
 import 'package:quran_app/features/bookmark/presentation/widgets/empty_bookmark_card.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/page_bookmark_card.dart';
 
+// ... imports
+
 class BookmarkBody extends ConsumerWidget {
   const BookmarkBody({super.key});
 
@@ -26,7 +28,7 @@ class BookmarkBody extends ConsumerWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: _buildContent(tab, verseAsync, pageAsync),
     );
   }
@@ -41,7 +43,8 @@ class BookmarkBody extends ConsumerWidget {
         return verseAsync.when(
           data: (bookmarks) => ListView.separated(
             itemCount: bookmarks.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+
+            separatorBuilder: (_, __) => const SizedBox(height: 24),
             itemBuilder: (context, i) => VerseBookmarkCard(bookmarks[i]),
           ),
           loading: () => const LinearProgressIndicator(),
@@ -52,7 +55,8 @@ class BookmarkBody extends ConsumerWidget {
         return pageAsync.when(
           data: (pages) => ListView.separated(
             itemCount: pages.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+
+            separatorBuilder: (_, __) => const SizedBox(height: 24),
             itemBuilder: (context, i) => PageBookmarkCard(pages[i]),
           ),
           loading: () => const LinearProgressIndicator(),
@@ -71,63 +75,68 @@ class BookmarkBody extends ConsumerWidget {
     return ListView(
       children: [
         verseAsync.when(
-          data: (list) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
+          data: (list) => list.isEmpty
+              ? const SizedBox()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      LucideIcons.bookmark,
-                      size: 16,
-                      color: AppColors.gray200,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      "Verse Bookmarks",
-                      style: TextStyle(color: AppColors.gray200, fontSize: 12),
+                    _buildHeader("Verse Bookmarks"),
+
+                    ...list.map(
+                      (b) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: VerseBookmarkCard(b),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              ...list.map((b) => VerseBookmarkCard(b)),
-            ],
-          ),
-          loading: () => const SizedBox(),
+          loading: () => const CircularProgressIndicator(),
           error: (_, __) => const Text("Error"),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 30),
 
         pageAsync.when(
-          data: (list) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 8),
-                child: Row(
+          data: (list) => list.isEmpty
+              ? const SizedBox()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      LucideIcons.bookmark,
-                      size: 16,
-                      color: AppColors.gray200,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      "Page Bookmarks",
-                      style: TextStyle(color: AppColors.gray200, fontSize: 12),
+                    _buildHeader("Page Bookmarks"),
+
+                    ...list.map(
+                      (p) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: PageBookmarkCard(p),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              ...list.map((p) => PageBookmarkCard(p)),
-            ],
-          ),
-          loading: () => const SizedBox(),
+          loading: () => const CircularProgressIndicator(),
           error: (_, __) => const Text("Error"),
         ),
       ],
+    );
+  }
+
+  // Helper to keep code clean
+  Widget _buildHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Icon(LucideIcons.bookmark, size: 20, color: AppColors.gray500),
+          const SizedBox(width: 6),
+          Text(
+            title,
+            style: TextStyle(
+              color: AppColors.gray500,
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

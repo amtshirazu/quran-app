@@ -14,11 +14,6 @@ class QuickAccess extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final surahListAsync = ref.watch(surahListProvider);
-    final lastReadSurahAsync = ref.watch(lastReadResolvedSurahProvider);
-
-    Surah? surahOfTheDay;
-
     final defaultSurahOfTheDay = Surah(
       number: 18,
       nameArabic: "الكهف",
@@ -36,6 +31,11 @@ class QuickAccess extends ConsumerWidget {
       translation: 'The Cow',
       revelationType: 'Madinan',
     );
+
+    final surahListAsync = ref.watch(surahListProvider);
+    final lastReadSurahAsync = ref.watch(lastReadResolvedSurahProvider);
+
+    Surah? surahOfTheDay;
 
     if (surahListAsync is AsyncData<List<Surah>>) {
       final surahList = surahListAsync.value;

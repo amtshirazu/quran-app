@@ -1,8 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/progress/domain/models/profile_progress_state.dart';
 import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/progress_service.dart';
 import 'package:quran_app/features/quran/domain/models/continueReadingData.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+
+final progressServiceProvider = Provider<ProgressService>((ref) {
+  return ProgressService();
+});
 
 final profileProgressProvider = FutureProvider<ProfileProgressState>((
   ref,

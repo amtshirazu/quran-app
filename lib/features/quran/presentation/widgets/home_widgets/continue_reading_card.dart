@@ -22,7 +22,7 @@ class ContinueReadingCard extends ConsumerWidget {
         if (data == null) return const EmptyCard();
 
         return InkWell(
-          onTap: () {
+          onTap: () async {
             ref.read(selectedSurahProvider.notifier).state = data.surah;
             ref.read(shouldResumeLastReadProvider.notifier).state = true;
 

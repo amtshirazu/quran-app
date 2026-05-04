@@ -6,12 +6,14 @@ import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
-import '../../../../../progress/presentation/state/progress_provider.dart';
+import '../../../../../progress/presentation/state/last_read_provider.dart';
 import '../../../../domain/models/ayah.dart';
 import '../../../../domain/models/translation.dart';
 
@@ -128,6 +130,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             subtitle:
                                 "${selectedSurah.nameEnglish} • Verse ${widget.ayah.ayahNumber}",
                             initialNote: existingBookmark?.note,
+                            isPageMode: false,
                           );
 
                           if (note == null) return;

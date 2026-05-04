@@ -31,6 +31,7 @@ class QuickAccessCard extends ConsumerWidget {
     return InkWell(
       onTap: () {
         ref.read(selectedSurahProvider.notifier).state = surah;
+        ref.read(currentPageSurahIdProvider.notifier).state = surah.number;
         context.push("/readAyah");
       },
       child: Card(

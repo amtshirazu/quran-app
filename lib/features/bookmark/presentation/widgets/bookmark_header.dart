@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart'; // Assuming you're using go_router
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_tabs.dart';
+import 'package:quran_app/features/bookmark/presentation/widgets/delete_bookmark.dart';
 
 class BookmarkHeader extends ConsumerWidget {
   const BookmarkHeader({super.key});
@@ -43,9 +44,24 @@ class BookmarkHeader extends ConsumerWidget {
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(LucideIcons.trash2, color: Colors.white),
+              InkWell(
+                onTap: () =>
+                    handleDeleteAction(context, ref), // Logic called here
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(LucideIcons.trash2, color: Colors.white, size: 20),
+                    SizedBox(width: 4),
+                    Text(
+                      "Delete All",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14, // Adjusted for better fit
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
