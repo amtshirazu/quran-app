@@ -62,5 +62,15 @@ class DatabaseHelper {
       created_at TEXT NOT NULL
     )
     ''');
+
+    await db.execute('''
+  CREATE TABLE reflections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    surah_id INTEGER NOT NULL,
+    ayah_number INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  )
+''');
   }
 }

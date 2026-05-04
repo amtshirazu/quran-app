@@ -95,14 +95,18 @@ final isPageBookmarkedProvider = Provider.family<bool, ({int page})>((
 final verseBookmarkUIProvider = FutureProvider<List<VerseBookmarkUI>>((
   ref,
 ) async {
-  final service = ref.watch(bookmarkServiceProvider);
-  final bookmarks = await service.getVerseBookmarks();
+  // Watch the root provider. When bookmarksProvider invalidates, this re-runs.
+  final allBookmarks = await ref.watch(bookmarksProvider.future);
+
+  // Filter only verse types from the reactive list
+  final verseData = allBookmarks
+      .where((b) => b.type == BookmarkType.verse)
+      .toList();
 
   final surahList = await ref.watch(surahListProvider.future);
-
   List<VerseBookmarkUI> result = [];
 
-  for (final b in bookmarks) {
+  for (final b in verseData) {
     final surah = surahList.firstWhere((s) => s.number == b.surahId);
 
     final ayahs = await ref.read(
@@ -135,46 +139,40 @@ final verseBookmarkUIProvider = FutureProvider<List<VerseBookmarkUI>>((
       ),
     );
   }
-
   return result;
 });
 
 final pageBookmarkUIProvider = FutureProvider<List<PageBookmarkUI>>((
   ref,
 ) async {
-  final service = ref.watch(bookmarkServiceProvider);
-  final bookmarks = await service.getPageBookmarks();
+  // Watch the root provider to ensure automatic UI updates
+  final allBookmarks = await ref.watch(bookmarksProvider.future);
+
+  final pageData = allBookmarks
+      .where((b) => b.type == BookmarkType.page)
+      .toList();
 
   final surahList = await ref.watch(surahListProvider.future);
-
   List<PageBookmarkUI> result = [];
 
-  for (final b in bookmarks) {
+  for (final b in pageData) {
     final page = b.page!;
-
-    /// 1. Get ALL ayahs on this page (structure only)
     final pageAyahs = await ref.read(pageAyahsProvider(page).future);
 
     if (pageAyahs.isEmpty) continue;
 
-    /// 2. Pick first ayah on page (preview anchor)
     final firstPageAyah = pageAyahs.first;
-
     final surahId = firstPageAyah.surah;
-    final ayahNumber = firstPageAyah.ayah;
-    final juzNumber = firstPageAyah.juz;
 
-    /// 3. Get Arabic text for that surah (UTHMANI)
     final arabicAyahs = await ref.read(
       ayahListProvider({"surahNumber": surahId, "script": "uthmani"}).future,
     );
 
     final arabic = arabicAyahs.firstWhere(
-      (a) => a.ayahNumber == ayahNumber,
+      (a) => a.ayahNumber == firstPageAyah.ayah,
       orElse: () => arabicAyahs.first,
     );
 
-    /// 4. Surah metadata
     final surah = surahList.firstWhere(
       (s) => s.number == surahId,
       orElse: () => surahList.first,
@@ -184,11 +182,10 @@ final pageBookmarkUIProvider = FutureProvider<List<PageBookmarkUI>>((
       PageBookmarkUI(
         bookmark: b,
         surahName: surah.nameEnglish,
-        juz: juzNumber,
+        juz: firstPageAyah.juz,
         arabicPreview: arabic.text,
       ),
     );
   }
-
   return result;
 });

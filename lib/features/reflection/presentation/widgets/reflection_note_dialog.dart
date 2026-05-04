@@ -1,29 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 
-Future<String?> showBookmarkDialog(
+Future<String?> showReflectionDialog(
   BuildContext context, {
-  required String title,
-  required String subtitle,
-  required bool isPageMode, // New parameter to determine the hint text
-  String? initialNote,
+  required String surahName,
+  required int ayahNumber,
+  String? initialReflection,
 }) {
-  final controller = TextEditingController(text: initialNote ?? "");
+  final controller = TextEditingController(text: initialReflection ?? "");
 
-  // Dynamic text based on mode
-  final String noteHint = isPageMode
-      ? "Add a note to remember why this page is important (optional)"
-      : "Add a note to remember why this verse is important (optional)";
-
-  final String textFieldHint = isPageMode
-      ? "e.g. Favorite Juz, specific topic, start of my journey..."
-      : "e.g. Read when stressed, reminder for prayer, beautiful tafsir...";
-
-  // Colors from your design
   const colorDeepGray = Color(0xFF111827);
   const colorMidGray = Color(0xFF4A4A4A);
   const colorLightGray = Color(0xFF71717A);
-  const colorAmber = Color(0xFFD97706);
+  const colorEmerald = Color(0xFF10B981); // Calming green for reflection
   const colorTextFieldBG = Color(0xFFF9FAFB);
 
   return showDialog<String>(
@@ -44,9 +32,9 @@ Future<String?> showBookmarkDialog(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
+                  const Text(
+                    "Write Your Reflection",
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: colorDeepGray,
@@ -67,9 +55,9 @@ Future<String?> showBookmarkDialog(
               const SizedBox(height: 4),
 
               Text(
-                subtitle,
+                "$surahName • Verse $ayahNumber",
                 style: const TextStyle(
-                  color: colorAmber,
+                  color: colorEmerald,
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
                 ),
@@ -77,21 +65,25 @@ Future<String?> showBookmarkDialog(
 
               const SizedBox(height: 12),
 
-              Text(
-                noteHint,
-                style: const TextStyle(color: colorMidGray, fontSize: 13),
+              const Text(
+                "What does this verse mean to you? How can you apply it in your life?",
+                style: TextStyle(
+                  color: colorMidGray,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
               // The Styled Text Field
               TextField(
                 controller: controller,
-                maxLines: 4,
+                maxLines: 6, // Slightly taller for longer reflections
                 autofocus: true,
                 style: const TextStyle(fontSize: 14, color: colorDeepGray),
                 decoration: InputDecoration(
-                  hintText: textFieldHint,
+                  hintText: "Write your thoughts and reflections here...",
                   hintStyle: const TextStyle(
                     color: colorLightGray,
                     fontSize: 13,
@@ -105,7 +97,10 @@ Future<String?> showBookmarkDialog(
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: colorAmber, width: 1.5),
+                    borderSide: const BorderSide(
+                      color: colorEmerald,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -139,7 +134,7 @@ Future<String?> showBookmarkDialog(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: colorAmber,
+                        backgroundColor: colorEmerald,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -150,7 +145,7 @@ Future<String?> showBookmarkDialog(
                         Navigator.pop(context, controller.text.trim());
                       },
                       child: const Text(
-                        "Save Bookmark",
+                        "Save Reflection",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),

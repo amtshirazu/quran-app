@@ -67,5 +67,5 @@ class AppColors {
   // 🔴 Destructive actions
   // ─────────────────────────────
 
-  static const danger = Color(0xFFDC2626); // red600
+  static const danger = Color(0xFFDC2626); // red600wh
 }
