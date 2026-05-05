@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
-
+import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
 import '../../../../../core/constants/app_colors.dart';
 
-
-
-class NextPrayerCard extends StatelessWidget {
+class NextPrayerCard extends ConsumerWidget {
   const NextPrayerCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // We watch the UI model provider instead of the raw one
+    final model = ref.watch(nextPrayerUIProvider);
+
+    // If there's no model (loading or error), show nothing or a skeleton
+    if (model == null) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       padding: EdgeInsets.all(AppSpacing.size12),
       decoration: BoxDecoration(
@@ -28,46 +35,55 @@ class NextPrayerCard extends StatelessWidget {
                   color: AppColors.emerald500,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.access_time,
-                    color: Colors.white),
+                child: const Icon(
+                  Icons.access_time,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Next Prayer",
-                      style: TextStyle(
-                          color: AppColors.emerald100,
-                          fontSize: AppSpacing.size12)
+                  const Text(
+                    "Next Prayer",
+                    style: TextStyle(
+                      color: AppColors.emerald100,
+                      fontSize: AppSpacing.size12,
+                    ),
                   ),
-                  Text("Dhuhr",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        fontSize: AppSpacing.size14,
-                      )
+                  Text(
+                    model.prayerName, // Pure data from provider
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: AppSpacing.size14,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("12:30 PM",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: AppSpacing.size18,
-                      fontWeight: FontWeight.bold)
+              Text(
+                model.formattedTime, // Pure data from provider
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: AppSpacing.size18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              Text("in 2h 15m",
-                  style: TextStyle(
-                      color: AppColors.emerald100,
-                      fontSize: AppSpacing.size12,
-                  )
+              Text(
+                model.remainingTime, // Pure data from provider
+                style: const TextStyle(
+                  color: AppColors.emerald100,
+                  fontSize: AppSpacing.size12,
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

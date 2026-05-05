@@ -16,4 +16,5 @@ class AppSpacing {
   static const size28 = 28.0;
   static const size30 = 30.0;
   static const size32 = 32.0;
+  static const size56 = 56.0;
 }

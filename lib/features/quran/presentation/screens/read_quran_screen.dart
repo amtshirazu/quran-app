@@ -6,49 +6,41 @@ import '../../../../core/constants/app_colors.dart';
 import '../widgets/bottom_navbar.dart';
 import '../widgets/read_quran_screen_widgets/header_section.dart';
 
-
-
-
 class ReadQuranScreen extends StatefulWidget {
   const ReadQuranScreen({super.key});
 
   @override
   State<ReadQuranScreen> createState() => _ReadQuranScreenState();
-
 }
 
 class _ReadQuranScreenState extends State<ReadQuranScreen> {
-
   int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [AppColors.emerald50, Colors.white],
-            ),
-          ),
-        
-          child: Column(
-            children: [
-              ReadHeaderSection(),
-              SizedBox(height: 20,),
-              Expanded(
-                child: CustomScrollView(
-                  cacheExtent: 1000,
-                  slivers: [
-                    _quickAccess(),
-                    SurahList(),
-                  ],
-                ),
-              ),
-            ],
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.emerald50, Colors.white],
           ),
         ),
+
+        child: Column(
+          children: [
+            ReadHeaderSection(),
+            SizedBox(height: 20),
+            Expanded(
+              child: CustomScrollView(
+                cacheExtent: 1000,
+                slivers: [_quickAccess(), SurahList()],
+              ),
+            ),
+          ],
+        ),
+      ),
 
       bottomNavigationBar: BottomNavbar(
         currentIndex: selectedIndex,
@@ -81,14 +73,5 @@ class _ReadQuranScreenState extends State<ReadQuranScreen> {
 }
 
 SliverList _quickAccess() {
-  return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          QuickAccess(),
-        ]
-      ),
-  );
+  return SliverList(delegate: SliverChildListDelegate([QuickAccess()]));
 }
-
-
-
