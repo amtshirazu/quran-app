@@ -14,7 +14,6 @@ class PrayerTimesList extends ConsumerStatefulWidget {
 }
 
 class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
-  // Simple state for toggles
   final Map<String, bool> _toggles = {};
 
   @override
@@ -23,22 +22,21 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
 
     return prayerTimesAsync.when(
       data: (times) {
-        final sortedKeys = times.keys.toList();
+        // Filter out 'Sunrise' so only the 5 daily prayers remain
+        final prayerKeys = times.keys.where((key) => key != "Sunrise").toList();
 
         return ListView.builder(
           padding: EdgeInsets.all(AppSpacing.size20),
-          // +1 to accommodate the Qibla Button at the end
-          itemCount: sortedKeys.length + 1,
+          itemCount: prayerKeys.length + 1, // Prayers + Qibla Button
           itemBuilder: (context, index) {
-            // Check if we are at the last index
-            if (index == sortedKeys.length) {
+            if (index == prayerKeys.length) {
               return const Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: QiblaButton(),
               );
             }
 
-            final name = sortedKeys[index];
+            final name = prayerKeys[index];
             final time = times[name]!;
 
             return PrayerTimeCard(
@@ -51,7 +49,7 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Center(child: Text("Error loading times: $err")),
+      error: (err, _) => Center(child: Text("Error: $err")),
     );
   }
 }

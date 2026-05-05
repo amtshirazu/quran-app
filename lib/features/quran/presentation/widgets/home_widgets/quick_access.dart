@@ -46,7 +46,7 @@ class QuickAccess extends StatelessWidget {
             fgColor: AppColors.pink600,
             icon: LucideIcons.compass,
             text: "Prayer Times",
-            route: "/surahs",
+            route: "/prayerTimes",
           ),
         ],
       ),

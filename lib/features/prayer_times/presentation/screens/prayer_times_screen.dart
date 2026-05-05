@@ -8,13 +8,10 @@ class PrayerTimesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.emerald50, // Light background for the list
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: PrayerTimesHeader(),
-      ),
-      body: const PrayerTimesList(),
+    return const Scaffold(
+      backgroundColor: AppColors.emerald50,
+      appBar: PrayerTimesHeader(), // We use a custom AppBar class here
+      body: PrayerTimesList(),
     );
   }
 }
