@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import 'package:quran_app/features/reflection/domain/models/reflection_model.dart';
@@ -44,10 +45,7 @@ class ReflectionCard extends ConsumerWidget {
               const Spacer(),
               Text(
                 DateFormat('MMM dd, yyyy').format(data.date),
-                style: const TextStyle(
-                  color: colorLightGrayBorder,
-                  fontSize: 11,
-                ),
+                style: const TextStyle(color: colorMidGray, fontSize: 12),
               ),
               const SizedBox(width: 8),
               IconButton(
@@ -55,9 +53,9 @@ class ReflectionCard extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 icon: const Icon(
-                  Icons.delete_outline,
+                  LucideIcons.trash2,
                   size: 18,
-                  color: colorLightGrayBorder,
+                  color: colorMidGray,
                 ),
                 onPressed: () async {
                   await ref
@@ -75,7 +73,7 @@ class ReflectionCard extends ConsumerWidget {
           Text(
             data.content,
             style: const TextStyle(
-              color: colorMidGray,
+              color: colorDeepGray,
               fontSize: 14,
               height: 1.6,
             ),
@@ -95,14 +93,14 @@ class ReflectionCard extends ConsumerWidget {
                 context.go('/readAyah');
               },
               icon: const Icon(
-                Icons.book_outlined,
-                size: 16,
-                color: colorDeepGray,
+                LucideIcons.bookOpen,
+                size: 18,
+                color: Color.fromARGB(255, 9, 13, 22),
               ),
               label: const Text(
                 "Read Full Surah",
                 style: TextStyle(
-                  color: colorDeepGray,
+                  color: Color.fromARGB(255, 9, 13, 22),
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),

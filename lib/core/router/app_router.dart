@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quran_app/features/audio/presentation/screens/reciters_selection_page.dart';
 import 'package:quran_app/features/bookmark/presentation/screens/bookmark_screen.dart';
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
+import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
 import '../../features/audio/presentation/screens/reciter_audio_screen.dart';
 import '../../features/quran/presentation/screens/home_screen.dart';
 import '../../features/quran/presentation/screens/read_quran_screen.dart';
@@ -31,6 +32,10 @@ class AppRouter {
       GoRoute(
         path: '/bookmarks',
         builder: (context, state) => const BookmarkScreen(),
+      ),
+      GoRoute(
+        path: '/reflections',
+        builder: (context, state) => const ReflectionScreen(),
       ),
       GoRoute(
         path: '/settings',

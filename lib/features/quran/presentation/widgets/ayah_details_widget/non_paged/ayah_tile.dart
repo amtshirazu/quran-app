@@ -8,8 +8,9 @@ import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
+import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart'; // Ensure this is correct
+import 'package:quran_app/features/reflection/presentation/widgets/reflection_note_dialog.dart'; // Ensure this is correct
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
@@ -30,15 +31,55 @@ class AyahTile extends ConsumerStatefulWidget {
 class _AyahTileState extends ConsumerState<AyahTile> {
   bool _hasBeenTracked = false;
 
+  Future<void> _handleReflectionTap() async {
+    final selectedSurah = ref.read(selectedSurahProvider);
+    if (selectedSurah == null) return;
+
+    // Check for existing reflection
+    final reflections = await ref.read(reflectionsProvider.future);
+    String? existingContent;
+
+    try {
+      final existing = reflections.firstWhere(
+        (r) =>
+            r['surah_id'] == selectedSurah.number &&
+            r['ayah_number'] == widget.ayah.ayahNumber,
+      );
+      existingContent = existing['content'];
+    } catch (_) {
+      existingContent = null;
+    }
+
+    if (!mounted) return;
+
+    // Show Reflection Dialog
+    final content = await showReflectionDialog(
+      context,
+      surahName: selectedSurah.nameEnglish,
+      ayahNumber: widget.ayah.ayahNumber,
+      initialReflection: existingContent,
+    );
+
+    if (content == null) return;
+
+    // Save to Database
+    final reflectionService = ref.read(reflectionServiceProvider);
+    await reflectionService.addOrUpdateReflection(
+      surahId: selectedSurah.number,
+      ayahNumber: widget.ayah.ayahNumber,
+      content: content,
+    );
+
+    // Refresh UI and Stats
+    ref.invalidate(reflectionsProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
     final selectedSurah = ref.watch(selectedSurahProvider);
 
-    if (selectedSurah == null) {
-      return const SizedBox.shrink();
-    }
+    if (selectedSurah == null) return const SizedBox.shrink();
 
     final isBookmarked = ref.watch(
       isAyahBookmarkedProvider((
@@ -52,22 +93,12 @@ class _AyahTileState extends ConsumerState<AyahTile> {
       onVisibilityChanged: (visibilityInfo) async {
         if (visibilityInfo.visibleFraction >= 0.6 && !_hasBeenTracked) {
           final progressService = ref.read(progressServiceProvider);
-          final selectedSurah = ref.read(selectedSurahProvider);
-
-          if (selectedSurah == null) return;
-
           await progressService.trackAyah(
             selectedSurah.number,
             widget.ayah.ayahNumber,
           );
-
           ref.invalidate(lastReadProvider);
-
-          if (mounted) {
-            setState(() {
-              _hasBeenTracked = true;
-            });
-          }
+          if (mounted) setState(() => _hasBeenTracked = true);
         }
       },
       child: Card(
@@ -95,55 +126,42 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       ),
                     ),
                   ),
-
                   const Spacer(),
-
                   Row(
                     children: [
                       IconButton(
                         onPressed: () async {
-                          final selectedSurah = ref.read(selectedSurahProvider);
-                          if (selectedSurah == null) return;
-
-                          // 👇 STEP 1: fetch bookmarks
                           final bookmarks = await ref.read(
                             bookmarksProvider.future,
                           );
-
-                          Bookmark? existingBookmark;
-
+                          Bookmark? existing;
                           try {
-                            existingBookmark = bookmarks.firstWhere(
+                            existing = bookmarks.firstWhere(
                               (b) =>
                                   b.type == BookmarkType.verse &&
                                   b.surahId == selectedSurah.number &&
                                   b.ayahNumber == widget.ayah.ayahNumber,
                             );
-                          } catch (_) {
-                            existingBookmark = null;
-                          }
+                          } catch (_) {}
 
-                          // open dialog with existing note
+                          if (!mounted) return;
                           final note = await showBookmarkDialog(
                             context,
                             title: "Add Bookmark",
                             subtitle:
                                 "${selectedSurah.nameEnglish} • Verse ${widget.ayah.ayahNumber}",
-                            initialNote: existingBookmark?.note,
+                            initialNote: existing?.note,
                             isPageMode: false,
                           );
 
                           if (note == null) return;
-
-                          // save (insert or update)
-                          final service = ref.read(bookmarkServiceProvider);
-
-                          await service.addOrUpdateVerseBookmark(
-                            surahId: selectedSurah.number,
-                            ayahNumber: widget.ayah.ayahNumber,
-                            note: note,
-                          );
-
+                          await ref
+                              .read(bookmarkServiceProvider)
+                              .addOrUpdateVerseBookmark(
+                                surahId: selectedSurah.number,
+                                ayahNumber: widget.ayah.ayahNumber,
+                                note: note,
+                              );
                           ref.invalidate(bookmarksProvider);
                         },
                         icon: Icon(
@@ -151,8 +169,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                               ? LucideIcons.bookmarkCheck
                               : LucideIcons.bookmark,
                           color: isBookmarked
-                              ? Colors
-                                    .amber // yellow
+                              ? Colors.amber
                               : AppColors.gray400,
                           size: 18,
                         ),
@@ -171,12 +188,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           final defaultReciter = ref.read(
                             defaultReciterProvider,
                           );
-                          final selectedSurah = ref.read(selectedSurahProvider);
-
-                          if (defaultReciter == null || selectedSurah == null) {
-                            return;
-                          }
-
+                          if (defaultReciter == null) return;
                           await audio.playVerse(
                             reciter: defaultReciter,
                             surah: selectedSurah,
@@ -193,9 +205,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 10),
-
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -206,12 +216,9 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     fontSize: AppSpacing.size18,
                   ),
                   textAlign: TextAlign.right,
-                  softWrap: true,
                 ),
               ),
-
               const SizedBox(height: 8),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -221,22 +228,20 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     fontSize: AppSpacing.size12,
                   ),
                   textAlign: TextAlign.left,
-                  softWrap: true,
                 ),
               ),
-
               const SizedBox(height: 8),
-
               const Divider(color: AppColors.gray200, thickness: 1),
-
               const SizedBox(height: 8),
-
               Row(
                 children: [
                   Expanded(
                     child: SelectedButton(
                       icon: LucideIcons.bookmarkCheck,
                       text: "Tafseer",
+                      onTap: () {
+                        // Logic for Tafseer
+                      },
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -244,6 +249,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     child: SelectedButton(
                       icon: LucideIcons.messageSquare,
                       text: "Reflection",
+                      onTap: _handleReflectionTap, // Integrated logic
                     ),
                   ),
                 ],

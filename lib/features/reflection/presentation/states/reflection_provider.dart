@@ -63,3 +63,18 @@ final reflectionStatsProvider = Provider((ref) {
     orElse: () => {'total': 0, 'thisWeek': 0, 'surahs': 0},
   );
 });
+
+final reflectionSearchQueryProvider = StateProvider((ref) => "");
+
+final filteredReflectionsProvider = Provider((ref) {
+  final query = ref.watch(reflectionSearchQueryProvider).toLowerCase();
+  final list = ref.watch(reflectionsUIProvider).value ?? [];
+
+  if (query.isEmpty) return list;
+
+  return list.where((item) {
+    return item.content.toLowerCase().contains(query) ||
+        item.surah.nameEnglish.toLowerCase().contains(query) ||
+        item.ayahNumber.toString().contains(query);
+  }).toList();
+});

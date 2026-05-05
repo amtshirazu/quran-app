@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 
-
-
-class ReflectionJournalCard extends StatelessWidget {
+class ReflectionJournalCard extends ConsumerWidget {
   const ReflectionJournalCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reflectionStats = ref.watch(reflectionStatsProvider);
+    final totalCount = reflectionStats['thisWeek'].toString();
+    ;
+
     return Card(
-      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 50 , top: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 25, top: 15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.size16),
       ),
@@ -24,10 +29,7 @@ class ReflectionJournalCard extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              AppColors.amber500,
-              AppColors.amber600,
-            ],
+            colors: [AppColors.amber500, AppColors.amber600],
           ),
         ),
         child: Row(
@@ -51,8 +53,8 @@ class ReflectionJournalCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Reflection Journal",
                       style: TextStyle(
                         color: Colors.white,
@@ -60,10 +62,10 @@ class ReflectionJournalCard extends StatelessWidget {
                         fontSize: AppSpacing.size16,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
-                      "3 reflections this week",
-                      style: TextStyle(
+                      "$totalCount reflections this week",
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: AppSpacing.size12,
                       ),
@@ -75,13 +77,15 @@ class ReflectionJournalCard extends StatelessWidget {
             // Right side: button
             TextButton(
               onPressed: () {
-                // navigate to /reflections
+                context.push('/reflections');
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.white.withOpacity(0.1),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.size12),
                 ),

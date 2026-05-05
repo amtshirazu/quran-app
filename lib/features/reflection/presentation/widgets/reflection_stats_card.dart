@@ -11,7 +11,7 @@ class ReflectionStatsCard extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         color: const Color(0xFFA855F7), // Vibrant Purple
         borderRadius: BorderRadius.circular(20),
