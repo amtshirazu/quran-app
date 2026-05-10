@@ -31,6 +31,7 @@ dependencies:
   quran: ^1.4.1
   shimmer: ^3.0.0
   qcf_quran_plus: ^0.0.8
+  muslim_data_flutter: ^1.5.0
 
 dev_dependencies:
   flutter_test:
