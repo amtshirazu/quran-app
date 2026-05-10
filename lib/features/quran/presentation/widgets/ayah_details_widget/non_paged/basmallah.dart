@@ -3,13 +3,11 @@ import 'package:quran_app/core/constants/app_colors.dart';
 
 import '../../../../../../core/constants/app_spacing.dart';
 
-
 class Basmallah extends StatelessWidget {
   const Basmallah({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
@@ -31,6 +29,7 @@ class Basmallah extends StatelessWidget {
             style: textTheme.titleSmall?.copyWith(
               color: AppColors.gray600,
               fontSize: AppSpacing.size12,
+              fontStyle: FontStyle.italic,
             ),
             textAlign: TextAlign.center,
           ),

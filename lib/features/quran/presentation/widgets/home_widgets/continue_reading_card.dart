@@ -19,8 +19,10 @@ class ContinueReadingCard extends ConsumerWidget {
 
     return continueReadingAsync.when(
       data: (data) {
-        if (data == null) return const EmptyCard();
-
+        if (data == null) {
+          print("No last read data available.");
+          return const EmptyCard();
+        }
         return InkWell(
           onTap: () async {
             ref.read(selectedSurahProvider.notifier).state = data.surah;

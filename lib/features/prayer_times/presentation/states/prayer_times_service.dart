@@ -4,16 +4,13 @@ class PrayerTimesService {
   Map<String, DateTime> calculateTodayTimes({
     required double lat,
     required double lng,
-    String? countryCode, // Optional: You could pass this from geocoding
+    String? countryCode,
   }) {
     final coordinates = Coordinates(lat, lng);
 
-    // Default to Muslim World League (MWL) for global compatibility
     CalculationParameters params = CalculationMethod.muslim_world_league
         .getParameters();
 
-    // Optional: Logic to override based on region
-    // If you detect the user is in Turkey, use the Turkey method
     if (lat > 36.0 && lat < 42.0 && lng > 26.0 && lng < 45.0) {
       params = CalculationMethod.turkey.getParameters();
     }

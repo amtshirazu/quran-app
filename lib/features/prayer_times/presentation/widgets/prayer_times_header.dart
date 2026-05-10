@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
-import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
 
 class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {

@@ -3,28 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
+import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../state/quran_providers.dart';
-
-
-
-
 
 class ReadHeaderSection extends ConsumerWidget {
   const ReadHeaderSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 60, 16, 20),
-      decoration: const BoxDecoration(
-        color: AppColors.emerald600,
-      ),
+      decoration: const BoxDecoration(color: AppColors.emerald600),
 
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -34,6 +29,9 @@ class ReadHeaderSection extends ConsumerWidget {
               IconButton(
                 onPressed: () {
                   ref.watch(searchQueryProvider.notifier).state = '';
+                  ref.invalidate(lastReadProvider);
+                  ref.invalidate(continueReadingProvider);
+                  ref.invalidate(surahProgressProvider);
                   context.go('/');
                 },
                 icon: Icon(
@@ -42,7 +40,7 @@ class ReadHeaderSection extends ConsumerWidget {
                   size: 24,
                 ),
               ),
-              SizedBox(width: 16,),
+              SizedBox(width: 16),
 
               Column(
                 children: [
@@ -61,17 +59,17 @@ class ReadHeaderSection extends ConsumerWidget {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
 
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
 
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: SearchField(),
           ),
-       ]
+        ],
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
+import 'package:quran_app/features/prayer_times/presentation/widgets/location_access_card.dart';
 import 'package:quran_app/features/prayer_times/presentation/widgets/prayer_times_card.dart';
 import 'package:quran_app/features/prayer_times/presentation/widgets/qibla_button.dart';
 
@@ -19,7 +21,6 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
   @override
   Widget build(BuildContext context) {
     final prayerTimesAsync = ref.watch(prayerTimesProvider);
-
     return prayerTimesAsync.when(
       data: (times) {
         // Filter out 'Sunrise' so only the 5 daily prayers remain
@@ -49,7 +50,25 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Center(child: Text("Error: $err")),
+      error: (err, _) {
+        return Padding(
+          padding: EdgeInsets.all(AppSpacing.size20),
+          child: LocationAccessCard(
+            onEnablePressed: () async {
+              LocationPermission permission =
+                  await Geolocator.checkPermission();
+
+              if (permission == LocationPermission.deniedForever) {
+                // Open app settings so user can enable location permissions
+                await Geolocator.openAppSettings();
+              } else {
+                // Invalidating locationProvider to trigger a refetch of GPS coordinates
+                ref.invalidate(locationProvider);
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

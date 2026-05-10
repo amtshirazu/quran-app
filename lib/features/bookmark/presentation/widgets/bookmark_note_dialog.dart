@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 
 Future<String?> showBookmarkDialog(
   BuildContext context, {

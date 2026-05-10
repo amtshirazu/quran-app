@@ -1,59 +1,52 @@
 import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/ayah.dart';
+import 'package:quran/quran.dart' as quran_data;
+import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
 import '../../domain/models/surah.dart';
-import '../../domain/models/translation.dart';
-import '../state/quran_providers.dart';
 
+// We keep this to store the "triple" result
 class DailyVerse {
-  final Ayah ayah;
-  final Translation translation;
+  final String arabicText;
+  final String translation;
   final Surah? surah;
+  final int ayahNumber;
 
   DailyVerse({
-    required this.ayah,
+    required this.arabicText,
     required this.translation,
     required this.surah,
+    required this.ayahNumber,
   });
 }
 
 final dailyVerseWithTranslationProvider = FutureProvider<DailyVerse>((
   ref,
 ) async {
-  final ayahRepo = ref.watch(ayahRepositoryProvider);
-  final translationRepo = ref.watch(translationRepositoryProvider);
-  final surah = ref.watch(surahListProvider).value;
+  final surahs = ref.watch(surahListProvider).value;
 
   final today = DateTime.now();
   final seed = today.year * 10000 + today.month * 100 + today.day;
   final random = Random(seed);
 
   final surahNumber = random.nextInt(114) + 1;
+  final totalAyahs = quran_data.getVerseCount(surahNumber);
+  final ayahNumber = random.nextInt(totalAyahs) + 1;
 
-  final ayahs = await ayahRepo.getSurahAyahs(
-    surahNumber: surahNumber,
-    script: "uthmani",
-  );
-  if (ayahs.isEmpty) throw Exception("No ayahs in Surah $surahNumber");
+  final arabicText = quran_data.getVerse(surahNumber, ayahNumber);
 
-  final ayahIndex = random.nextInt(ayahs.length);
-  final ayah = ayahs[ayahIndex];
-
-  final translations = await translationRepo.getSurahTranslations(
-    surahNumber: surahNumber,
-    translationFile: "saheeh",
+  final translationService = ref.read(translationServiceProvider);
+  final translationText = await translationService.getTranslation(
+    surahNumber,
+    ayahNumber,
   );
 
-  final translation = translations.firstWhere(
-    (t) => t.ayahNumber == ayah.ayahNumber,
-    orElse: () => Translation(
-      ayahNumber: ayah.ayahNumber,
-      text: "Translation not found",
-      surahNumber: surahNumber,
-    ),
+  final currentSurah = surahs?.firstWhere((s) => s.number == surahNumber);
+
+  return DailyVerse(
+    arabicText: arabicText,
+    translation: translationText,
+    surah: currentSurah,
+    ayahNumber: ayahNumber,
   );
-
-  final currentSurah = surah?.firstWhere((s) => s.number == surahNumber);
-
-  return DailyVerse(ayah: ayah, translation: translation, surah: currentSurah);
 });

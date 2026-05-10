@@ -5,8 +5,8 @@ import 'package:quran_app/features/progress/presentation/state/last_read_provide
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/bottom_page_indicator.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../state/reading_mode.dart';
 import '../widgets/ayah_details_widget/non_paged/ayah_list.dart';
 import '../widgets/ayah_details_widget/non_paged/basmallah.dart';
@@ -60,7 +60,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
       final range = surahPageRanges[selectedSurah.number];
       int initialPage = range?.start ?? 1;
 
-      /// 🔥 1. BOOKMARK JUMP (highest priority)
+      /// BOOKMARK JUMP (highest priority)
       final jumpPage = ref.read(jumpToPageProvider);
       if (jumpPage != null) {
         initialPage = jumpPage;
@@ -87,7 +87,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         ref.read(shouldResumeLastReadProvider.notifier).state = false;
       }
 
-      /// 🔥 3. CREATE CONTROLLER SAFELY
+      /// CONTROLLER SAFELY
       _pageController?.dispose();
       _pageController = PageController(initialPage: initialPage - 1);
 
@@ -148,48 +148,51 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     }
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.emerald50, Colors.white],
-          ),
-        ),
-        child: Column(
-          children: [
-            SurahHeaderSection(mode: readingMode, controller: _pageController),
-
-            if (readingMode == ReadingMode.translation)
-              Expanded(
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    SliverToBoxAdapter(child: SurahInfo()),
-
-                    if (selectedSurah.number != 1 && selectedSurah.number != 9)
-                      const SliverToBoxAdapter(child: Basmallah()),
-
-                    const SliverToBoxAdapter(child: SizedBox(height: 10)),
-
-                    AyahList(
-                      ayahkeys: _ayahKeys,
-                      onListBuilt: _onAyahListBuilt,
-                    ),
-
-                    SurahNavigationCard(),
-                  ],
-                ),
-              )
-            else
-              Expanded(
-                child: _pageController == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : QuranPagedReaderScreen(controller: _pageController!),
-              ),
-          ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(85),
+        child: SurahHeaderSection(
+          controller: _pageController,
+          mode: readingMode,
         ),
       ),
+      body: readingMode == ReadingMode.translation
+          ? Column(
+              children: [
+                Expanded(
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      SliverToBoxAdapter(child: SurahInfo()),
+
+                      if (selectedSurah.number != 1 &&
+                          selectedSurah.number != 9)
+                        const SliverToBoxAdapter(child: Basmallah()),
+
+                      const SliverToBoxAdapter(child: SizedBox(height: 10)),
+
+                      AyahList(
+                        ayahkeys: _ayahKeys,
+                        onListBuilt: _onAyahListBuilt,
+                      ),
+
+                      SurahNavigationCard(),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                const SizedBox(height: 16),
+                Expanded(
+                  child: _pageController == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : QuranPagedReaderScreen(controller: _pageController!),
+                ),
+
+                BottomPageIndicator(),
+              ],
+            ),
     );
   }
 }

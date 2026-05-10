@@ -44,7 +44,7 @@ class SurahHeaderSection extends ConsumerWidget {
         : selectedSurah;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 40),
+      padding: const EdgeInsets.fromLTRB(24, 60, 24, 25),
       decoration: const BoxDecoration(color: AppColors.emerald600),
 
       child: Row(

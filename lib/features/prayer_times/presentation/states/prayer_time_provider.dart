@@ -22,7 +22,7 @@ final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
 
     if (placemarks.isNotEmpty) {
       final place = placemarks.first;
-      // You can return place.locality (City) or place.subAdministrativeArea
+
       return {
         "city":
             place.administrativeArea ?? place.locality ?? "Unknown Location",
@@ -36,7 +36,7 @@ final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
   }
 });
 
-// 1. Coordinates Provider: Fetches GPS every time it's watched/invalidated
+// Fetches GPS every time it's watched/invalidated
 final locationProvider = FutureProvider<Position>((ref) async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) throw 'Location services are disabled.';
@@ -47,19 +47,23 @@ final locationProvider = FutureProvider<Position>((ref) async {
     if (permission == LocationPermission.denied) throw 'Permissions denied.';
   }
 
-  // Updated non-deprecated way to set accuracy
   const locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.low, // Precision vs Battery balance
-    distanceFilter: 100, // Only updates if user moves 100 meters
-    timeLimit: Duration(seconds: 5), // Timeout for location fetch
+    accuracy: LocationAccuracy.low,
+    distanceFilter: 100,
+    timeLimit: Duration(seconds: 120),
   );
 
-  return await Geolocator.getCurrentPosition(
-    locationSettings: locationSettings,
-  );
+  try {
+    return await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+  } catch (e) {
+    final lastKnown = await Geolocator.getLastKnownPosition();
+    if (lastKnown != null) return lastKnown;
+    rethrow;
+  }
 });
 
-// 2. Prayer Times Provider: Automatically re-runs when location changes
 final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
   final position = await ref.watch(locationProvider.future);
   final countryAndCityName = await ref.watch(countryAndCityNameProvider.future);
@@ -87,7 +91,6 @@ final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
   return times;
 });
 
-// 3. Next Prayer Logic: Finds the upcoming prayer relative to 'now'
 final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
   final timesAsync = ref.watch(prayerTimesProvider);
 
@@ -95,11 +98,8 @@ final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
     data: (times) {
       final now = DateTime.now();
       try {
-        // Find the first prayer today that hasn't happened yet
         return times.entries.firstWhere((e) => e.value.isAfter(now));
       } catch (_) {
-        // If all prayers today passed, you'd technically look at tomorrow's Fajr
-        // For simplicity, we return null or the first prayer of the day
         return null;
       }
     },

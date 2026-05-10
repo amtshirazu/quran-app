@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/domain/model/page_model.dart';
@@ -5,6 +6,8 @@ import 'package:quran_app/features/bookmark/domain/model/verse_model.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
+import 'package:quran/quran.dart' as quran;
 
 final bookmarkServiceProvider = Provider<BookmarkService>((ref) {
   return BookmarkService();
@@ -95,49 +98,39 @@ final isPageBookmarkedProvider = Provider.family<bool, ({int page})>((
 final verseBookmarkUIProvider = FutureProvider<List<VerseBookmarkUI>>((
   ref,
 ) async {
-  // Watch the root provider. When bookmarksProvider invalidates, this re-runs.
   final allBookmarks = await ref.watch(bookmarksProvider.future);
-
-  // Filter only verse types from the reactive list
   final verseData = allBookmarks
       .where((b) => b.type == BookmarkType.verse)
       .toList();
-
   final surahList = await ref.watch(surahListProvider.future);
+
+  // Access our new SQLite service
+  final translationService = ref.read(translationServiceProvider);
+
   List<VerseBookmarkUI> result = [];
 
   for (final b in verseData) {
-    final surah = surahList.firstWhere((s) => s.number == b.surahId);
+    try {
+      final surah = surahList.firstWhere((s) => s.number == b.surahId);
 
-    final ayahs = await ref.read(
-      ayahListProvider({"surahNumber": b.surahId, "script": "uthmani"}).future,
-    );
+      final arabicText = quran.getVerse(b.surahId!, b.ayahNumber!);
 
-    final translations = await ref.read(
-      translationListProvider({
-        "surahNumber": b.surahId,
-        "translationFile": "saheeh",
-      }).future,
-    );
+      final translationText = await translationService.getTranslation(
+        b.surahId!,
+        b.ayahNumber!,
+      );
 
-    final ayah = ayahs.firstWhere(
-      (a) => a.ayahNumber == b.ayahNumber,
-      orElse: () => ayahs.first,
-    );
-
-    final translation = translations.firstWhere(
-      (t) => t.ayahNumber == b.ayahNumber,
-      orElse: () => translations.first,
-    );
-
-    result.add(
-      VerseBookmarkUI(
-        bookmark: b,
-        surah: surah,
-        arabic: ayah.text,
-        translation: translation.text,
-      ),
-    );
+      result.add(
+        VerseBookmarkUI(
+          bookmark: b,
+          surah: surah,
+          arabic: arabicText,
+          translation: translationText,
+        ),
+      );
+    } catch (e) {
+      debugPrint("Error loading bookmark UI for Surah ${b.surahId}: $e");
+    }
   }
   return result;
 });
@@ -145,45 +138,42 @@ final verseBookmarkUIProvider = FutureProvider<List<VerseBookmarkUI>>((
 final pageBookmarkUIProvider = FutureProvider<List<PageBookmarkUI>>((
   ref,
 ) async {
-  // Watch the root provider to ensure automatic UI updates
   final allBookmarks = await ref.watch(bookmarksProvider.future);
-
   final pageData = allBookmarks
       .where((b) => b.type == BookmarkType.page)
       .toList();
-
   final surahList = await ref.watch(surahListProvider.future);
+
   List<PageBookmarkUI> result = [];
 
   for (final b in pageData) {
     final page = b.page!;
-    final pageAyahs = await ref.read(pageAyahsProvider(page).future);
 
-    if (pageAyahs.isEmpty) continue;
+    final List<Map<String, dynamic>> pageVerses = quran
+        .getPageData(page)
+        .cast<Map<String, dynamic>>();
 
-    final firstPageAyah = pageAyahs.first;
-    final surahId = firstPageAyah.surah;
+    if (pageVerses.isEmpty) continue;
 
-    final arabicAyahs = await ref.read(
-      ayahListProvider({"surahNumber": surahId, "script": "uthmani"}).future,
-    );
+    final firstVerse = pageVerses.first;
+    final surahId = firstVerse['surah'];
+    final ayahId = firstVerse['ayah'];
 
-    final arabic = arabicAyahs.firstWhere(
-      (a) => a.ayahNumber == firstPageAyah.ayah,
-      orElse: () => arabicAyahs.first,
-    );
+    final arabicPreview = quran.getVerse(surahId!, ayahId!);
 
     final surah = surahList.firstWhere(
       (s) => s.number == surahId,
       orElse: () => surahList.first,
     );
 
+    final juz = quran.getJuzNumber(surahId!, ayahId!);
+
     result.add(
       PageBookmarkUI(
         bookmark: b,
         surahName: surah.nameEnglish,
-        juz: firstPageAyah.juz,
-        arabicPreview: arabic.text,
+        juz: juz,
+        arabicPreview: arabicPreview,
       ),
     );
   }

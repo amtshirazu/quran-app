@@ -1,6 +1,6 @@
 import 'package:quran_app/core/database/database_helper.dart';
-import 'package:quran_app/features/quran/data/repository/paged_repository.dart';
 import '../../../quran/presentation/widgets/ayah_details_widget/paged/paged_surah_map.dart';
+import 'package:quran/quran.dart' as quran;
 
 class ProgressService {
   final dbHelper = DatabaseHelper.instance;
@@ -116,7 +116,9 @@ class ProgressService {
     required String mode,
   }) async {
     final db = await dbHelper.database;
-    final activeSurah = await _resolveActiveSurahForEntry(
+
+    // Resolve active surah for page mode to ensure last_read always has a valid surah_id for easier UI display and consistency
+    final activeSurah = await resolveActiveSurah(
       mode: mode,
       surahId: surahId,
       page: page,
@@ -165,58 +167,39 @@ class ProgressService {
     int totalAyahs,
   ) async {
     final db = await dbHelper.database;
-
     final rows = await db.query('last_read');
-
     if (rows.isEmpty) return 0.0;
 
     final Set<int> uniqueAyahs = {};
-
-    // 🔥 Since mode is uniform, just read it once
     final mode = rows.first['mode'];
 
-    // =========================
-    // AYAH MODE
-    // =========================
     if (mode == 'ayah') {
       for (final row in rows) {
         final ayah = row['ayah'] as int?;
-        if (ayah != null) {
-          uniqueAyahs.add(ayah);
-        }
+        if (ayah != null) uniqueAyahs.add(ayah);
       }
-    }
-    // =========================
-    // PAGE MODE
-    // =========================
-    else if (mode == 'page') {
-      // Avoid duplicate page loads
+    } else if (mode == 'page') {
       final Set<int> uniquePages = {};
-
       for (final row in rows) {
         final page = row['page'] as int?;
-        if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
+        if (page != null && page >= 1 && page <= 604) {
           uniquePages.add(page);
         }
       }
 
       for (final page in uniquePages) {
-        final ayahs = await loadPageAyahs(page);
-
-        for (final ayah in ayahs) {
-          if (ayah.surah == surahId) {
-            uniqueAyahs.add(ayah.ayah);
+        final pageData = quran.getPageData(page).cast<Map<String, dynamic>>();
+        for (final verse in pageData) {
+          if (verse['surah'] == surahId) {
+            uniqueAyahs.add(verse['ayah']);
           }
         }
       }
     }
 
-    // =========================
-    // FINAL PROGRESS
-    // =========================
-    if (totalAyahs == 0) return 0.0;
-
-    return (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
+    return totalAyahs == 0
+        ? 0
+        : (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
   }
 
   Future<int?> resolveActiveSurah({
@@ -224,63 +207,44 @@ class ProgressService {
     int? surahId,
     int? page,
   }) async {
-    return _resolveActiveSurahForEntry(
-      mode: mode,
-      surahId: surahId,
-      page: page,
-    );
-  }
-
-  Future<int?> _resolveActiveSurahForEntry({
-    required String mode,
-    int? surahId,
-    int? page,
-  }) async {
-    // =========================
-    // AYAH MODE
-    // =========================
     if (mode == 'ayah') return surahId;
 
-    // =========================
-    // INVALID PAGE CASE
-    // =========================
     if (mode != 'page' || page == null) return null;
 
-    final surahsOnPage = getSurahNumbersFromPage(page);
+    final pageData = quran.getPageData(page).cast<Map<String, dynamic>>();
 
-    if (surahsOnPage.isEmpty) return null;
+    if (pageData.isEmpty) return null;
 
-    // =========================
-    // 🔥 NEW FIX: SINGLE SURAH PAGE
-    // =========================
+    final surahsOnPage = pageData
+        .map((e) => e['surah'] as int)
+        .toSet()
+        .toList();
+
     if (surahsOnPage.length == 1) {
       return surahsOnPage.first;
     }
 
-    // =========================
-    // MULTIPLE SURAHS ON PAGE
-    // =========================
-    final pageAyahs = await loadPageAyahs(page);
+    final firstVerse = pageData.first;
+    final firstVerseSurah = firstVerse['surah'];
+    final firstVerseNumber = firstVerse['ayah'];
 
-    if (pageAyahs.isEmpty) {
-      return surahsOnPage.first;
+    if (firstVerseNumber == 1) {
+      return firstVerseSurah;
     }
 
-    final firstAyah = pageAyahs.first;
-
-    // If page starts with a new surah (ayah 1)
-    if (firstAyah.ayah == 1 && surahsOnPage.contains(firstAyah.surah)) {
-      return firstAyah.surah;
+    // Otherwise, if the page starts as a continuation, but a new Surah
+    // begins later on the same page, we look for the first 'Ayah 1' occurrence.
+    try {
+      final firstNewSurahOnPage = pageData.firstWhere(
+        (verse) => verse['ayah'] == 1,
+      );
+      return firstNewSurahOnPage['surah'];
+    } catch (_) {
+      // If no verse on this page is an 'Ayah 1', it's a continuation
+      // of a very long Surah (like Al-Baqarah).
+      return firstVerseSurah;
     }
-
-    // Otherwise, assume continuation → second surah
-    if (surahsOnPage.length >= 2) {
-      return surahsOnPage[1];
-    }
-
-    return surahsOnPage.first;
   }
-
   // ========================= STATS =========================
 
   Future<int?> getSurahsCompleted(List<dynamic> surahs) async {
@@ -305,62 +269,42 @@ class ProgressService {
     required int totalAyahs,
   }) async {
     final db = await dbHelper.database;
-
     final Set<int> uniqueAyahs = {};
 
-    // =========================
-    // 1. DIRECT AYAH TRACKING
-    // =========================
     final ayahResult = await db.rawQuery(
-      '''
-    SELECT DISTINCT ayah
-    FROM reading_sessions
-    WHERE mode = 'ayah' AND surah_id = ?
-    ''',
+      "SELECT DISTINCT ayah FROM reading_sessions WHERE mode = 'ayah' AND surah_id = ?",
       [surahId],
     );
 
     for (final row in ayahResult) {
       final ayah = row['ayah'] as int?;
-      if (ayah != null) {
-        uniqueAyahs.add(ayah);
-      }
+      if (ayah != null) uniqueAyahs.add(ayah);
     }
 
-    // ayah tracking based on pages read
     final range = surahPageRanges[surahId];
-
     if (range != null) {
       final pageResult = await db.rawQuery(
-        '''
-      SELECT DISTINCT page
-      FROM reading_sessions
-      WHERE mode = 'page'
-        AND page BETWEEN ? AND ?
-      ''',
+        "SELECT DISTINCT page FROM reading_sessions WHERE mode = 'page' AND page BETWEEN ? AND ?",
         [range.start, range.end],
       );
 
       for (final row in pageResult) {
         final page = row['page'] as int?;
-
-        if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
-          final ayahs = await loadPageAyahs(page);
-
-          for (final ayah in ayahs) {
-            // Only include ayahs of THIS surah
-            if (ayah.surah == surahId) {
-              uniqueAyahs.add(ayah.ayah);
+        if (page != null && page >= 1 && page <= 604) {
+          // Instant package lookup
+          final pageData = quran.getPageData(page).cast<Map<String, dynamic>>();
+          for (final verse in pageData) {
+            if (verse['surah'] == surahId) {
+              uniqueAyahs.add(verse['ayah']);
             }
           }
         }
       }
     }
 
-    if (totalAyahs == 0) return 0;
-
-    final result = (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
-    return result;
+    return totalAyahs == 0
+        ? 0
+        : (uniqueAyahs.length / totalAyahs).clamp(0.0, 1.0);
   }
 
   Future<double> getQuranProgress() async {
@@ -373,15 +317,11 @@ class ProgressService {
 
   Future<int> getTotalVersesRead() async {
     final db = await dbHelper.database;
-
-    // 1. Get ayahs read directly
-    final ayahResult = await db.rawQuery('''
-    SELECT DISTINCT surah_id, ayah
-    FROM reading_sessions
-    WHERE mode = 'ayah'
-  ''');
-
     final Set<String> uniqueAyahs = {};
+
+    final ayahResult = await db.rawQuery(
+      "SELECT DISTINCT surah_id, ayah FROM reading_sessions WHERE mode = 'ayah'",
+    );
 
     for (final row in ayahResult) {
       final surah = row['surah_id'];
@@ -391,27 +331,20 @@ class ProgressService {
       }
     }
 
-    // 2. Get pages read
-    final pageResult = await db.rawQuery('''
-    SELECT DISTINCT page
-    FROM reading_sessions
-    WHERE mode = 'page'
-  ''');
+    final pageResult = await db.rawQuery(
+      "SELECT DISTINCT page FROM reading_sessions WHERE mode = 'page'",
+    );
 
-    // 3. Convert pages → ayahs
     for (final row in pageResult) {
       final page = row['page'] as int?;
-
-      if (page != null && page >= _minQuranPage && page <= _maxQuranPage) {
-        final ayahs = await loadPageAyahs(page);
-
-        for (final ayah in ayahs) {
-          uniqueAyahs.add('${ayah.surah}-${ayah.ayah}');
+      if (page != null && page >= 1 && page <= 604) {
+        final pageData = quran.getPageData(page).cast<Map<String, dynamic>>();
+        for (final verse in pageData) {
+          uniqueAyahs.add('${verse['surah']}-${verse['ayah']}');
         }
       }
     }
 
-    // 4. Final count
     return uniqueAyahs.length;
   }
 

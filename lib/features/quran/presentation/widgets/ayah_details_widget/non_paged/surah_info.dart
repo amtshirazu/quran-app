@@ -4,16 +4,11 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../state/quran_providers.dart';
 
-
-
-
-
 class SurahInfo extends ConsumerWidget {
   const SurahInfo({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final surahMetadata = ref.watch(selectedSurahProvider);
     final textTheme = Theme.of(context).textTheme;
 
@@ -26,10 +21,7 @@ class SurahInfo extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.emerald500,
-              AppColors.emerald600,
-            ],
+            colors: [AppColors.emerald500, AppColors.emerald600],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -44,7 +36,7 @@ class SurahInfo extends ConsumerWidget {
               style: TextStyle(
                 fontSize: AppSpacing.size22,
                 color: Colors.white,
-                fontFamily: "Uthmanic"
+                fontFamily: "Uthmanic",
               ),
             ),
             const SizedBox(height: 8),
@@ -53,7 +45,7 @@ class SurahInfo extends ConsumerWidget {
               style: textTheme.bodyMedium?.copyWith(
                 color: AppColors.gray400,
                 fontSize: AppSpacing.size16,
-              )
+              ),
             ),
             const SizedBox(height: 4),
             Text(
@@ -68,21 +60,23 @@ class SurahInfo extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                    '${surahMetadata?.totalAyahs} Verses',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppSpacing.size14,
-                    ),
+                  '${surahMetadata?.totalAyahs} Verses',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: AppSpacing.size14,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Text('•', style: TextStyle(color: Colors.white)),
                 const SizedBox(width: 4),
                 Text(
-                    surahMetadata?.revelationType ?? "",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppSpacing.size14,
-                    ),
+                  surahMetadata?.revelationType ?? "",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: AppSpacing.size14,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
             ),
