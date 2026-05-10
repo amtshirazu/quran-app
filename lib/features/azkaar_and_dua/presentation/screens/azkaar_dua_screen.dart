@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/azkaar_dua_appbar.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/benefits_card.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/remembrance_card.dart';
@@ -27,7 +28,7 @@ class AzkaarDuaScreen extends StatelessWidget {
               icon: Icons.auto_awesome_rounded,
               tags: const ['Morning & Evening', 'After Salah', 'Before Sleep'],
               onTap: () {
-                // Navigate to full list of 11 Categories
+                context.push('/azkaarCategories');
               },
             ),
 
@@ -43,7 +44,7 @@ class AzkaarDuaScreen extends StatelessWidget {
                 'For Protection',
               ],
               onTap: () {
-                // Navigate to Quranic Duas section
+                context.push('/duaCategories');
               },
             ),
 

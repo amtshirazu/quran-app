@@ -1,5 +1,10 @@
 import 'package:go_router/go_router.dart';
+import 'package:muslim_data_flutter/muslim_data_flutter.dart';
 import 'package:quran_app/features/audio/presentation/screens/reciters_selection_page.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar_categories_screen.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar_chapters_screen.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar_dua_screen.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar_items_screen.dart';
 import 'package:quran_app/features/bookmark/presentation/screens/bookmark_screen.dart';
 import 'package:quran_app/features/prayer_times/presentation/screens/prayer_times_screen.dart';
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
@@ -41,6 +46,24 @@ class AppRouter {
       GoRoute(
         path: '/prayerTimes',
         builder: (context, state) => const PrayerTimesScreen(),
+      ),
+      GoRoute(
+        path: '/azkaarAndDua',
+        builder: (context, state) => const AzkaarDuaScreen(),
+      ),
+      GoRoute(
+        path: '/azkaarCategories',
+        builder: (context, state) => const AzkarCategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/azkaarChapters',
+        builder: (context, state) =>
+            AzkarChaptersScreen(category: state.extra as AzkarCategory),
+      ),
+      GoRoute(
+        path: '/azkaarItems',
+        builder: (context, state) =>
+            AzkarItemsScreen(chapter: state.extra as AzkarChapter),
       ),
       GoRoute(
         path: '/settings',

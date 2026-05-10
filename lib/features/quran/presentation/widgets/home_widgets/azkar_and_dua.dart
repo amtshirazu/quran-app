@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AzkaarDuaCard extends StatelessWidget {
@@ -45,7 +46,11 @@ class AzkaarDuaCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push(
+                  '/azkaarAndDua',
+                ); // Navigate to Azkaar and Dua screen
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: tealColor,
