@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quran_app/features/azkaar_and_dua/presentation/states/azkaar_and_dua_provider.dart';
-import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/categories_list.dart';
-import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/prophetic_tip_card.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/states/azkaar_provider.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/azkaar/categories_list.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/azkaar/prophetic_tip_card.dart';
 
 class AzkarCategoriesScreen extends ConsumerWidget {
   const AzkarCategoriesScreen({super.key});
