@@ -44,7 +44,7 @@ class AzkaarDuaScreen extends StatelessWidget {
                 'For Protection',
               ],
               onTap: () {
-                context.push('/duaCategories');
+                context.push('/duas');
               },
             ),
 

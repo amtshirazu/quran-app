@@ -52,6 +52,7 @@ flutter:
     - assets/reciters/
     - assets/database/translations/
     - assets/database/tafseer/
+    - assets/database/azkaar_and_dua/
 
   fonts:
     - family: Indo Park
