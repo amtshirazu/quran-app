@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -79,9 +80,7 @@ class LifeSituationCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {
-                  // navigate to life-situation
-                },
+                onPressed: () => context.push('/findGuidance'),
                 child: const Text(
                   "Find Guidance",
                   style: TextStyle(

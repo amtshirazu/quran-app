@@ -11,10 +11,13 @@ class DuaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Capitalize your internal subject categories nicely for display metadata pill tag
-    final formattedSubject = dua.subject.isNotEmpty
-        ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
-        : 'General';
+    final isWitr = dua.categoryType == 'witr';
+
+    final formattedSubject = isWitr
+        ? 'Qunoot & Supplication'
+        : (dua.subject.isNotEmpty
+            ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
+            : 'General');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -24,7 +27,7 @@ class DuaCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withAlpha(5),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -33,54 +36,45 @@ class DuaCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Row containing title, action buttons, and source pill tags
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "For $formattedSubject",
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.emerald500.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      "Quran",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.emerald600,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      formattedSubject,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.emerald100,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        isWitr ? "Witr & Qunoot" : "Quran",
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.emerald600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      // Implement your bookmark action hook logic here
-                    },
-                    icon: const Icon(
-                      LucideIcons.heart,
-                      size: 20,
-                      color: Colors.black38,
-                    ),
-                  ),
                   IconButton(
                     onPressed: () {
                       Clipboard.setData(
@@ -91,6 +85,7 @@ class DuaCard extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Dua copied to clipboard"),
+                          behavior: SnackBarBehavior.floating,
                         ),
                       );
                     },
@@ -106,12 +101,12 @@ class DuaCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Arabic typography text field view block
+          /// Arabic text
           Text(
             dua.arabic,
             textAlign: TextAlign.right,
             style: const TextStyle(
-              fontFamily: "Uthmanic", // Falls back gracefully if standard
+              fontFamily: "Uthmanic",
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -120,7 +115,7 @@ class DuaCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
 
-          // Transliteration text container block
+          /// Transliteration
           if (dua.transliteration != null &&
               dua.transliteration!.isNotEmpty) ...[
             Container(
@@ -142,7 +137,7 @@ class DuaCard extends StatelessWidget {
             const SizedBox(height: 14),
           ],
 
-          // English explanation view layout
+          /// Translation
           Text(
             dua.translation,
             style: const TextStyle(
@@ -153,11 +148,13 @@ class DuaCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Specific Verse Reference indicator line
+          /// Reference / Source
           Text(
-            "Quran ${dua.surahNum}:${dua.ayahNum}",
+            isWitr
+                ? (dua.source ?? "Hadith / Sunnah")
+                : "Quran ${dua.surahNum}:${dua.ayahNum}",
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: AppColors.emerald600,
             ),

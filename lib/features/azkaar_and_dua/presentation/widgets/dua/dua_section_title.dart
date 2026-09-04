@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../states/dua_provider.dart';
 
-class DuaSectionTitle extends StatelessWidget {
+class DuaSectionTitle extends ConsumerWidget {
   const DuaSectionTitle({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Column(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final category = ref.watch(selectedDuaCategoryProvider);
+    final isWitr = category == DuaCategory.witr;
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "All Duas",
-          style: TextStyle(
+          isWitr ? "Witr & Qunoot Duas" : "Quranic Duas",
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(
-              0xFF0F2E3A,
-            ), // Dark blue navy font variant from snapshot
+            color: Color(0xFF0F2E3A),
           ),
         ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
-          "Essential supplications for every need",
-          style: TextStyle(fontSize: 13, color: Colors.black54),
+          isWitr
+              ? "Special supplications for Witr prayer and Qunoot"
+              : "Essential supplications from the Holy Quran",
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
         ),
       ],
     );

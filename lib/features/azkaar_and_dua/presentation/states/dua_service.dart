@@ -1,20 +1,34 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
-import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 
-class QuranicDuaDatabaseService {
-  Database? _db;
-  final String dbFileName = "quranic_duas.db";
+enum DuaCategory {
+  quranic, // Quranic Duas
+  witr,    // Witr & Qunoot Duas
+}
 
-  Future<Database> get database async {
-    if (_db != null) return _db!;
-    _db = await _initDb();
-    return _db!;
+class DuaDatabaseService {
+  Database? _quranicDb;
+  Database? _witrDb;
+
+  final String quranicDbFileName = "quranic_duas.db";
+  final String witrDbFileName = "witr_duas.db";
+
+  Future<Database> _getDatabase(DuaCategory category) async {
+    if (category == DuaCategory.quranic) {
+      if (_quranicDb != null) return _quranicDb!;
+      _quranicDb = await _initDb(quranicDbFileName);
+      return _quranicDb!;
+    } else {
+      if (_witrDb != null) return _witrDb!;
+      _witrDb = await _initDb(witrDbFileName);
+      return _witrDb!;
+    }
   }
 
-  Future<Database> _initDb() async {
+  Future<Database> _initDb(String dbFileName) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, dbFileName);
 
@@ -22,12 +36,10 @@ class QuranicDuaDatabaseService {
 
     if (!exists) {
       try {
-        // Updated path to reflect project structure file tree
         final assetPath = 'assets/database/azkaar_and_dua/$dbFileName';
 
         await Directory(dirname(path)).create(recursive: true);
 
-        // Copy from assets to device local storage
         ByteData data = await rootBundle.load(assetPath);
         List<int> bytes = data.buffer.asUint8List(
           data.offsetInBytes,
@@ -36,35 +48,44 @@ class QuranicDuaDatabaseService {
 
         await File(path).writeAsBytes(bytes, flush: true);
       } catch (e) {
-        throw Exception("Error copying Quranic Duas database from assets: $e");
+        throw Exception("Error copying database $dbFileName from assets: $e");
       }
     }
 
     return await openDatabase(path, readOnly: true);
   }
 
-  // Fetch ALL Duas
-  Future<List<QuranicDua>> getAllDuas() async {
-    final db = await database;
-
-    // Querying the 'duas' table shown in DB
+  /// Fetch all duas for selected category
+  Future<List<QuranicDua>> getDuasByCategory(DuaCategory category) async {
+    final db = await _getDatabase(category);
     final List<Map<String, dynamic>> maps = await db.query('duas');
 
-    return maps.map((map) => QuranicDua.fromMap(map)).toList();
+    final categoryType = category == DuaCategory.quranic ? 'quranic' : 'witr';
+    return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
   }
 
-  Future<List<QuranicDua>> searchDuas(String query) async {
-    final db = await database;
+  /// Search duas within selected category
+  Future<List<QuranicDua>> searchDuasByCategory(DuaCategory category, String query) async {
+    final db = await _getDatabase(category);
     final wildCardQuery = "%$query%";
+    final categoryType = category == DuaCategory.quranic ? 'quranic' : 'witr';
 
-    // Searches comprehensively across subject fields, literal translation arrays, or phonetics
-    final List<Map<String, dynamic>> maps = await db.query(
-      'duas',
-      where:
-          'subject LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
-      whereArgs: [wildCardQuery, wildCardQuery, wildCardQuery, wildCardQuery],
-    );
+    List<Map<String, dynamic>> maps;
 
-    return maps.map((map) => QuranicDua.fromMap(map)).toList();
+    if (category == DuaCategory.quranic) {
+      maps = await db.query(
+        'duas',
+        where: 'subject LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
+        whereArgs: [wildCardQuery, wildCardQuery, wildCardQuery, wildCardQuery],
+      );
+    } else {
+      maps = await db.query(
+        'duas',
+        where: 'source LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
+        whereArgs: [wildCardQuery, wildCardQuery, wildCardQuery, wildCardQuery],
+      );
+    }
+
+    return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
   }
 }

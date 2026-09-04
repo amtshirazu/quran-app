@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/states/dua_provider.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_card.dart';
+import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_category_toggle.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_header.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_search_field.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_section_title.dart';
@@ -20,21 +21,16 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamically toggle between searching vs showing all duas based on text input
     final duasAsync = searchQuery.isEmpty
-        ? ref.watch(allQuranicDuasProvider)
-        : ref.watch(filteredQuranicDuasProvider(searchQuery));
+        ? ref.watch(allDuasProvider)
+        : ref.watch(filteredDuasProvider(searchQuery));
 
     return Scaffold(
-      backgroundColor: const Color(
-        0xFFF4FBF7,
-      ), // The light tint background seen in the images
+      backgroundColor: const Color(0xFFF4FBF7),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 1. Top Custom Green Header Block
           const DuaHeader(),
-
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(
@@ -42,21 +38,24 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
                 vertical: 20.0,
               ),
               children: [
-                // 2. The Power of Dua Feature Block
                 const PowerOfDuaCard(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // 3. Search Input Field Element
+                /// Category Toggle (Quranic Duas vs Witr & Qunoot)
+                const DuaCategoryToggle(),
+                const SizedBox(height: 16),
+
+                /// Search Input Field Element
                 DuaSearchField(
                   onChanged: (value) => setState(() => searchQuery = value),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 20),
 
-                // 4. Section Label Title Block
+                /// Section Label Title Block
                 const DuaSectionTitle(),
-                //const SizedBox(height: 4),
+                const SizedBox(height: 12),
 
-                // 5. Reactive Query List Rendering View
+                /// Reactive Query List Rendering View
                 duasAsync.when(
                   data: (duas) {
                     if (duas.isEmpty) {

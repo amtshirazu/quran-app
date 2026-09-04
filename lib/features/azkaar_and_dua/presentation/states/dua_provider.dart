@@ -2,19 +2,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/states/dua_service.dart';
 
-// Exposes the database instance across the application
-final quranicDuaServiceProvider = Provider<QuranicDuaDatabaseService>((ref) {
-  return QuranicDuaDatabaseService();
+export 'package:quran_app/features/azkaar_and_dua/presentation/states/dua_service.dart' show DuaCategory;
+
+/// Exposes the database service instance
+final duaServiceProvider = Provider<DuaDatabaseService>((ref) {
+  return DuaDatabaseService();
 });
 
-// Fetches EVERY single Quranic Dua in the database
-final allQuranicDuasProvider = FutureProvider<List<QuranicDua>>((ref) async {
-  final service = ref.watch(quranicDuaServiceProvider);
-  return await service.getAllDuas();
+/// Currently selected active category toggle
+final selectedDuaCategoryProvider = StateProvider<DuaCategory>((ref) {
+  return DuaCategory.quranic;
 });
 
-final filteredQuranicDuasProvider =
-    FutureProvider.family<List<QuranicDua>, String>((ref, query) async {
-      final service = ref.watch(quranicDuaServiceProvider);
-      return await service.searchDuas(query);
-    });
+/// Fetches all duas for the active category toggle
+final allDuasProvider = FutureProvider<List<QuranicDua>>((ref) async {
+  final service = ref.watch(duaServiceProvider);
+  final category = ref.watch(selectedDuaCategoryProvider);
+  return await service.getDuasByCategory(category);
+});
+
+/// Filters/searches duas within the active category toggle
+final filteredDuasProvider = FutureProvider.family<List<QuranicDua>, String>((ref, query) async {
+  final service = ref.watch(duaServiceProvider);
+  final category = ref.watch(selectedDuaCategoryProvider);
+  return await service.searchDuasByCategory(category, query);
+});

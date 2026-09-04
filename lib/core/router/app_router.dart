@@ -7,6 +7,7 @@ import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar/az
 import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar/azkaar_items_screen.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/screens/dua/dua_screen.dart';
 import 'package:quran_app/features/bookmark/presentation/screens/bookmark_screen.dart';
+import 'package:quran_app/features/find_guidance/presentation/screens/find_guidance_screen.dart';
 import 'package:quran_app/features/prayer_times/presentation/screens/prayer_times_screen.dart';
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
 import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
@@ -74,6 +75,10 @@ class AppRouter {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileProgressScreen(),
+      ),
+      GoRoute(
+        path: '/findGuidance',
+        builder: (context, state) => const FindGuidanceScreen(),
       ),
     ],
   );

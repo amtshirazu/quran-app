@@ -55,6 +55,7 @@ class SelectionCard extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
+                          color: Color(0xFF009688),
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
