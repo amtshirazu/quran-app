@@ -62,6 +62,13 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
       /// BOOKMARK JUMP (highest priority)
       final jumpPage = ref.read(jumpToPageProvider);
+      final jumpAyah = ref.read(targetAyahProvider);
+
+      if (jumpAyah != null) {
+        _targetAyah = jumpAyah;
+        ref.read(targetAyahProvider.notifier).state = null;
+      }
+
       if (jumpPage != null) {
         initialPage = jumpPage;
         ref.read(jumpToPageProvider.notifier).state = null;
@@ -115,17 +122,17 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         alignment: 0.1,
       );
     } else {
-      _scrollController
-          .animateTo(
-            _scrollController.offset + 120,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.linear,
-          )
-          .then((_) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _scrollToAyah(ayah);
-            });
-          });
+      // Fast jump directly to estimated offset of target ayah
+      final estimatedOffset = (ayah - 1) * 180.0;
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final targetOffset = estimatedOffset.clamp(0.0, maxScroll);
+        _scrollController.jumpTo(targetOffset);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollToAyah(ayah);
+        });
+      }
     }
   }
 

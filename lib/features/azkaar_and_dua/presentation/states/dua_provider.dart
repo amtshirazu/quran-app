@@ -14,6 +14,9 @@ final selectedDuaCategoryProvider = StateProvider<DuaCategory>((ref) {
   return DuaCategory.quranic;
 });
 
+/// Target Dua ID to scroll to when navigating from Search
+final targetDuaIdProvider = StateProvider<int?>((ref) => null);
+
 /// Fetches all duas for the active category toggle
 final allDuasProvider = FutureProvider<List<QuranicDua>>((ref) async {
   final service = ref.watch(duaServiceProvider);

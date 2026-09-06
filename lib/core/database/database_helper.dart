@@ -10,7 +10,18 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('quran.db');
+    await _ensureRecentSearchesTableExists(_database!);
     return _database!;
+  }
+
+  Future<void> _ensureRecentSearchesTableExists(Database db) async {
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS recent_searches (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      query TEXT UNIQUE,
+      timestamp INTEGER
+    )
+    ''');
   }
 
   Future<Database> _initDB(String filePath) async {
@@ -72,5 +83,7 @@ class DatabaseHelper {
     created_at TEXT NOT NULL
   )
 ''');
+
+    await _ensureRecentSearchesTableExists(db);
   }
 }

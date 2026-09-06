@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/states/dua_provider.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_card.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/widgets/dua/dua_category_toggle.dart';
@@ -18,6 +19,32 @@ class DuasScreen extends ConsumerStatefulWidget {
 
 class _DuasScreenState extends ConsumerState<DuasScreen> {
   String searchQuery = '';
+  final ScrollController _scrollController = ScrollController();
+  final Map<int, GlobalKey> _duaKeys = {};
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToDuaIfTargetSet() {
+    final targetDuaId = ref.read(targetDuaIdProvider);
+    if (targetDuaId == null) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(targetDuaIdProvider.notifier).state = null;
+      final key = _duaKeys[targetDuaId];
+      if (key?.currentContext != null) {
+        Scrollable.ensureVisible(
+          key!.currentContext!,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastOutSlowIn,
+          alignment: 0.1,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +60,7 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
           const DuaHeader(),
           Expanded(
             child: ListView(
+              controller: _scrollController,
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
                 vertical: 20.0,
@@ -72,12 +100,22 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
                         ),
                       );
                     }
+
+                    _scrollToDuaIfTargetSet();
+
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: duas.length,
-                      itemBuilder: (context, index) =>
-                          DuaCard(dua: duas[index]),
+                      itemBuilder: (context, index) {
+                        final dua = duas[index];
+                        final key =
+                            _duaKeys.putIfAbsent(dua.id, () => GlobalKey());
+                        return Container(
+                          key: key,
+                          child: DuaCard(dua: dua),
+                        );
+                      },
                     );
                   },
                   loading: () => const Center(

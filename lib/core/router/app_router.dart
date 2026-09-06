@@ -11,6 +11,8 @@ import 'package:quran_app/features/find_guidance/presentation/screens/find_guida
 import 'package:quran_app/features/prayer_times/presentation/screens/prayer_times_screen.dart';
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
 import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
+import 'package:quran_app/features/search/presentation/screens/search_screen.dart';
+import 'package:quran_app/features/search/presentation/screens/topic_detail_screen.dart';
 import '../../features/audio/presentation/screens/reciter_audio_screen.dart';
 import '../../features/quran/presentation/screens/home_screen.dart';
 import '../../features/quran/presentation/screens/read_quran_screen.dart';
@@ -79,6 +81,16 @@ class AppRouter {
       GoRoute(
         path: '/findGuidance',
         builder: (context, state) => const FindGuidanceScreen(),
+      ),
+      GoRoute(
+        path: '/search',
+        builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: '/topicDetail',
+        builder: (context, state) => TopicDetailScreen(
+          topicLabel: (state.extra as String?) ?? 'Topic',
+        ),
       ),
     ],
   );
