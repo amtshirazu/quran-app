@@ -1,17 +1,30 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muslim_data_flutter/muslim_data_flutter.dart';
+import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
 
 /// Repository Provider
 final muslimRepoProvider = Provider((ref) => MuslimRepository());
 
-// Chapters Provider (Families allow passing the category ID)
+Language _getMuslimDataLanguage(String appLang) {
+  switch (appLang) {
+    case 'ar':
+      return Language.ar;
+    default:
+      return Language.en;
+  }
+}
+
+// Chapters Provider
 final chaptersProvider = FutureProvider.family<List<AzkarChapter>, int>((
   ref,
   categoryId,
 ) async {
   final repo = ref.watch(muslimRepoProvider);
+  final langCode = ref.watch(appLanguageProvider);
+  final lang = _getMuslimDataLanguage(langCode);
+
   return await repo.getAzkarChapters(
-    language: Language.en,
+    language: lang,
     categoryId: categoryId,
   );
 });
@@ -22,7 +35,10 @@ final itemsProvider = FutureProvider.family<List<AzkarItem>, int>((
   chapterId,
 ) async {
   final repo = ref.watch(muslimRepoProvider);
-  return await repo.getAzkarItems(language: Language.en, chapterId: chapterId);
+  final langCode = ref.watch(appLanguageProvider);
+  final lang = _getMuslimDataLanguage(langCode);
+
+  return await repo.getAzkarItems(language: lang, chapterId: chapterId);
 });
 
 // Fetch the total count for a SPECIFIC category
@@ -31,18 +47,18 @@ final categoryItemCountProvider = FutureProvider.family<int, int>((
   categoryId,
 ) async {
   final repo = ref.watch(muslimRepoProvider);
+  final langCode = ref.watch(appLanguageProvider);
+  final lang = _getMuslimDataLanguage(langCode);
   int count = 0;
 
-  // Get all chapters for this specific category
   final chapters = await repo.getAzkarChapters(
-    language: Language.en,
+    language: lang,
     categoryId: categoryId,
   );
 
-  // Sum up all items in those chapters
   for (var chapter in chapters) {
     final items = await repo.getAzkarItems(
-      language: Language.en,
+      language: lang,
       chapterId: chapter.id,
     );
     count += items.length;
@@ -52,5 +68,8 @@ final categoryItemCountProvider = FutureProvider.family<int, int>((
 
 final categoriesProvider = FutureProvider<List<AzkarCategory>>((ref) async {
   final repo = ref.watch(muslimRepoProvider);
-  return await repo.getAzkarCategories(language: Language.en);
+  final langCode = ref.watch(appLanguageProvider);
+  final lang = _getMuslimDataLanguage(langCode);
+
+  return await repo.getAzkarCategories(language: lang);
 });

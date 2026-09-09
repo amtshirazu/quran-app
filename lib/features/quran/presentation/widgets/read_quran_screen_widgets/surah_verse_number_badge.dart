@@ -35,6 +35,7 @@ class SurahVerseNumberBadge extends StatelessWidget {
           "$surahNumber",
           style: textTheme.titleLarge?.copyWith(
             fontSize: AppSpacing.size12,
+            color: Colors.white,
           ),
         ),
       ),

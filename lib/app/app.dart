@@ -19,12 +19,10 @@ class _QuranAppState extends ConsumerState<QuranApp>
   void initState() {
     super.initState();
 
-    // Audio Initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(audioServiceProvider).init(ref);
     });
 
-    // Lifecycle Observer to track when the app "Opens"
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -36,9 +34,7 @@ class _QuranAppState extends ConsumerState<QuranApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // triggers "whenever the app opens" from the background
     if (state == AppLifecycleState.resumed) {
-      // Refreshes location and prayer times
       ref.invalidate(locationProvider);
     }
   }

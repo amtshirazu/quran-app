@@ -24,6 +24,48 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   }
 }
 
+/// App Language Notifier ('en', 'tr', 'fr')
+class AppLanguageNotifier extends StateNotifier<String> {
+  AppLanguageNotifier() : super('en') {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting('app_language');
+      if (saved != null && (saved == 'en' || saved == 'tr' || saved == 'fr')) {
+        state = saved;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> setLanguage(String langCode) async {
+    state = langCode;
+    await DatabaseHelper.instance.setSetting('app_language', langCode);
+  }
+}
+
+/// Streaming Mode Notifier (Default: false)
+class StreamingModeNotifier extends StateNotifier<bool> {
+  StreamingModeNotifier() : super(false) {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting('streaming_mode');
+      if (saved != null) {
+        state = saved == 'true';
+      }
+    } catch (_) {}
+  }
+
+  Future<void> toggleStreaming(bool value) async {
+    state = value;
+    await DatabaseHelper.instance.setSetting('streaming_mode', value ? 'true' : 'false');
+  }
+}
+
 /// Quran Script Notifier ('Uthmanic' vs 'IndoPak')
 class QuranScriptNotifier extends StateNotifier<String> {
   QuranScriptNotifier() : super('Uthmanic') {

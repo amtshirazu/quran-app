@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:quran/quran.dart' as quran;
+import 'package:quran_app/core/database/database_helper.dart';
 import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import 'package:audio_session/audio_session.dart';
 import '../../../quran/domain/models/surah.dart';
@@ -38,89 +40,65 @@ class QuranAudioService {
 
       if (mediaItem != null) {
         final parts = mediaItem.id.split(':');
-        int surahNum = int.parse(parts[0]);
-        int ayahNum = int.parse(parts[1]);
+
+        final page = int.parse(parts[2]);
 
         ref.read(currentPlayingAyahProvider.notifier).state = AyahIdentifier(
-          surah: surahNum,
-          ayah: ayahNum,
-          page: current!.page,
+          surah: int.parse(parts[0]),
+          ayah: int.parse(parts[1]),
+          page: page,
         );
+
+        if (current?.page != page) {
+          ref.read(jumpToPageProvider.notifier).state = page;
+        }
       }
     });
 
     _audioPlayer.currentIndexStream.listen((index) {
       if (_isUserSelecting) return;
 
-      if (index == null) return;
+      if (index != null) {
+        final sequence = _audioPlayer.sequence;
+        if (index < sequence.length) {
+          final currentSource = sequence[index];
+          final mediaItem = currentSource.tag as MediaItem?;
 
-      final sequence = _audioPlayer.sequence;
-      if (sequence == null || index >= sequence.length) return;
+          if (mediaItem != null) {
+            final surahNumber = int.parse(mediaItem.id);
 
-      final source = sequence[index];
-      final mediaItem = source.tag as MediaItem?;
-
-      if (mediaItem != null) {
-        int surahNumber = int.parse(mediaItem.id);
-        int actualListIndex = surahNumber - 1;
-
-        final currentSelected = ref.read(selectedSurahIndexProvider);
-
-        if (currentSelected != actualListIndex) {
-          ref.read(selectedSurahIndexProvider.notifier).state = actualListIndex;
+            ref.read(selectedSurahIndexProvider.notifier).state =
+                surahNumber - 1;
+          }
         }
       }
     });
 
-    _ayahPlayer.positionStream.listen((position) async {
+    _audioPlayer.playerStateStream.listen((state) async {
+      if (_isUserSelecting) return;
+
       final repeatMode = ref.read(repeatModeProvider);
-      final duration = _ayahPlayer.duration;
 
-      if ((repeatMode == RepeatStates.off ||
-              repeatMode == RepeatStates.repeatOne ||
-              repeatMode == RepeatStates.repeatAll) &&
-          duration != null) {
-        final finishLine = duration - const Duration(milliseconds: 200);
-
-        if (position >= finishLine) {
-          await _ayahPlayer.pause();
-
-          await _ayahPlayer.seek(Duration.zero);
-        }
-      }
-    });
-
-    _audioPlayer.positionStream.listen((position) async {
-      final repeatMode = ref.read(repeatModeProvider);
-      final duration = _audioPlayer.duration;
-
-      if (repeatMode == RepeatStates.off && duration != null) {
-        final finishLine = duration - const Duration(milliseconds: 200);
-
-        if (position >= finishLine) {
+      if (state.processingState == ProcessingState.completed) {
+        if (repeatMode == RepeatStates.off) {
+          // No repeat: stop at the end of current Surah and seek back to 00:00
           await _audioPlayer.pause();
-
           await _audioPlayer.seek(Duration.zero);
         }
       }
     });
   }
 
-  bool _hasLoadedSurah = false;
-
-  bool get hasLoadedSurah => _hasLoadedSurah;
-
   AudioPlayer get player => _audioPlayer;
 
-  Future<void> updateRepeatMode(RepeatStates mode) async {
-    final loopMode = switch (mode) {
+  Future<void> updateRepeatMode(RepeatStates repeatMode) async {
+    final loopMode = switch (repeatMode) {
+      RepeatStates.off => LoopMode.off,
       RepeatStates.repeatAll => LoopMode.all,
       RepeatStates.repeatOne => LoopMode.one,
-      RepeatStates.off => LoopMode.off,
     };
 
     await _audioPlayer.setLoopMode(loopMode);
-    await _ayahPlayer.setLoopMode(loopMode);
   }
 
   Future<void> play() async {
@@ -138,45 +116,29 @@ class QuranAudioService {
 
   void dispose() {
     _audioPlayer.dispose();
+    _ayahPlayer.dispose();
   }
 
-  Future<AudioSource> buildUrl({
-    required Surah surah,
-    required int ayah,
-    required Reciter reciter,
-    required String dirPath,
-  }) async {
-    final surahStr = surah.number.toString().padLeft(3, '0');
-    final ayahStr = ayah.toString().padLeft(3, '0');
-
-    final url =
-        "https://everyayah.com/data/${reciter.audioFolder}/$surahStr$ayahStr.mp3";
-    final fileName = "$surahStr$ayahStr.mp3";
-    final localPath = "$dirPath/${reciter.audioFolder}/$fileName";
-
-    if (await File(localPath).exists()) {
-      return AudioSource.file(
-        localPath,
-        tag: MediaItem(
-          id: "${surah.number}:$ayah",
-          album: "Quran",
-          title: "Surah ${surah.nameEnglish} - Ayah $ayah",
-          artist: reciter.name,
+  Future<void> configureAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(
+      const AudioSessionConfiguration(
+        avAudioSessionCategory: AVAudioSessionCategory.playback,
+        avAudioSessionCategoryOptions:
+            AVAudioSessionCategoryOptions.mixWithOthers,
+        androidAudioAttributes: AndroidAudioAttributes(
+          contentType: AndroidAudioContentType.music,
+          usage: AndroidAudioUsage.media,
         ),
-      );
-    } else {
-      _startBackgroundDownload(url, localPath);
-      return AudioSource.uri(
-        Uri.parse(url),
-        tag: MediaItem(
-          id: "${surah.number}:$ayah",
-          album: "Quran",
-          title: "Surah ${surah.nameEnglish} - Ayah $ayah",
-          artist: reciter.name,
-        ),
-      );
-    }
+        androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      ),
+    );
   }
+
+  bool _hasLoadedSurah = false;
+  bool get hasLoadedSurah => _hasLoadedSurah;
+
+  bool get isPlaying => _audioPlayer.playing;
 
   Future<void> playVerse({
     required Reciter reciter,
@@ -185,10 +147,12 @@ class QuranAudioService {
   }) async {
     final session = await AudioSession.instance;
     await session.setActive(true);
+
     _audioPlayer.stop();
-    _ayahPlayer.stop();
+    await _ayahPlayer.stop();
 
     final directory = await getApplicationDocumentsDirectory();
+
     final currentAyahIndex = ayah - 1;
 
     List<Future<AudioSource>> windowFutures = [];
@@ -322,10 +286,10 @@ class QuranAudioService {
 
     final surahStr = surah.number.toString().padLeft(3, '0');
     final fileName = "$surahStr.mp3";
-    final localPath = "$directory.path/${reciter.audioFolder}/$fileName";
-    final url = "${reciter.serverUrl}/$fileName";
+    final localPath = "${directory.path}/${reciter.audioFolder}/$fileName";
 
-    _startBackgroundDownload(url, localPath);
+    final streamingSetting = await DatabaseHelper.instance.getSetting('streaming_mode');
+    final isStreamingOnly = streamingSetting == 'true';
 
     _fillRestOfSurahPlaylist(
       windowSources,
@@ -334,6 +298,32 @@ class QuranAudioService {
       reciter,
       directory.path,
     );
+
+    final file = File(localPath);
+
+    if (!isStreamingOnly && !(await file.exists())) {
+      final url = "${reciter.serverUrl}/$fileName";
+      _startBackgroundDownload(url, localPath);
+    }
+
+  }
+
+  Future<void> downloadSurah({
+    required Reciter reciter,
+    required Surah surah,
+  }) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final surahStr = surah.number.toString().padLeft(3, '0');
+    final fileName = "$surahStr.mp3";
+    final localPath = "${directory.path}/${reciter.audioFolder}/$fileName";
+    final url = "${reciter.serverUrl}/$fileName";
+
+    final file = File(localPath);
+    if (await file.exists()) {
+      return;
+    }
+
+    await _startBackgroundDownload(url, localPath);
   }
 
   void _fillRestOfSurahPlaylist(
@@ -344,8 +334,9 @@ class QuranAudioService {
     String path,
   ) async {
     for (int i = 0; i < all.length; i++) {
-      if (i == currentIdx || i == currentIdx - 1 || i == currentIdx + 1)
+      if (i == currentIdx || i == currentIdx - 1 || i == currentIdx + 1) {
         continue;
+      }
 
       final source = await _buildSingleAudioSource(all[i], reciter, path);
 
@@ -384,6 +375,43 @@ class QuranAudioService {
           id: '${surah.number}',
           album: surah.translation,
           title: 'Surah ${surah.nameEnglish}',
+          artist: reciter.name,
+        ),
+      );
+    }
+  }
+
+  Future<AudioSource> buildUrl({
+    required Surah surah,
+    required int ayah,
+    required Reciter reciter,
+    required String dirPath,
+  }) async {
+    final surahStr = surah.number.toString().padLeft(3, '0');
+    final ayahStr = ayah.toString().padLeft(3, '0');
+    final page = quran.getPageNumber(surah.number, ayah);
+
+    final fileName = "$surahStr$ayahStr.mp3";
+    final localPath = "$dirPath/${reciter.audioFolder}/$fileName";
+    final url = "${reciter.serverUrl}/$fileName";
+
+    if (await File(localPath).exists()) {
+      return AudioSource.file(
+        localPath,
+        tag: MediaItem(
+          id: '${surah.number}:$ayah:$page',
+          album: surah.translation,
+          title: 'Verse $ayah',
+          artist: reciter.name,
+        ),
+      );
+    } else {
+      return AudioSource.uri(
+        Uri.parse(url),
+        tag: MediaItem(
+          id: '${surah.number}:$ayah:$page',
+          album: surah.translation,
+          title: 'Verse $ayah',
           artist: reciter.name,
         ),
       );
@@ -435,11 +463,5 @@ class QuranAudioService {
 
   Future<void> setVolume(double volume) async {
     await _audioPlayer.setVolume(volume);
-  }
-
-  Future<void> configureAudioSession() async {
-    final session = await AudioSession.instance;
-
-    await session.configure(const AudioSessionConfiguration.music());
   }
 }

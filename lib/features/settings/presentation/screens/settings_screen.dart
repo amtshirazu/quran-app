@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
-import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
-import '../../../audio/presentation/state/audio_providers.dart';
+import 'package:quran_app/features/settings/presentation/state/download_provider.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/settings_header.dart';
 import '../widgets/settings_row.dart';
@@ -22,7 +22,58 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  bool _isStreaming = false;
+  void _showLanguagePicker(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? AppTheme.darkSurface : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Select Language',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    'English',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                    ),
+                  ),
+                  trailing: const Icon(
+                    Icons.check_circle,
+                    color: AppColors.emerald600,
+                  ),
+                  onTap: () {
+                    ref.read(appLanguageProvider.notifier).setLanguage('en');
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +89,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final String reciterSubtitle = defaultReciter != null
         ? defaultReciter.name
         : 'Abu Bakr Ash-Shaatree';
+
+    final storageSummaryAsync = ref.watch(storageSummaryProvider);
+    final String downloadsSubtitle = storageSummaryAsync.when(
+      data: (s) => s.formattedTotalUsed,
+      loading: () => 'Calculating...',
+      error: (_, __) => '0 MB',
+    );
 
     final quranScript = ref.watch(quranScriptProvider);
     final ayahTextSize = ref.watch(ayahTextSizeProvider);
@@ -128,11 +186,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: 'Streaming',
                   subtitle: 'Stream audio instead of downloading',
                   showDivider: false,
-                  trailing: Checkbox(
-                    value: _isStreaming,
-                    activeColor: AppColors.emerald600,
+                  trailing: Switch(
+                    value: ref.watch(streamingModeProvider),
+                    activeTrackColor: AppColors.emerald600,
                     onChanged: (val) {
-                      setState(() => _isStreaming = val ?? false);
+                      ref.read(streamingModeProvider.notifier).toggleStreaming(val);
                     },
                   ),
                 ),
@@ -272,7 +330,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    _showLanguagePicker(context);
+                  },
                 ),
                 SettingsRow(
                   icon: LucideIcons.download,
@@ -281,7 +341,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '184 MB',
+                        downloadsSubtitle,
                         style: TextStyle(
                           color: isDarkMode ? Colors.white70 : AppColors.gray600,
                           fontSize: 13,
@@ -291,7 +351,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    context.push('/downloads');
+                  },
                 ),
                 SettingsRow(
                   icon: LucideIcons.info,

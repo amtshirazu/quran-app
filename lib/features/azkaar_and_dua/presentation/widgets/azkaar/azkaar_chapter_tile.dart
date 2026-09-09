@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:muslim_data_flutter/muslim_data_flutter.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 

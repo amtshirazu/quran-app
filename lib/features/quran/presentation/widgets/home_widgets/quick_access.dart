@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/quick_access_card.dart';
-
 import '../../../../../core/constants/app_colors.dart';
 
 class QuickAccess extends StatelessWidget {

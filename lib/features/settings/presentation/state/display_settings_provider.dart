@@ -6,6 +6,14 @@ final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((r
   return ThemeModeNotifier();
 });
 
+final appLanguageProvider = StateNotifierProvider<AppLanguageNotifier, String>((ref) {
+  return AppLanguageNotifier();
+});
+
+final streamingModeProvider = StateNotifierProvider<StreamingModeNotifier, bool>((ref) {
+  return StreamingModeNotifier();
+});
+
 final quranScriptProvider =
     StateNotifierProvider<QuranScriptNotifier, String>((ref) {
   return QuranScriptNotifier();

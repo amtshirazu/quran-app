@@ -77,9 +77,7 @@ class StudyPlanCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {
-                  // navigate to study-plan
-                },
+                onPressed: () {},
                 child: const Text(
                   "Create Plan",
                   style: TextStyle(

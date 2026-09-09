@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:muslim_data_flutter/muslim_data_flutter.dart';
+import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/audio/presentation/screens/reciter_audio_screen.dart';
 import 'package:quran_app/features/audio/presentation/screens/reciters_selection_page.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/screens/azkaar/azkaar_categories_screen.dart';
@@ -16,6 +17,8 @@ import 'package:quran_app/features/quran/presentation/screens/read_quran_screen.
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
 import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
 import 'package:quran_app/features/search/presentation/screens/search_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/downloads_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/reciter_downloads_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/reciter_selection_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/settings_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/translations_screen.dart';
@@ -78,6 +81,15 @@ class AppRouter {
       GoRoute(
         path: '/selectReciter',
         builder: (context, state) => const ReciterSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/downloads',
+        builder: (context, state) => const DownloadsScreen(),
+      ),
+      GoRoute(
+        path: '/reciterDownloads',
+        builder: (context, state) =>
+            ReciterDownloadsScreen(reciter: state.extra as Reciter),
       ),
       GoRoute(
         path: '/translations',

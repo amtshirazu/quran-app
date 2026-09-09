@@ -77,6 +77,7 @@ class SettingsRow extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(height: 2,),
         if (showDivider)
           Divider(
             height: 1,
