@@ -5,7 +5,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
+import 'package:quran_app/features/quran/presentation/state/tafseer_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
+import 'package:quran_app/features/settings/domain/model/tafseer_model.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
 import 'package:quran_app/features/settings/presentation/state/download_provider.dart';
 import '../widgets/settings_card.dart';
@@ -85,6 +87,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ? 'Multiple (${selectedTranslations.length})'
         : 'Sahih International';
 
+    final selectedTafseerDb = ref.watch(selectedTafseerProvider);
+    final tafseerModel = kAllTafseers.firstWhere(
+      (m) => m.dbFileName == selectedTafseerDb,
+      orElse: () => kAllTafseers.first,
+    );
+    final String tafseerSubtitle = tafseerModel.name;
+
     final defaultReciter = ref.watch(defaultReciterProvider);
     final String reciterSubtitle = defaultReciter != null
         ? defaultReciter.name
@@ -138,6 +147,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   onTap: () {
                     context.push('/translations');
+                  },
+                ),
+                SettingsRow(
+                  icon: LucideIcons.book,
+                  title: 'Tafseer',
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        tafseerSubtitle,
+                        style: TextStyle(
+                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                    ],
+                  ),
+                  onTap: () {
+                    context.push('/tafseer');
                   },
                 ),
                 SettingsRow(
@@ -373,7 +403,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    context.push('/about');
+                  },
                 ),
               ],
             ),

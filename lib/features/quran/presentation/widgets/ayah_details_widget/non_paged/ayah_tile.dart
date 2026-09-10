@@ -11,6 +11,7 @@ import 'package:quran_app/features/progress/presentation/state/profile_progress_
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/selectedButton.dart';
+import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/tafseer_bottom_sheet.dart';
 import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart';
 import 'package:quran_app/features/reflection/presentation/widgets/reflection_note_dialog.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
@@ -351,7 +352,14 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     child: SelectedButton(
                       icon: LucideIcons.bookmarkCheck,
                       text: "Tafseer",
-                      onTap: () {},
+                      onTap: () {
+                        showTafseerBottomSheet(
+                          context,
+                          surahName: selectedSurah.nameEnglish,
+                          surahNumber: selectedSurah.number,
+                          ayahNumber: widget.ayahNumber,
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 8),

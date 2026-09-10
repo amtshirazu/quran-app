@@ -17,10 +17,16 @@ import 'package:quran_app/features/quran/presentation/screens/read_quran_screen.
 import 'package:quran_app/features/quran/presentation/screens/surah_detail_screen.dart';
 import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
 import 'package:quran_app/features/search/presentation/screens/search_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/about/about_credits_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/about/about_licenses_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/about/about_privacy_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/about/about_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/about/about_terms_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/downloads_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/reciter_downloads_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/reciter_selection_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/settings_screen.dart';
+import 'package:quran_app/features/settings/presentation/screens/tafseer_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/translations_screen.dart';
 
 class AppRouter {
@@ -79,6 +85,26 @@ class AppRouter {
         builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
+        path: '/about',
+        builder: (context, state) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: '/aboutCredits',
+        builder: (context, state) => const AboutCreditsScreen(),
+      ),
+      GoRoute(
+        path: '/aboutTerms',
+        builder: (context, state) => const AboutTermsScreen(),
+      ),
+      GoRoute(
+        path: '/aboutPrivacy',
+        builder: (context, state) => const AboutPrivacyScreen(),
+      ),
+      GoRoute(
+        path: '/aboutLicenses',
+        builder: (context, state) => const AboutLicensesScreen(),
+      ),
+      GoRoute(
         path: '/selectReciter',
         builder: (context, state) => const ReciterSelectionScreen(),
       ),
@@ -94,6 +120,10 @@ class AppRouter {
       GoRoute(
         path: '/translations',
         builder: (context, state) => const TranslationsScreen(),
+      ),
+      GoRoute(
+        path: '/tafseer',
+        builder: (context, state) => const TafseerScreen(),
       ),
       GoRoute(
         path: '/profile',
