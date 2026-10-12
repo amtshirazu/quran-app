@@ -30,12 +30,13 @@ class ReciterCard extends StatelessWidget {
         color: isDark ? AppTheme.darkSurface : Colors.white,
         clipBehavior: Clip.antiAlias,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 140,
+                  height: 130,
                   child: Image.asset(reciter.image, fit: BoxFit.cover),
                 ),
                 Positioned.fill(
@@ -53,13 +54,13 @@ class ReciterCard extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 12,
-                  right: 4,
+                  top: 10,
+                  right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha(230),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       reciter.country,
@@ -73,8 +74,8 @@ class ReciterCard extends StatelessWidget {
                 ),
                 Positioned(
                   bottom: 8,
-                  left: 12,
-                  right: 12,
+                  left: 10,
+                  right: 10,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -93,11 +94,13 @@ class ReciterCard extends StatelessWidget {
                         child: Text(
                           reciter.arabicName,
                           style: const TextStyle(
-                            fontSize: AppSpacing.size12,
+                            fontSize: AppSpacing.size11,
                             fontWeight: FontWeight.bold,
                             color: Colors.white70,
                           ),
                           textDirection: TextDirection.rtl,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -105,9 +108,8 @@ class ReciterCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 15, top: 8),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -118,24 +120,40 @@ class ReciterCard extends StatelessWidget {
                         Text(
                           reciter.riwayah,
                           style: TextStyle(
-                            fontSize: AppSpacing.size11,
-                            color: isDark ? AppTheme.darkTextSecondary : Colors.black,
+                            fontSize: AppSpacing.size10,
+                            color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 3),
+                        Text(
+                          reciter.style,
+                          style: const TextStyle(
+                            fontSize: AppSpacing.size10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.emerald600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 3),
                         Text(
                           "${reciter.totalSurahs} Surahs",
                           style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? AppTheme.darkTextPrimary : Colors.black,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
                             fontSize: AppSpacing.size11,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(width: 4),
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(
                       color: AppColors.emerald600,
                       shape: BoxShape.circle,
@@ -143,6 +161,7 @@ class ReciterCard extends StatelessWidget {
                     child: const Icon(
                       LucideIcons.play,
                       color: Colors.white,
+                      size: 16,
                     ),
                   ),
                 ],

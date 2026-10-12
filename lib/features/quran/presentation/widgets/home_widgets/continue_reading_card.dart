@@ -6,7 +6,6 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
-import '../../../../../core/constants/app_spacing.dart';
 import '../../../../progress/presentation/state/last_read_provider.dart';
 import '../../state/reading_mode.dart';
 import 'empty_card.dart';
@@ -57,15 +56,15 @@ class ContinueReadingCard extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
       color: isDark ? AppTheme.darkSurface : Colors.white,
-      elevation: isDark ? 0 : 6,
+      elevation: isDark ? 0 : 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,14 +73,14 @@ class ContinueReadingCard extends ConsumerWidget {
                 const Icon(
                   LucideIcons.bookOpen,
                   color: AppColors.emerald600,
-                  size: 22,
+                  size: 20,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Text(
                   "Continue Reading",
                   style: TextStyle(
                     color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
-                    fontSize: AppSpacing.size16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -89,29 +88,29 @@ class ContinueReadingCard extends ConsumerWidget {
                 Icon(
                   LucideIcons.chevronRight,
                   color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
-                  size: 20,
+                  size: 18,
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               subtitle,
               style: TextStyle(
                 color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
-                fontSize: AppSpacing.size12,
+                fontSize: 11,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             LinearProgressIndicator(
               value: progress,
               backgroundColor: isDark ? AppTheme.darkBorder : AppColors.gray200,
               valueColor: const AlwaysStoppedAnimation(AppColors.emerald600),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               "${(progress * 100).toStringAsFixed(0)}% completed",
               style: TextStyle(
-                fontSize: AppSpacing.size12,
+                fontSize: 11,
                 color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
               ),
             ),

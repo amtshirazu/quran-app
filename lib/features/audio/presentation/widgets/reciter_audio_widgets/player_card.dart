@@ -9,6 +9,7 @@ import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import 'package:quran_app/features/audio/presentation/widgets/reciter_audio_widgets/player_card_buttons.dart';
 import 'package:quran_app/features/settings/presentation/state/download_provider.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_spacing.dart';
 import '../../../../quran/presentation/state/quran_providers.dart';
@@ -26,11 +27,11 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
     final minutes = d.inMinutes.remainder(60);
     final seconds = d.inSeconds.remainder(60);
 
-    final hourStamp = hours > 0 ? "$hours:" : "";
+    final hourStamp = hours > 0 ? '$hours:' : '';
     final minStamp = minutes.toString().padLeft(2, '0');
     final secStamp = seconds.toString().padLeft(2, '0');
 
-    return "$hourStamp$minStamp:$secStamp";
+    return '$hourStamp$minStamp:$secStamp';
   }
 
   @override
@@ -41,9 +42,13 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
     final reciter = ref.watch(selectedReciterProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    if (selectedAudioSurah == null) return const SizedBox.shrink();
+    if (selectedAudioSurah == null) {
+      return const SizedBox.shrink();
+    }
 
     final subtextColor = isDark ? AppTheme.darkTextSecondary : Colors.black54;
+    final repeatMode = ref.watch(repeatModeProvider);
+    final volume = ref.watch(volumeProvider);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -65,10 +70,13 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
               gradient: isDark
                   ? null
                   : const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [AppColors.deepGreen, AppColors.emerald600],
-                    ),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.deepGreen,
+                  AppColors.emerald600,
+                ],
+              ),
               color: isDark ? const Color(0xFF162320) : null,
             ),
             child: Center(
@@ -90,7 +98,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: AppSpacing.size24,
-                      fontFamily: "Uthmanic",
+                      fontFamily: 'Uthmanic',
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -107,7 +115,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "Surah ${selectedAudioSurah.number} • ${selectedAudioSurah.totalAyahs} Verses",
+                    'Surah ${selectedAudioSurah.number} • ${selectedAudioSurah.totalAyahs} Verses',
                     style: const TextStyle(
                       fontSize: AppSpacing.size13,
                       color: AppColors.emerald100,
@@ -130,7 +138,10 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     double currentSeconds = position.inSeconds.toDouble();
                     double maxSeconds = duration.inSeconds.toDouble();
 
-                    if (maxSeconds <= 0) maxSeconds = 1.0;
+                    if (maxSeconds <= 0) {
+                      maxSeconds = 1.0;
+                    }
+
                     if (currentSeconds > maxSeconds) {
                       currentSeconds = maxSeconds;
                     }
@@ -151,7 +162,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             max: maxSeconds,
                             onChanged: (value) {
                               audioPlayer.seek(
-                                Duration(seconds: value.toInt()),
+                                Duration(
+                                  seconds: value.toInt(),
+                                ),
                               );
                             },
                           ),
@@ -183,11 +196,11 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Repeat Mode Button
                     IconButton(
                       onPressed: () async {
-                        final repeatNotifier = ref.read(
-                          repeatModeProvider.notifier,
-                        );
+                        final repeatNotifier =
+                        ref.read(repeatModeProvider.notifier);
                         final audio = ref.read(audioServiceProvider);
 
                         final newMode = switch (repeatNotifier.state) {
@@ -200,45 +213,25 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                         await audio.updateRepeatMode(newMode);
                       },
                       icon: Icon(
-                        switch (ref.watch(repeatModeProvider)) {
+                        switch (repeatMode) {
                           RepeatStates.off => LucideIcons.repeat,
                           RepeatStates.repeatAll => LucideIcons.repeat,
                           RepeatStates.repeatOne => LucideIcons.repeat1,
                         },
-                        color: switch (ref.watch(repeatModeProvider)) {
-                          RepeatStates.off =>
-                            isDark
-                                ? AppTheme.darkTextSecondary
-                                : AppColors.gray600,
+                        color: switch (repeatMode) {
+                          RepeatStates.off => isDark
+                              ? AppTheme.darkTextSecondary
+                              : AppColors.gray600,
                           RepeatStates.repeatAll => AppColors.emerald600,
                           RepeatStates.repeatOne => AppColors.emerald600,
                         },
                       ),
                     ),
+
+                    // Previous Track Button
                     IconButton(
                       onPressed: () async {
-                        final audio = ref.read(audioServiceProvider);
-                        final currentReciter = ref.read(
-                          selectedReciterProvider,
-                        );
-                        final surahs = ref.read(surahListProvider).value;
-
-                        if (currentReciter == null) return;
-
-                        final currentIndex =
-                            ref.read(selectedSurahIndexProvider) ?? 0;
-
-                        if (currentIndex > 0) {
-                          final prevIndex = currentIndex - 1;
-                          ref.read(selectedSurahIndexProvider.notifier).state =
-                              prevIndex;
-                          final surah = surahs![prevIndex];
-                          await audio.playSurah(
-                            reciter: currentReciter,
-                            surah: surah,
-                            allSurahs: surahs,
-                          );
-                        }
+                        await ref.read(audioServiceProvider).skipToPrevious();
                       },
                       icon: Icon(
                         LucideIcons.skipBack,
@@ -247,6 +240,8 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             : AppColors.gray900,
                       ),
                     ),
+
+                    // Play / Pause Button
                     Container(
                       width: 56,
                       height: 56,
@@ -263,61 +258,37 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                         ),
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          final currentReciter = ref.read(
-                            selectedReciterProvider,
-                          );
+                          final currentReciter =
+                          ref.read(selectedReciterProvider);
                           final surah = ref.read(selectedAudioSurahProvider);
                           final surahs = ref.read(surahListProvider).value;
 
                           if (playerState?.playing == true) {
                             await audio.pause();
-                          } else {
-                            if (!audio.hasLoadedSurah &&
-                                currentReciter != null &&
-                                surah != null &&
-                                surahs != null) {
-                              await audio.playSurah(
-                                reciter: currentReciter,
-                                surah: surah,
-                                allSurahs: surahs,
-                              );
-                              return;
-                            }
-
-                            if (playerState?.processingState ==
-                                ProcessingState.completed) {
-                              await audio.seekToStart();
-                            }
-
-                            await audio.play();
+                            return;
                           }
+
+                          if (!audio.hasLoadedSurah &&
+                              currentReciter != null &&
+                              surah != null &&
+                              surahs != null) {
+                            await audio.playSurah(
+                              reciter: currentReciter,
+                              surah: surah,
+                              allSurahs: surahs,
+                            );
+                            return;
+                          }
+
+                          await audio.play();
                         },
                       ),
                     ),
+
+                    // Next Track Button
                     IconButton(
                       onPressed: () async {
-                        final audio = ref.read(audioServiceProvider);
-                        final currentReciter = ref.read(
-                          selectedReciterProvider,
-                        );
-                        final surahs = ref.read(surahListProvider).value;
-
-                        if (currentReciter == null) return;
-
-                        final currentIndex =
-                            ref.read(selectedSurahIndexProvider) ?? 0;
-
-                        if (currentIndex < surahs!.length - 1) {
-                          final nextIndex = currentIndex + 1;
-                          ref.read(selectedSurahIndexProvider.notifier).state =
-                              nextIndex;
-                          final surah = surahs[nextIndex];
-                          await audio.playSurah(
-                            reciter: currentReciter,
-                            surah: surah,
-                            allSurahs: surahs,
-                          );
-                        }
+                        await ref.read(audioServiceProvider).skipToNext();
                       },
                       icon: Icon(
                         LucideIcons.skipForward,
@@ -326,16 +297,17 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             : AppColors.gray900,
                       ),
                     ),
+
+                    // Volume Increment Button
                     IconButton(
                       onPressed: () {
-                        final volumeNotifier = ref.read(
-                          volumeProvider.notifier,
-                        );
+                        final volumeNotifier =
+                        ref.read(volumeProvider.notifier);
                         final audio = ref.read(audioServiceProvider);
-                        final newVolume = (volumeNotifier.state + 0.05).clamp(
-                          0.0,
-                          1.0,
-                        );
+
+                        final newVolume =
+                        (volumeNotifier.state + 0.05).clamp(0.0, 1.0);
+
                         volumeNotifier.state = newVolume;
                         audio.setVolume(newVolume);
                       },
@@ -352,9 +324,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                 Row(
                   children: [
                     Icon(
-                      ref.watch(volumeProvider) == 0
+                      volume == 0
                           ? LucideIcons.volumeX
-                          : ref.watch(volumeProvider) <= 0.5
+                          : volume <= 0.5
                           ? LucideIcons.volume1
                           : LucideIcons.volume2,
                       color: isDark
@@ -373,7 +345,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                           trackHeight: 3,
                         ),
                         child: Slider(
-                          value: ref.watch(volumeProvider),
+                          value: volume,
                           max: 1,
                           onChanged: (value) {
                             ref.read(volumeProvider.notifier).state = value;
@@ -383,11 +355,10 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                       ),
                     ),
                     Text(
-                      "${(ref.watch(volumeProvider) * 100).toInt()}%",
+                      '${(volume * 100).toInt()}%',
                       style: TextStyle(
-                        color: isDark
-                            ? AppTheme.darkTextSecondary
-                            : Colors.grey,
+                        color:
+                        isDark ? AppTheme.darkTextSecondary : Colors.grey,
                         fontSize: 12,
                       ),
                     ),
@@ -399,29 +370,23 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     Expanded(
                       child: PlayerCardButtons(
                         icon: LucideIcons.share,
-                        text: "Share",
+                        text: 'Share',
                         onPressed: () async {
-                          debugPrint(
-                            "selectedAudioSurah: $selectedAudioSurah, reciter: $reciter",
-                          );
-                          if (selectedAudioSurah != null && reciter != null) {
+                          if (reciter != null) {
                             final surahNumStr = selectedAudioSurah.number
                                 .toString()
                                 .padLeft(3, '0');
+
                             final shareText =
-                                "Listen to Surah ${selectedAudioSurah.nameEnglish} by ${reciter.name}:\n"
-                                "${reciter.serverUrl}/$surahNumStr.mp3";
+                                'Listen to Surah ${selectedAudioSurah.nameEnglish} by ${reciter.name}:\n'
+                                '${reciter.serverUrl}/$surahNumStr.mp3';
 
                             await SharePlus.instance.share(
                               ShareParams(
                                 text: shareText,
                                 subject:
-                                    "Surah ${selectedAudioSurah.nameEnglish}",
+                                'Surah ${selectedAudioSurah.nameEnglish}',
                               ),
-                            );
-                          } else {
-                            debugPrint(
-                              "Share blocked — reciter or surah was null",
                             );
                           }
                         },
@@ -431,13 +396,13 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     Expanded(
                       child: PlayerCardButtons(
                         icon: LucideIcons.download,
-                        text: "Download",
+                        text: 'Download',
                         onPressed: () async {
-                          if (selectedAudioSurah != null && reciter != null) {
+                          if (reciter != null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "Downloading Surah ${selectedAudioSurah.nameEnglish}...",
+                                  'Downloading Surah ${selectedAudioSurah.nameEnglish}...',
                                 ),
                                 behavior: SnackBarBehavior.floating,
                               ),
@@ -446,21 +411,22 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             final manager = ref.read(
                               downloadManagerProvider.notifier,
                             );
+
                             await manager.downloadSurah(
                               reciter: reciter,
                               surah: selectedAudioSurah,
                               onCompleted: () {
                                 ref
                                     .read(
-                                      downloadRefreshTriggerProvider
-                                          .notifier,
-                                    )
+                                  downloadRefreshTriggerProvider.notifier,
+                                )
                                     .state++;
+
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Surah ${selectedAudioSurah.nameEnglish} downloaded!",
+                                        'Surah ${selectedAudioSurah.nameEnglish} downloaded!',
                                       ),
                                       behavior: SnackBarBehavior.floating,
                                     ),

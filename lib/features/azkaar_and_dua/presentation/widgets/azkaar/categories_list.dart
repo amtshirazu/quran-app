@@ -15,18 +15,17 @@ class CategoryListCard extends ConsumerWidget {
     final countAsync = ref.watch(categoryItemCountProvider(category.id));
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isDark ? AppTheme.darkSurface : const Color(0xFFE0F2F1).withAlpha(102),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppTheme.darkBorder : AppColors.emerald600.withAlpha(26),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        color: isDark ? AppTheme.darkSurface : const Color(0xFFE0F2F1).withAlpha(102),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: isDark ? AppTheme.darkBorder : AppColors.emerald600.withAlpha(26),
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
         child: ListTile(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 8),

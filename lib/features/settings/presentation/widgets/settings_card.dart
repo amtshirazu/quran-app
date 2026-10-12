@@ -11,26 +11,22 @@ class SettingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Material(
         color: isDark ? AppTheme.darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? AppTheme.darkBorder : AppColors.gray200,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: isDark ? AppTheme.darkBorder : AppColors.gray200,
+          ),
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withAlpha(6),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-      ),
-      child: Column(
-        children: children,
+        elevation: isDark ? 0 : 1,
+        shadowColor: Colors.black.withAlpha(15),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: children,
+        ),
       ),
     );
   }

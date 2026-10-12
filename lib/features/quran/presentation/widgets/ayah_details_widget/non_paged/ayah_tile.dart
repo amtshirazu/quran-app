@@ -15,6 +15,7 @@ import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widge
 import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart';
 import 'package:quran_app/features/reflection/presentation/widgets/reflection_note_dialog.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../../core/constants/app_spacing.dart';
@@ -48,8 +49,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
     try {
       final existing = reflections.firstWhere(
-        (r) =>
-            r['surah_id'] == selectedSurah.number &&
+            (r) =>
+        r['surah_id'] == selectedSurah.number &&
             r['ayah_number'] == widget.ayahNumber,
       );
       existingContent = existing['content'];
@@ -75,6 +76,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
       content: content,
     );
 
+    if (!mounted) return;
     ref.invalidate(reflectionsProvider);
   }
 
@@ -102,82 +104,82 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     // Fetch active translations using Riverpod provider
     Widget translationWidget = ref
         .watch(
-          activeVerseTranslationsProvider((
-            surah: widget.surahNumber,
-            verse: widget.ayahNumber,
-          )),
-        )
+      activeVerseTranslationsProvider((
+      surah: widget.surahNumber,
+      verse: widget.ayahNumber,
+      )),
+    )
         .when(
-          data: (translations) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: translations.map((t) {
-              final isSecondary = !t.isDefault;
-              return Padding(
-                padding: EdgeInsets.only(top: isSecondary ? 10.0 : 0.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isSecondary) ...[
-                      Divider(
-                        height: 16,
-                        thickness: 0.8,
-                        color: isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
-                        child: Text(
-                          t.translationName.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.emerald600,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                    Text(
-                      t.text,
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: isDark ? AppTheme.darkTextSecondary : AppColors.gray700,
-                        fontSize: translationTextSize,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-          loading: () => Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+      data: (translations) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: translations.map((t) {
+          final isSecondary = !t.isDefault;
+          return Padding(
+            padding: EdgeInsets.only(top: isSecondary ? 10.0 : 0.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                3,
-                (index) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Container(
-                    width: index == 2 ? 150 : double.infinity,
-                    height: 12.0,
-                    color: Colors.white,
+              children: [
+                if (isSecondary) ...[
+                  Divider(
+                    height: 16,
+                    thickness: 0.8,
+                    color: isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: Text(
+                      t.translationName.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.emerald600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
+                Text(
+                  t.text,
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: isDark ? AppTheme.darkTextSecondary : AppColors.gray700,
+                    fontSize: translationTextSize,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+      loading: () => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            3,
+                (index) => Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Container(
+                width: index == 2 ? 150 : double.infinity,
+                height: 12.0,
+                color: Colors.white,
               ),
             ),
           ),
-          error: (err, stack) => const Text(
-            "Translation unavailable",
-            style: TextStyle(color: Colors.red, fontSize: 12),
-          ),
-        );
+        ),
+      ),
+      error: (err, stack) => const Text(
+        "Translation unavailable",
+        style: TextStyle(color: Colors.red, fontSize: 12),
+      ),
+    );
 
     final isBookmarked = ref.watch(
       isAyahBookmarkedProvider((
-        surahId: selectedSurah.number,
-        ayahNumber: widget.ayahNumber,
+      surahId: selectedSurah.number,
+      ayahNumber: widget.ayahNumber,
       )),
     );
 
@@ -185,16 +187,20 @@ class _AyahTileState extends ConsumerState<AyahTile> {
       key: Key('visibility-${widget.ayahNumber}'),
       onVisibilityChanged: (visibilityInfo) async {
         if (visibilityInfo.visibleFraction >= 0.6 && !_hasBeenTracked) {
+          _hasBeenTracked = true;
           final progressService = ref.read(progressServiceProvider);
           await progressService.trackAyah(
             selectedSurah.number,
             widget.ayahNumber,
           );
+
+          if (!mounted) return;
+
           ref.invalidate(lastReadProvider);
           ref.invalidate(lastReadResolvedSurahProvider);
           ref.invalidate(profileProgressProvider);
           ref.invalidate(continueReadingProvider);
-          if (mounted) setState(() => _hasBeenTracked = true);
+          setState(() {});
         }
       },
       child: Card(
@@ -240,8 +246,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           Bookmark? existing;
                           try {
                             existing = bookmarks.firstWhere(
-                              (b) =>
-                                  b.type == BookmarkType.verse &&
+                                  (b) =>
+                              b.type == BookmarkType.verse &&
                                   b.surahId == selectedSurah.number &&
                                   b.ayahNumber == widget.ayahNumber,
                             );
@@ -252,7 +258,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             context,
                             title: "Add Bookmark",
                             subtitle:
-                                "${selectedSurah.nameEnglish} • Verse ${widget.ayahNumber}",
+                            "${selectedSurah.nameEnglish} • Verse ${widget.ayahNumber}",
                             initialNote: existing?.note,
                             isPageMode: false,
                           );
@@ -261,10 +267,11 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           await ref
                               .read(bookmarkServiceProvider)
                               .addOrUpdateVerseBookmark(
-                                surahId: selectedSurah.number,
-                                ayahNumber: widget.ayahNumber,
-                                note: note,
-                              );
+                            surahId: selectedSurah.number,
+                            ayahNumber: widget.ayahNumber,
+                            note: note,
+                          );
+                          if (!mounted) return;
                           ref.invalidate(bookmarksProvider);
                         },
                         icon: Icon(
@@ -278,7 +285,26 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final translationText = quran.getVerseTranslation(
+                            widget.surahNumber,
+                            widget.ayahNumber,
+                          );
+
+                          final shareText =
+                              '"$ayahText"\n\n'
+                              '"$translationText"\n\n'
+                              '— Surah ${selectedSurah.nameEnglish} (${selectedSurah.number}:${widget.ayahNumber})\n'
+                              'Shared via Bayyinah Flow';
+
+                          await SharePlus.instance.share(
+                            ShareParams(
+                              text: shareText,
+                              subject:
+                              "Surah ${selectedSurah.nameEnglish} (${selectedSurah.number}:${widget.ayahNumber})",
+                            ),
+                          );
+                        },
                         icon: const Icon(
                           LucideIcons.share2,
                           color: AppColors.gray400,
@@ -288,15 +314,27 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       IconButton(
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          final defaultReciter = ref.read(
-                            defaultReciterProvider,
-                          );
-                          if (defaultReciter == null) return;
-                          await audio.playVerse(
-                            reciter: defaultReciter,
-                            surah: selectedSurah,
-                            ayah: widget.ayahNumber,
-                          );
+                          // Prefer default reciter, fallback to currently selected reciter or first in list
+                          final reciter = ref.read(defaultReciterProvider) ??
+                              ref.read(selectedReciterProvider) ??
+                              ref.read(recitersListProvider).first;
+
+                          try {
+                            await audio.playVerse(
+                              reciter: reciter,
+                              surah: selectedSurah,
+                              ayah: widget.ayahNumber,
+                            );
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Error playing verse: $e"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          }
                         },
                         icon: const Icon(
                           LucideIcons.volume2,

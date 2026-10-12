@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 
 Future<String?> showBookmarkDialog(
   BuildContext context, {
   required String title,
   required String subtitle,
-  required bool isPageMode, // New parameter to determine the hint text
+  required bool isPageMode,
   String? initialNote,
 }) {
   final controller = TextEditingController(text: initialNote ?? "");
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
-  // Dynamic text based on mode
   final String noteHint = isPageMode
       ? "Add a note to remember why this page is important (optional)"
       : "Add a note to remember why this verse is important (optional)";
@@ -18,89 +19,84 @@ Future<String?> showBookmarkDialog(
       ? "e.g. Favorite Juz, specific topic, start of my journey..."
       : "e.g. Read when stressed, reminder for prayer, beautiful tafsir...";
 
-  // Colors from your design
-  const colorDeepGray = Color(0xFF111827);
-  const colorMidGray = Color(0xFF4A4A4A);
-  const colorLightGray = Color(0xFF71717A);
   const colorAmber = Color(0xFFD97706);
-  const colorTextFieldBG = Color(0xFFF9FAFB);
+
+  final textColor = isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827);
+  final subtextColor = isDark ? AppTheme.darkTextSecondary : const Color(0xFF71717A);
+  final fieldBg = isDark ? AppTheme.darkScaffold : const Color(0xFFF9FAFB);
+  final borderColor = isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB);
 
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
     builder: (context) {
       return Dialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: isDark ? AppTheme.darkSurface : Colors.white,
+        surfaceTintColor: isDark ? AppTheme.darkSurface : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: colorDeepGray,
+                      color: textColor,
                     ),
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      color: colorLightGray,
+                      color: subtextColor,
                       size: 20,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 4),
-
+              const SizedBox(height: 2),
               Text(
                 subtitle,
                 style: const TextStyle(
                   color: colorAmber,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
-
-              const SizedBox(height: 12),
-
+              const SizedBox(height: 10),
               Text(
                 noteHint,
-                style: const TextStyle(color: colorMidGray, fontSize: 13),
+                style: TextStyle(color: subtextColor, fontSize: 12),
               ),
-
               const SizedBox(height: 12),
-
-              // The Styled Text Field
               TextField(
                 controller: controller,
-                maxLines: 4,
+                maxLines: 3,
                 autofocus: true,
-                style: const TextStyle(fontSize: 14, color: colorDeepGray),
+                style: TextStyle(fontSize: 14, color: textColor),
                 decoration: InputDecoration(
                   hintText: textFieldHint,
-                  hintStyle: const TextStyle(
-                    color: colorLightGray,
-                    fontSize: 13,
+                  hintStyle: TextStyle(
+                    color: subtextColor,
+                    fontSize: 12,
                   ),
                   filled: true,
-                  fillColor: colorTextFieldBG,
-                  contentPadding: const EdgeInsets.all(16),
+                  fillColor: fieldBg,
+                  contentPadding: const EdgeInsets.all(14),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+                    borderSide: BorderSide(color: borderColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -108,26 +104,23 @@ Future<String?> showBookmarkDialog(
                   ),
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Action Buttons
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFFE5E7EB)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: BorderSide(color: borderColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),
-                      child: const Text(
+                      child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: colorMidGray,
+                          color: subtextColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -137,7 +130,7 @@ Future<String?> showBookmarkDialog(
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         backgroundColor: colorAmber,
                         foregroundColor: Colors.white,
                         elevation: 0,

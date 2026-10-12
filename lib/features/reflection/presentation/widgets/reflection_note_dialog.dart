@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 
 Future<String?> showReflectionDialog(
   BuildContext context, {
@@ -7,123 +9,115 @@ Future<String?> showReflectionDialog(
   String? initialReflection,
 }) {
   final controller = TextEditingController(text: initialReflection ?? "");
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
-  const colorDeepGray = Color(0xFF111827);
-  const colorMidGray = Color(0xFF4A4A4A);
-  const colorLightGray = Color(0xFF71717A);
-  const colorEmerald = Color(0xFF10B981); // Calming green for reflection
-  const colorTextFieldBG = Color(0xFFF9FAFB);
+  final textColor = isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827);
+  final subtextColor = isDark ? AppTheme.darkTextSecondary : const Color(0xFF71717A);
+  final fieldBg = isDark ? AppTheme.darkScaffold : const Color(0xFFF9FAFB);
+  final borderColor = isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB);
 
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
     builder: (context) {
       return Dialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: isDark ? AppTheme.darkSurface : Colors.white,
+        surfaceTintColor: isDark ? AppTheme.darkSurface : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Write Your Reflection",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: colorDeepGray,
+                      color: textColor,
                     ),
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      color: colorLightGray,
+                      color: subtextColor,
                       size: 20,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 4),
-
+              const SizedBox(height: 2),
               Text(
                 "$surahName • Verse $ayahNumber",
                 style: const TextStyle(
-                  color: colorEmerald,
+                  color: AppColors.emerald600,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
-
-              const SizedBox(height: 12),
-
-              const Text(
+              const SizedBox(height: 10),
+              Text(
                 "What does this verse mean to you? How can you apply it in your life?",
                 style: TextStyle(
-                  color: colorMidGray,
-                  fontSize: 13,
+                  color: subtextColor,
+                  fontSize: 12,
                   height: 1.4,
                 ),
               ),
-
-              const SizedBox(height: 16),
-
-              // The Styled Text Field
+              const SizedBox(height: 12),
               TextField(
                 controller: controller,
-                maxLines: 6, // Slightly taller for longer reflections
+                maxLines: 4,
                 autofocus: true,
-                style: const TextStyle(fontSize: 14, color: colorDeepGray),
+                style: TextStyle(fontSize: 14, color: textColor),
                 decoration: InputDecoration(
                   hintText: "Write your thoughts and reflections here...",
-                  hintStyle: const TextStyle(
-                    color: colorLightGray,
-                    fontSize: 13,
+                  hintStyle: TextStyle(
+                    color: subtextColor,
+                    fontSize: 12,
                   ),
                   filled: true,
-                  fillColor: colorTextFieldBG,
-                  contentPadding: const EdgeInsets.all(16),
+                  fillColor: fieldBg,
+                  contentPadding: const EdgeInsets.all(14),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+                    borderSide: BorderSide(color: borderColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                      color: colorEmerald,
+                      color: AppColors.emerald600,
                       width: 1.5,
                     ),
                   ),
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Action Buttons
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFFE5E7EB)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: BorderSide(color: borderColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),
-                      child: const Text(
+                      child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: colorMidGray,
+                          color: subtextColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -133,8 +127,8 @@ Future<String?> showReflectionDialog(
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: colorEmerald,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: AppColors.emerald600,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(

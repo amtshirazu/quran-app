@@ -80,6 +80,23 @@ class AboutScreen extends StatelessWidget {
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.emerald600.withAlpha(38)
+                          : AppColors.emerald100,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Icon(
+                      LucideIcons.bookOpen,
+                      color: AppColors.emerald600,
+                      size: 50,
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 16),
@@ -93,7 +110,7 @@ class AboutScreen extends StatelessWidget {
                 color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               'Version 2.1.0',
               style: TextStyle(
@@ -153,14 +170,15 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 28),
 
             /// Sub-Navigation Menu
-            Container(
-              decoration: BoxDecoration(
-                color: isDark ? AppTheme.darkSurface : Colors.white,
+            Material(
+              color: isDark ? AppTheme.darkSurface : Colors.white,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
+                side: BorderSide(
                   color: isDark ? AppTheme.darkBorder : AppColors.gray200,
                 ),
               ),
+              clipBehavior: Clip.antiAlias,
               child: Column(
                 children: [
                   _buildNavTile(

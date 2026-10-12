@@ -19,8 +19,17 @@ class _QuranAppState extends ConsumerState<QuranApp>
   void initState() {
     super.initState();
 
+    // CHANGE: removed `.init(ref as Ref<Object?>)`.
+    //
+    // `ref` in a ConsumerState is a WidgetRef, and casting a WidgetRef to
+    // Ref is invalid (it throws a type error at runtime). It is also not
+    // needed: audioServiceProvider already calls service.init(ref) itself
+    // with the correct Ref the first time the provider is read.
+    //
+    // Reading the provider here just makes sure the service is created
+    // (and initialized) at app start.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(audioServiceProvider).init(ref);
+      ref.read(audioServiceProvider);
     });
 
     WidgetsBinding.instance.addObserver(this);

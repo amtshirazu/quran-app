@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
-import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
 
@@ -18,11 +18,13 @@ class PlaylistCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedSurahIndexProvider);
-    final audioPlayer = ref.read(audioServiceProvider);
+    final audioService = ref.read(audioServiceProvider);
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ListView.builder(
       shrinkWrap: true,
+      padding: const EdgeInsets.only(bottom: 24, top: 0),
       physics: const BouncingScrollPhysics(),
       itemCount: surahs.length,
       itemBuilder: (context, index) {
@@ -33,30 +35,30 @@ class PlaylistCard extends ConsumerWidget {
             ? (isDark ? AppTheme.darkBorder : AppColors.gray200)
             : (isDark ? AppTheme.darkSurface : Colors.white);
 
-        final textColor = isDark ? AppTheme.darkTextPrimary : Colors.black;
-        final subtextColor = isDark ? AppTheme.darkTextSecondary : AppColors.gray600;
+        final textColor =
+        isDark ? AppTheme.darkTextPrimary : Colors.black;
+
+        final subtextColor =
+        isDark ? AppTheme.darkTextSecondary : AppColors.gray600;
 
         return InkWell(
           onTap: () async {
             final reciter = ref.read(selectedReciterProvider);
-            if (reciter == null) return;
 
-            audioPlayer.setUserSelecting(true);
-            ref.read(selectedSurahIndexProvider.notifier).state = index;
-            await audioPlayer.player.seek(Duration.zero);
+            if (reciter == null) {
+              return;
+            }
 
             try {
-              await audioPlayer.playSurah(
+              // playSurah will set selectedSurahIndexProvider internally under a lock
+              await audioService.playSurah(
                 reciter: reciter,
                 surah: surah,
                 allSurahs: surahs,
               );
             } catch (e) {
-              debugPrint("Audio error: $e");
+              debugPrint('Audio error: $e');
             }
-
-            await Future.delayed(const Duration(milliseconds: 150));
-            audioPlayer.setUserSelecting(false);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(
@@ -74,6 +76,9 @@ class PlaylistCard extends ConsumerWidget {
             ),
             child: Row(
               children: [
+                // ---------------------------------------------------------
+                // SURAH NUMBER
+                // ---------------------------------------------------------
                 Container(
                   width: 40,
                   height: 40,
@@ -81,11 +86,13 @@ class PlaylistCard extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.emerald600
-                        : (isDark ? AppTheme.darkScaffold : AppColors.gray200),
+                        : (isDark
+                        ? AppTheme.darkScaffold
+                        : AppColors.gray200),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "${surah.number}",
+                    '${surah.number}',
                     style: TextStyle(
                       color: isSelected ? Colors.white : textColor,
                       fontWeight: FontWeight.bold,
@@ -93,7 +100,12 @@ class PlaylistCard extends ConsumerWidget {
                     ),
                   ),
                 ),
+
                 const SizedBox(width: 12),
+
+                // ---------------------------------------------------------
+                // ENGLISH NAME + TRANSLATION
+                // ---------------------------------------------------------
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +120,7 @@ class PlaylistCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${surah.translation} • ${surah.totalAyahs} verses",
+                        '${surah.translation} • ${surah.totalAyahs} verses',
                         style: TextStyle(
                           fontSize: AppSpacing.size11,
                           color: subtextColor,
@@ -117,12 +129,16 @@ class PlaylistCard extends ConsumerWidget {
                     ],
                   ),
                 ),
+
+                // ---------------------------------------------------------
+                // ARABIC NAME
+                // ---------------------------------------------------------
                 Text(
                   surah.nameArabic,
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontSize: 15,
-                    fontFamily: "Uthmanic",
+                    fontFamily: 'Uthmanic',
                     color: textColor,
                   ),
                 ),

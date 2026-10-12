@@ -1,7 +1,7 @@
 import '../domain/models/Reciters.dart';
 
 final reciters = [
-  Reciter(
+  const Reciter(
     id: "alafasy",
     name: "Mishary Rashid Alafasy",
     arabicName: "مشاري بن راشد العفاسي",
@@ -12,9 +12,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Alafasy_128kbps",
     serverUrl: "https://server8.mp3quran.net/afs",
+    ayahAudioFolder: "Alafasy_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Alafasy_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "shuraym",
     name: "Saud Ash-Shuraym",
     arabicName: "سعود الشريم",
@@ -25,9 +27,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Saood_ash-Shuraym_128kbps",
     serverUrl: "https://server7.mp3quran.net/shur",
+    ayahAudioFolder: "Saood_ash-Shuraym_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Saood_ash-Shuraym_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "dussary",
     name: "Yasser Ad-Dussary",
     arabicName: "ياسر الدوسري",
@@ -38,9 +42,12 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Yasser_Ad-Dussary_128kbps",
     serverUrl: "https://server11.mp3quran.net/yasser",
+    ayahAudioFolder: "Yasser_Ad-Dussary_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Yasser_Ad-Dussary_128kbps",
   ),
 
-  Reciter(
+  // Okasha Kameny plays his own Surahs, but routes Ayahs to Shaatree on EveryAyah
+  const Reciter(
     id: "okasha_kameny",
     name: "Okasha Kameny",
     arabicName: "عكاشة كميني",
@@ -49,12 +56,13 @@ final reciters = [
     riwayah: "Al-Bazzi 'an Ibn Kathir",
     style: "Murattal",
     totalSurahs: 114,
-    audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
-    serverUrl:
-        "https://server16.mp3quran.net/okasha/Rewayat-Albizi-A-n-Ibn-Katheer",
+    audioFolder: "Okasha_Kameny_128kbps",
+    serverUrl: "https://cdn.mp3quran.net/audio/okasha-kameny/r2",
+    ayahAudioFolder: "Abu_Bakr_Ash-Shaatree_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abu_Bakr_Ash-Shaatree_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "Abdurrahmaan_As-Sudais",
     name: "Abdurrahmaan As-Sudais",
     arabicName: "عبد الرحمن السديس",
@@ -65,9 +73,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Abdurrahmaan_As-Sudais_192kbps",
     serverUrl: "https://server11.mp3quran.net/sds",
+    ayahAudioFolder: "Abdurrahmaan_As-Sudais_192kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abdurrahmaan_As-Sudais_192kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "abdul_basit_murattal",
     name: "Abdul Basit AbdulSammad",
     arabicName: "عبد الباسط عبد الصمد",
@@ -78,10 +88,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Abdul_Basit_Murattal_192kbps",
     serverUrl: "https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad",
-
+    ayahAudioFolder: "Abdul_Basit_Murattal_192kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abdul_Basit_Murattal_192kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "abdullah_matroud",
     name: "Abdullah Matroud",
     arabicName: "عبدالله المطرود",
@@ -92,9 +103,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Abdullah_Matroud_128kbps",
     serverUrl: "https://server8.mp3quran.net/mtrod",
+    ayahAudioFolder: "Abdullah_Matroud_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abdullah_Matroud_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "abdullah_basfar",
     name: "Abdullah Basfar",
     arabicName: "عبدالله بصفر",
@@ -105,9 +118,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Abdullah_Basfar_192kbps",
     serverUrl: "https://server6.mp3quran.net/bsfr",
+    ayahAudioFolder: "Abdullah_Basfar_192kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abdullah_Basfar_192kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "abu_bakr_shaatree",
     name: "Abu Bakr Ash-Shaatree",
     arabicName: "أبو بكر الشاطري",
@@ -118,9 +133,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Abu_Bakr_Ash-Shaatree_128kbps",
     serverUrl: "https://server11.mp3quran.net/shatri",
+    ayahAudioFolder: "Abu_Bakr_Ash-Shaatree_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Abu_Bakr_Ash-Shaatree_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "husary",
     name: "Mahmoud Khalil Al-Husary",
     arabicName: "محمود خليل الحصري",
@@ -131,9 +148,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Husary_128kbps",
     serverUrl: "https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad",
+    ayahAudioFolder: "Husary_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Husary_128kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "ali_jaber",
     name: "Ali Jaber",
     arabicName: "علي جابر",
@@ -144,9 +163,11 @@ final reciters = [
     totalSurahs: 114,
     audioFolder: "Ali_Jaber_64kbps",
     serverUrl: "https://server11.mp3quran.net/a_jbr",
+    ayahAudioFolder: "Ali_Jaber_64kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/Ali_Jaber_64kbps",
   ),
 
-  Reciter(
+  const Reciter(
     id: "warsh_Omar_Al-Qazabri",
     name: "Omar Al-Qazabri",
     arabicName: "عمر القزابري",
@@ -155,7 +176,9 @@ final reciters = [
     riwayah: "Warsh 'an Nafi",
     style: "Murattal",
     totalSurahs: 114,
-    audioFolder: "warsh/warsh_ibrahim_aldosary_128kbps",
+    audioFolder: "warsh_Omar_Al-Qazabri_128kbps",
     serverUrl: "https://server9.mp3quran.net/omar_warsh",
+    ayahAudioFolder: "warsh_ibrahim_aldosary_128kbps_ayahs",
+    ayahServerUrl: "https://everyayah.com/data/warsh/warsh_ibrahim_aldosary_128kbps",
   ),
 ];

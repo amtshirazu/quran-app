@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 
 class LocationAccessCard extends StatelessWidget {
   final VoidCallback onEnablePressed;
@@ -10,13 +11,19 @@ class LocationAccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
-        color: AppColors.emerald500.withOpacity(0.08),
+        color: isDark
+            ? AppColors.emerald600.withAlpha(26)
+            : AppColors.emerald500.withAlpha(20),
         borderRadius: BorderRadius.circular(AppSpacing.size20),
         border: Border.all(
-          color: AppColors.emerald500.withOpacity(0.2),
+          color: isDark
+              ? AppTheme.darkBorder
+              : AppColors.emerald500.withAlpha(51),
           width: 1,
         ),
       ),
@@ -26,7 +33,9 @@ class LocationAccessCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.emerald500.withOpacity(0.12),
+              color: isDark
+                  ? AppColors.emerald600.withAlpha(38)
+                  : AppColors.emerald500.withAlpha(30),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -36,24 +45,25 @@ class LocationAccessCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-
-          const Text(
+          Text(
             "Location Access Required",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
             ),
           ),
           const SizedBox(height: 12),
-
-          const Text(
+          Text(
             "We need your location to show accurate prayer times for your area. Please enable location access to continue.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: Colors.black54, height: 1.5),
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
+              height: 1.5,
+            ),
           ),
           const SizedBox(height: 24),
-
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -75,14 +85,12 @@ class LocationAccessCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
-          // Privacy Footer
           Text(
             "Your location is only used to calculate prayer times and is not stored.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.black45,
+              color: isDark ? AppTheme.darkTextSecondary : Colors.black45,
               fontStyle: FontStyle.italic,
             ),
           ),

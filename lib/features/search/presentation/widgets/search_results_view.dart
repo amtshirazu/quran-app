@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 import 'package:quran_app/features/azkaar_and_dua/presentation/states/dua_provider.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
@@ -420,22 +421,25 @@ class SearchResultsView extends ConsumerWidget {
     AzkarSearchResult item,
     String query,
   ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.gray200),
-      ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        color: isDark ? AppTheme.darkSurface : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: isDark ? AppTheme.darkBorder : AppColors.gray200,
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
         child: ListTile(
           contentPadding: const EdgeInsets.all(12),
           leading: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.emerald100,
+              color: isDark ? AppColors.emerald600.withAlpha(38) : AppColors.emerald100,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -447,25 +451,26 @@ class SearchResultsView extends ConsumerWidget {
           title: HighlightedText(
             text: item.chapter.name,
             query: query,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
-              color: AppColors.gray900,
+              color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
             ),
           ),
           subtitle: Text(
             item.category.name,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppColors.gray500,
+              color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
             ),
           ),
           trailing: const Icon(
             Icons.chevron_right,
             color: AppColors.gray400,
+            size: 20,
           ),
           onTap: () {
-            context.push('/azkaarChapters', extra: item.category);
+            context.push('/azkaarItems', extra: item.chapter);
           },
         ),
       ),

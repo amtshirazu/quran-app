@@ -59,7 +59,7 @@ class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Prayer Times & Qibla',
+                'Prayer Times',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,

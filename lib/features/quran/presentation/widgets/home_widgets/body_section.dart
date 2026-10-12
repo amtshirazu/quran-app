@@ -5,7 +5,6 @@ import 'package:quran_app/features/quran/presentation/widgets/home_widgets/life_
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/progress_stats.dart';
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/quick_access.dart';
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/reflection_journal.dart';
-import 'package:quran_app/features/quran/presentation/widgets/home_widgets/study_plan_card.dart';
 import 'package:quran_app/features/quran/presentation/widgets/home_widgets/verse_of_day_card.dart';
 
 class BodySection extends StatelessWidget {
@@ -13,15 +12,15 @@ class BodySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         ContinueReadingCard(),
         DailyVerseCard(),
         LifeSituationCard(),
-        StudyPlanCard(),
         QuickAccess(),
         ReflectionJournalCard(),
         AzkaarDuaCard(),
+        SizedBox(height: 10),
         ProgressSection(),
       ],
     );

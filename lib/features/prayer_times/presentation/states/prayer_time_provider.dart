@@ -8,68 +8,139 @@ import 'package:geocoding/geocoding.dart';
 
 final prayerTimesServiceProvider = Provider((ref) => PrayerTimesService());
 
+String _firstNonEmpty(List<String?> candidates, String fallback) {
+  for (final candidate in candidates) {
+    if (candidate != null && candidate.trim().isNotEmpty) {
+      return candidate.trim();
+    }
+  }
+  return fallback;
+}
+
+// Fetches GPS location with diagnostic logging and fallback
+final locationProvider = FutureProvider<Position>((ref) async {
+  debugPrint("📍 LOCATION: Starting location detection...");
+
+  final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  debugPrint("📍 LOCATION: Service enabled = $serviceEnabled");
+  if (!serviceEnabled) {
+    throw 'Location services are disabled on device.';
+  }
+
+  LocationPermission permission = await Geolocator.checkPermission();
+  debugPrint("📍 LOCATION: Current permission = $permission");
+
+  if (permission == LocationPermission.deniedForever) {
+    throw 'Location permissions are permanently denied. Please enable them in app settings.';
+  }
+
+  if (permission == LocationPermission.denied) {
+    debugPrint("📍 LOCATION: Requesting location permission...");
+    permission = await Geolocator.requestPermission();
+    debugPrint("📍 LOCATION: Permission after request = $permission");
+
+    if (permission == LocationPermission.deniedForever) {
+      throw 'Location permissions are permanently denied. Please enable them in app settings.';
+    }
+    if (permission == LocationPermission.denied) {
+      throw 'Location permissions were denied.';
+    }
+  }
+
+  const locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.low,
+    distanceFilter: 100,
+    timeLimit: Duration(seconds: 60),
+  );
+
+  try {
+    debugPrint("📍 LOCATION: Requesting current position...");
+    final position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+    debugPrint("✅ LOCATION: Position received");
+    debugPrint("   Latitude: ${position.latitude}");
+    debugPrint("   Longitude: ${position.longitude}");
+    debugPrint("   Accuracy: ${position.accuracy}");
+    return position;
+  } catch (e) {
+    debugPrint("⚠️ LOCATION: getCurrentPosition failed: $e");
+    debugPrint("📍 LOCATION: Attempting to fetch last known position...");
+    final lastKnown = await Geolocator.getLastKnownPosition();
+
+    if (lastKnown != null) {
+      debugPrint("✅ LOCATION: Last known position fetched successfully");
+      debugPrint("   Latitude: ${lastKnown.latitude}");
+      debugPrint("   Longitude: ${lastKnown.longitude}");
+      return lastKnown;
+    }
+
+    debugPrint("❌ LOCATION: No last known position available.");
+    throw 'Failed to acquire current or last known GPS location: $e';
+  }
+});
+
 final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
   ref,
 ) async {
   final position = await ref.watch(locationProvider.future);
 
   try {
-    // Reverse geocode the coordinates
     List<Placemark> placemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
     );
 
     if (placemarks.isNotEmpty) {
-      final place = placemarks.first;
+      for (final place in placemarks) {
+        final city = _firstNonEmpty([
+          place.locality,
+          place.subAdministrativeArea,
+          place.administrativeArea,
+          place.subLocality,
+          place.name,
+        ], "");
+
+        final country = _firstNonEmpty([
+          place.country,
+        ], "Unknown Country");
+
+        if (city.isNotEmpty) {
+          return {
+            "city": city,
+            "country": country,
+          };
+        }
+      }
+
+      // Fallback if city was empty in all placemarks
+      final firstPlace = placemarks.first;
+      final fallbackCity = _firstNonEmpty([
+        firstPlace.administrativeArea,
+        firstPlace.subAdministrativeArea,
+        firstPlace.name,
+      ], "Unknown City");
 
       return {
-        "city":
-            place.administrativeArea ?? place.locality ?? "Unknown Location",
-        "country": place.country ?? "Unknown Country",
+        "city": fallbackCity,
+        "country": _firstNonEmpty([firstPlace.country], "Unknown Country"),
       };
     }
     return {"city": "Unknown Location", "country": "Unknown Country"};
   } catch (e) {
     debugPrint("Geocoding Error: $e");
-    return {"city": "Location Error", "country": "Location Error"};
-  }
-});
-
-// Fetches GPS every time it's watched/invalidated
-final locationProvider = FutureProvider<Position>((ref) async {
-  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) throw 'Location services are disabled.';
-
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) throw 'Permissions denied.';
-  }
-
-  const locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.low,
-    distanceFilter: 100,
-    timeLimit: Duration(seconds: 120),
-  );
-
-  try {
-    return await Geolocator.getCurrentPosition(
-      locationSettings: locationSettings,
-    );
-  } catch (e) {
-    final lastKnown = await Geolocator.getLastKnownPosition();
-    if (lastKnown != null) return lastKnown;
-    rethrow;
+    return {"city": "Unknown Location", "country": "Unknown Country"};
   }
 });
 
 final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
   final position = await ref.watch(locationProvider.future);
-  final countryAndCityName = await ref.watch(countryAndCityNameProvider.future);
+  final countryAndCityName =
+      await ref.watch(countryAndCityNameProvider.future).catchError(
+            (_) => {"city": "Unknown Location", "country": "Unknown Country"},
+          );
   final service = ref.read(prayerTimesServiceProvider);
 
-  // Debugging logs for CLI
   debugPrint("📍 LOCATION FETCHED:");
   debugPrint("   Latitude: ${position.latitude}");
   debugPrint("   Longitude: ${position.longitude}");
@@ -115,7 +186,6 @@ final nextPrayerUIProvider = Provider<NextPrayerUIModel?>((ref) {
   final now = DateTime.now();
   final prayerTime = nextPrayer.value;
 
-  // 1. Calculate Remaining Time String
   final difference = prayerTime.difference(now);
   String remaining;
   if (difference.isNegative) {
@@ -126,7 +196,6 @@ final nextPrayerUIProvider = Provider<NextPrayerUIModel?>((ref) {
     remaining = hours > 0 ? "in ${hours}h ${minutes}m" : "in ${minutes}m";
   }
 
-  // 2. Return the UI Model with pre-formatted values
   return NextPrayerUIModel(
     prayerName: nextPrayer.key,
     formattedTime: DateFormat.jm().format(prayerTime),

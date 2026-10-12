@@ -89,67 +89,106 @@ class TafseerDatabaseService {
 
         List<Map<String, dynamic>> results = [];
 
-        // Strategy 1: Check ayah_key or group_ayah_key
+        // Strategy 1: Check by exact ayah_key
         if (columnNames.contains('ayah_key')) {
           results = await db.query(
             tableName,
-            columns: [textCol],
             where: 'ayah_key = ?',
             whereArgs: [key],
           );
+
+          if (results.isNotEmpty) {
+            final rawText = results.first[textCol] as String?;
+            final groupKey = columnNames.contains('group_ayah_key')
+                ? results.first['group_ayah_key'] as String?
+                : null;
+
+            if ((rawText == null || rawText.trim().isEmpty) &&
+                groupKey != null &&
+                groupKey != key) {
+              // Query parent group row for commentary text
+              final groupResults = await db.query(
+                tableName,
+                columns: [textCol],
+                where: 'ayah_key = ?',
+                whereArgs: [groupKey],
+              );
+              if (groupResults.isNotEmpty) {
+                final groupText = groupResults.first[textCol] as String?;
+                if (groupText != null && groupText.trim().isNotEmpty) {
+                  return _cleanHtmlText(groupText);
+                }
+              }
+            } else if (rawText != null && rawText.trim().isNotEmpty) {
+              return _cleanHtmlText(rawText);
+            }
+          }
         }
 
-        if (results.isEmpty && columnNames.contains('group_ayah_key')) {
+        // Strategy 2: Check by ayah_keys column containing the key (e.g. "15:1,15:2,15:3")
+        if (columnNames.contains('ayah_keys')) {
           results = await db.query(
             tableName,
             columns: [textCol],
-            where: 'group_ayah_key = ?',
+            where: 'ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys = ?',
+            whereArgs: ['%,$key,%', '$key,%', '%,$key', key],
+          );
+
+          if (results.isNotEmpty) {
+            final rawText = results.first[textCol] as String?;
+            if (rawText != null && rawText.trim().isNotEmpty) {
+              return _cleanHtmlText(rawText);
+            }
+          }
+        }
+
+        // Strategy 3: Check by group_ayah_key = key
+        if (columnNames.contains('group_ayah_key')) {
+          results = await db.query(
+            tableName,
+            columns: [textCol],
+            where: 'group_ayah_key = ? AND $textCol IS NOT NULL AND $textCol != ""',
             whereArgs: [key],
           );
+
+          if (results.isNotEmpty) {
+            final rawText = results.first[textCol] as String?;
+            if (rawText != null && rawText.trim().isNotEmpty) {
+              return _cleanHtmlText(rawText);
+            }
+          }
         }
 
-        // Strategy 2: Check ayah_keys contains key
-        if (results.isEmpty && columnNames.contains('ayah_keys')) {
+        // Strategy 4: Check sura / surah and ayah / verse columns
+        String? surahCol;
+        for (final c in ['sura', 'surah', 'sura_id', 'surah_id', 'chapter']) {
+          if (columnNames.contains(c)) {
+            surahCol = c;
+            break;
+          }
+        }
+
+        String? verseCol;
+        for (final c in ['ayah', 'verse', 'ayah_id', 'verse_id']) {
+          if (columnNames.contains(c)) {
+            verseCol = c;
+            break;
+          }
+        }
+
+        if (surahCol != null && verseCol != null) {
           results = await db.query(
             tableName,
             columns: [textCol],
-            where: 'ayah_keys LIKE ? OR ayah_keys = ?',
-            whereArgs: ['%$key%', key],
+            where: '$surahCol = ? AND $verseCol = ?',
+            whereArgs: [surah, verse],
           );
-        }
 
-        // Strategy 3: Check sura / surah and ayah / verse columns
-        if (results.isEmpty) {
-          String? surahCol;
-          for (final c in ['sura', 'surah', 'sura_id', 'surah_id', 'chapter']) {
-            if (columnNames.contains(c)) {
-              surahCol = c;
-              break;
+          if (results.isNotEmpty) {
+            final rawText = results.first[textCol] as String?;
+            if (rawText != null && rawText.trim().isNotEmpty) {
+              return _cleanHtmlText(rawText);
             }
-          }
-
-          String? verseCol;
-          for (final c in ['ayah', 'verse', 'ayah_id', 'verse_id']) {
-            if (columnNames.contains(c)) {
-              verseCol = c;
-              break;
-            }
-          }
-
-          if (surahCol != null && verseCol != null) {
-            results = await db.query(
-              tableName,
-              columns: [textCol],
-              where: '$surahCol = ? AND $verseCol = ?',
-              whereArgs: [surah, verse],
-            );
-          }
-        }
-
-        if (results.isNotEmpty) {
-          final rawText = results.first[textCol] as String?;
-          if (rawText != null && rawText.trim().isNotEmpty) {
-            return _cleanHtmlText(rawText);
           }
         }
       }
