@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+
+import '../../../../core/constants/app_spacing.dart';
 
 Future<String?> showBookmarkDialog(
   BuildContext context, {
@@ -19,7 +22,7 @@ Future<String?> showBookmarkDialog(
       ? "e.g. Favorite Juz, specific topic, start of my journey..."
       : "e.g. Read when stressed, reminder for prayer, beautiful tafsir...";
 
-  const colorAmber = Color(0xFFD97706);
+  const colorEmerald = AppColors.emerald600;
 
   final textColor = isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827);
   final subtextColor = isDark ? AppTheme.darkTextSecondary : const Color(0xFF71717A);
@@ -49,7 +52,7 @@ Future<String?> showBookmarkDialog(
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: AppSpacing.size15,
                       fontWeight: FontWeight.bold,
                       color: textColor,
                     ),
@@ -69,15 +72,15 @@ Future<String?> showBookmarkDialog(
               Text(
                 subtitle,
                 style: const TextStyle(
-                  color: colorAmber,
+                  color: colorEmerald,
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                  fontSize: AppSpacing.size12,
                 ),
               ),
               const SizedBox(height: 10),
               Text(
                 noteHint,
-                style: TextStyle(color: subtextColor, fontSize: 12),
+                style: TextStyle(color: subtextColor, fontSize: AppSpacing.size10),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -89,7 +92,7 @@ Future<String?> showBookmarkDialog(
                   hintText: textFieldHint,
                   hintStyle: TextStyle(
                     color: subtextColor,
-                    fontSize: 12,
+                    fontSize: AppSpacing.size10,
                   ),
                   filled: true,
                   fillColor: fieldBg,
@@ -100,7 +103,7 @@ Future<String?> showBookmarkDialog(
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: colorAmber, width: 1.5),
+                    borderSide: const BorderSide(color: colorEmerald, width: 1.5),
                   ),
                 ),
               ),
@@ -110,7 +113,7 @@ Future<String?> showBookmarkDialog(
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         side: BorderSide(color: borderColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -122,6 +125,7 @@ Future<String?> showBookmarkDialog(
                         style: TextStyle(
                           color: subtextColor,
                           fontWeight: FontWeight.bold,
+                          fontSize: AppSpacing.size10,
                         ),
                       ),
                     ),
@@ -130,8 +134,8 @@ Future<String?> showBookmarkDialog(
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        backgroundColor: colorAmber,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        backgroundColor: colorEmerald,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -143,7 +147,10 @@ Future<String?> showBookmarkDialog(
                       },
                       child: const Text(
                         "Save Bookmark",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppSpacing.size12,
+                        ),
                       ),
                     ),
                   ),

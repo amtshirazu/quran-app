@@ -3,6 +3,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class ReflectionJourneyCard extends StatelessWidget {
   const ReflectionJourneyCard({super.key});
 
@@ -12,10 +14,10 @@ class ReflectionJourneyCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : null,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: isDark ? Border.all(color: AppTheme.darkBorder) : null,
         gradient: isDark
             ? null
@@ -39,7 +41,7 @@ class ReflectionJourneyCard extends StatelessWidget {
             child: const Icon(
               LucideIcons.notebookPen,
               color: Colors.white,
-              size: 28,
+              size: 22,
             ),
           ),
           const SizedBox(width: 16),
@@ -51,7 +53,7 @@ class ReflectionJourneyCard extends StatelessWidget {
                   "Your Personal Journey",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: AppSpacing.size14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -60,7 +62,7 @@ class ReflectionJourneyCard extends StatelessWidget {
                   "Write reflections as you read the Quran. Track your spiritual growth and insights over time.",
                   style: TextStyle(
                     color: AppColors.emerald100,
-                    fontSize: 13,
+                    fontSize: AppSpacing.size11,
                     height: 1.4,
                   ),
                 ),

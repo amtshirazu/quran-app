@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
 class SettingsStepperRow extends StatelessWidget {
@@ -37,7 +38,7 @@ class SettingsStepperRow extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: AppSpacing.size15,
                       fontWeight: FontWeight.w600,
                       color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                     ),
@@ -50,7 +51,7 @@ class SettingsStepperRow extends StatelessWidget {
                         child: Text(
                           '${value.round()}',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppSpacing.size15,
                             fontWeight: FontWeight.bold,
                             color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                           ),
@@ -96,15 +97,15 @@ class SettingsStepperRow extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        width: 32,
-        height: 32,
+        width: 26,
+        height: 26,
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF28322E) : const Color(0xFFE5E7EB),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(
           icon,
-          size: 18,
+          size: 16,
           color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
         ),
       ),

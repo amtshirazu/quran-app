@@ -21,7 +21,7 @@ class TafseerScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -49,7 +49,7 @@ class TafseerScreen extends ConsumerWidget {
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                     onPressed: () {
                       if (context.canPop()) {

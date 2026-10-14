@@ -10,14 +10,15 @@ class QuickAccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.size16),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.size16,0,AppSpacing.size16,AppSpacing.size16),
       child: GridView.count(
+        padding: EdgeInsets.only(top: 20),
         crossAxisCount: 2,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 1,
+        childAspectRatio: 1.25,
         children: const [
           QuickAccessCard(
             bgColor: AppColors.emerald100,

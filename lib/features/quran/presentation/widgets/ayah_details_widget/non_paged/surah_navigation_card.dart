@@ -76,7 +76,7 @@ class SurahNavigationCard extends ConsumerWidget {
                                   const Icon(
                                     LucideIcons.arrowLeft,
                                     color: Colors.white,
-                                    size: 18,
+                                    size: 20,
                                   ),
                                   const SizedBox(width: 8),
                                   Text(

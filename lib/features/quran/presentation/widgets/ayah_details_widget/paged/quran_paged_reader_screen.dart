@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qcf_quran_plus/qcf_quran_plus.dart';
@@ -18,20 +19,60 @@ class QuranPagedReaderScreen extends ConsumerStatefulWidget {
 
 class _QuranPagedReaderScreenState
     extends ConsumerState<QuranPagedReaderScreen> {
+  Timer? _dwellTimer;
+  static const Duration _pagedDwellThreshold = Duration(seconds: 15);
+
   @override
   void initState() {
     super.initState();
 
-    Future.microtask(() async {
-      final startPage = widget.controller.initialPage + 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+
+      final startPage = widget.controller.hasClients && widget.controller.page != null
+          ? widget.controller.page!.round() + 1
+          : widget.controller.initialPage + 1;
+
+      _handlePageSelected(startPage);
+    });
+  }
+
+  Future<void> _handlePageSelected(int pageNumber) async {
+    ref.read(currentPageProvider.notifier).state = pageNumber;
+
+    final progress = ref.read(progressServiceProvider);
+    final surahId = await progress.resolveActiveSurah(
+      mode: 'page',
+      page: pageNumber,
+    );
+
+    if (surahId != null) {
+      ref.read(currentPageSurahIdProvider.notifier).state = surahId;
+    }
+
+    // 1. Instantly register place-marker so Continue Reading works immediately
+    await progress.setBookmarkImmediate(
+      mode: 'page',
+      page: pageNumber,
+      surahId: surahId,
+    );
+
+    _invalidateProgressProviders();
+
+    // 2. Start the 30-second dwell countdown for reading credit and streak
+    _startDwellTimer(pageNumber);
+  }
+
+  void _startDwellTimer(int pageNumber) {
+    _dwellTimer?.cancel();
+
+    _dwellTimer = Timer(_pagedDwellThreshold, () async {
+      if (!mounted) return;
 
       final progress = ref.read(progressServiceProvider);
-
       await progress.updateStreak();
+      await progress.trackPage(pageNumber);
 
-      ref.read(currentPageProvider.notifier).state = startPage;
-
-      await progress.trackPage(startPage);
       _invalidateProgressProviders();
     });
   }
@@ -44,6 +85,12 @@ class _QuranPagedReaderScreenState
   }
 
   @override
+  void dispose() {
+    _dwellTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
@@ -52,33 +99,11 @@ class _QuranPagedReaderScreenState
       highlights: const [],
       isDarkMode: isDarkMode,
       isTajweed: false,
-      onPageChanged: (pageNumber) async {
-        final progress = ref.read(progressServiceProvider);
-
-        ref.read(currentPageProvider.notifier).state = pageNumber;
-
-        final prevSurahId = ref.read(currentPageSurahIdProvider);
-
-        final newSurahId = await progress.resolveActiveSurah(
-          mode: 'page',
-          page: pageNumber,
-        );
-
-        if (prevSurahId != null && newSurahId != prevSurahId) {
-          await progress.clearLastRead();
-        }
-
-        if (newSurahId != null) {
-          ref.read(currentPageSurahIdProvider.notifier).state = newSurahId;
-        }
-
-        await progress.trackPage(pageNumber);
-        _invalidateProgressProviders();
+      onPageChanged: (pageNumber) {
+        _handlePageSelected(pageNumber);
       },
       onLongPress: (surah, verse, details) {
-        debugPrint(
-          "Long pressed: Surah $surah, Verse $verse - Details: $details",
-        );
+        debugPrint("Long pressed: Surah $surah, Verse $verse, Details: $details");
       },
     );
   }

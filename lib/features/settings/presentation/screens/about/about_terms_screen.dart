@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 class AboutTermsScreen extends StatelessWidget {
   const AboutTermsScreen({super.key});
 
@@ -12,7 +14,7 @@ class AboutTermsScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -40,7 +42,7 @@ class AboutTermsScreen extends StatelessWidget {
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                     onPressed: () {
                       if (context.canPop()) {
@@ -50,12 +52,12 @@ class AboutTermsScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'Terms of Use',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -83,7 +85,7 @@ class AboutTermsScreen extends StatelessWidget {
               Text(
                 'Last updated September 2026',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: AppSpacing.size12,
                   color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
                 ),
               ),
@@ -138,7 +140,7 @@ class AboutTermsScreen extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 15,
+            fontSize: AppSpacing.size14,
             fontWeight: FontWeight.bold,
             color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
           ),
@@ -147,7 +149,7 @@ class AboutTermsScreen extends StatelessWidget {
         Text(
           body,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: AppSpacing.size12,
             height: 1.5,
             color: isDark ? AppTheme.darkTextSecondary : AppColors.gray700,
           ),

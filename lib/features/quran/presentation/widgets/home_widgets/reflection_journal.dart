@@ -64,7 +64,7 @@ class ReflectionJournalCard extends ConsumerWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppSpacing.size16,
+                        fontSize: AppSpacing.size15,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -72,7 +72,7 @@ class ReflectionJournalCard extends ConsumerWidget {
                       "$totalCount reflections this week",
                       style: const TextStyle(
                         color: AppColors.emerald100,
-                        fontSize: AppSpacing.size12,
+                        fontSize: AppSpacing.size10,
                       ),
                     ),
                   ],
@@ -87,8 +87,8 @@ class ReflectionJournalCard extends ConsumerWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: isDark ? AppColors.emerald600 : Colors.white.withAlpha(26),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                  horizontal: 10,
+                  vertical: 8,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.size12),
@@ -96,7 +96,7 @@ class ReflectionJournalCard extends ConsumerWidget {
               ),
               child: const Text(
                 "View All",
-                style: TextStyle(fontSize: AppSpacing.size14),
+                style: TextStyle(fontSize: AppSpacing.size10),
               ),
             ),
           ],

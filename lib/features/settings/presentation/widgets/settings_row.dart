@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class SettingsRow extends StatelessWidget {
   final IconData? icon;
   final Widget? iconWidget;
@@ -54,7 +56,7 @@ class SettingsRow extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: AppSpacing.size13,
                           fontWeight: FontWeight.w600,
                           color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                         ),
@@ -64,7 +66,7 @@ class SettingsRow extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppSpacing.size11,
                             color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
                           ),
                         ),

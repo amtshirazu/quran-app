@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
+import 'package:quran_app/core/notifications/notification_service.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
 import 'package:quran_app/features/prayer_times/presentation/widgets/location_access_card.dart';
 import 'package:quran_app/features/prayer_times/presentation/widgets/prayer_times_card.dart';
@@ -15,14 +16,13 @@ class PrayerTimesList extends ConsumerStatefulWidget {
 }
 
 class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
-  final Map<String, bool> _toggles = {};
-
   @override
   Widget build(BuildContext context) {
     final prayerTimesAsync = ref.watch(prayerTimesProvider);
+    final enabledPrayers = ref.watch(enabledPrayersProvider);
+
     return prayerTimesAsync.when(
       data: (times) {
-        // Filter out 'Sunrise' so only the 5 daily prayers remain
         final prayerKeys = times.keys.where((key) => key != "Sunrise").toList();
 
         return ListView.builder(
@@ -31,12 +31,28 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
           itemBuilder: (context, index) {
             final name = prayerKeys[index];
             final time = times[name]!;
+            final isEnabled = enabledPrayers.contains(name);
 
             return PrayerTimeCard(
               prayerName: name,
               prayerTime: DateFormat.jm().format(time),
-              isEnabled: _toggles[name] ?? true,
-              onToggle: (val) => setState(() => _toggles[name] = val),
+              isEnabled: isEnabled,
+              onToggle: (val) async {
+                if (val) {
+                  final hasPermission = await NotificationService.instance
+                      .checkAndRequestPermission(context);
+                  if (!hasPermission) return;
+                }
+                await ref.read(enabledPrayersProvider.notifier).togglePrayer(name, val);
+                final currentTimes = ref.read(prayerTimesProvider).asData?.value;
+                if (currentTimes != null) {
+                  final activePrayers = ref.read(enabledPrayersProvider);
+                  await NotificationService.instance.schedule7DayPrayerNotifications(
+                    todayTimes: currentTimes,
+                    enabledPrayers: activePrayers,
+                  );
+                }
+              },
             );
           },
         );

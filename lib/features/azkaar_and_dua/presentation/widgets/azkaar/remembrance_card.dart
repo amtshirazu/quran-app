@@ -12,7 +12,7 @@ class RemembranceCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : AppColors.emerald600,
         borderRadius: BorderRadius.circular(16),
@@ -21,20 +21,20 @@ class RemembranceCard extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.auto_awesome, color: Colors.white, size: 28),
-          SizedBox(height: 12),
+          Icon(Icons.auto_awesome, color: Colors.white, size: 22),
+          SizedBox(height: 10),
           Text(
             'Remember Allah',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 4),
           Text(
             '"Verily, in the remembrance of Allah do hearts find rest." (Quran 13:28)',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.4),
           ),
         ],
       ),

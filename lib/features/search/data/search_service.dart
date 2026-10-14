@@ -33,28 +33,38 @@ class SearchService {
     ''');
   }
 
-  /// 20 static high-frequency queries
+  /// Static high-frequency popular search queries
   static const List<String> _kPopularSearchPool = [
-    "Ayat al-Kursi",
+    "Surah Al-Waqi'ah",
     "Surah Al-Kahf",
     "Surah Ya-sin",
     "Surah Al-Mulk",
     "Surah Ar-Rahman",
-    "Surah Al-Waqi'ah",
-    "Patience (Sabr)",
-    "Forgiveness (Istighfar)",
+    "Surah Al-Baqarah",
+    "Surah An-Nas",
+    "Surah Al-Falaq",
+    "Ayat al-Kursi",
+    "Prophet Musa",
+    "Prophet Ibrahim",
+    "Prophet Yusuf",
+    "Tawakkul",
+    "Patience",
+    "Sabr",
+    "Gratitude",
+    "Shukr",
+    "Forgiveness",
+    "Istighfar",
     "Morning Adhkar",
     "Evening Adhkar",
     "Rabbana Duas",
-    "Tawakkul",
-    "Gratitude (Shukr)",
     "Tahajjud Prayer",
     "Protection from Evil Eye",
-    "Anxiety & Relief",
+    "Anxiety and Relief",
     "Parents in Quran",
     "Repentance",
-    "Prophet Musa",
     "Day of Judgment",
+    "Paradise",
+    "Jannah",
   ];
 
   /// Selects count items deterministically based on today's date (YYYYMMDD) seed

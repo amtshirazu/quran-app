@@ -14,7 +14,7 @@ class LifeSituationCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 25, left: 15, right: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15),
       elevation: isDark ? 0 : 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -52,7 +52,7 @@ class LifeSituationCard extends StatelessWidget {
                   "How are you feeling?",
                   style: textTheme.headlineLarge?.copyWith(
                     color: Colors.white,
-                    fontSize: AppSpacing.size16,
+                    fontSize: AppSpacing.size15,
                   ),
                 ),
               ],
@@ -62,7 +62,7 @@ class LifeSituationCard extends StatelessWidget {
               "Find verses that speak to your heart right now",
               style: TextStyle(
                 color: AppColors.emerald100,
-                fontSize: AppSpacing.size12,
+                fontSize: AppSpacing.size10,
               ),
             ),
             const SizedBox(height: 16),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class SearchChip extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
@@ -27,7 +29,7 @@ class SearchChip extends StatelessWidget {
             label,
             style: const TextStyle(
               color: Color(0xFF2A3B32), // Deep charcoal/green text
-              fontSize: 13,
+              fontSize: AppSpacing.size12,
               fontWeight: FontWeight.w500,
             ),
           ),

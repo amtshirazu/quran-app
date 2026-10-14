@@ -12,7 +12,7 @@ class ModeSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 205,
+      width: 180,
       child: Container(
         padding: EdgeInsets.all(AppSpacing.size8),
         decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class ModeSwitcher extends StatelessWidget {
             style: TextStyle(
               color: mode == newMode ? Colors.white : AppColors.gray300,
               fontWeight: FontWeight.w600,
-              fontSize: AppSpacing.size12,
+              fontSize: AppSpacing.size10,
             ),
           ),
         ),

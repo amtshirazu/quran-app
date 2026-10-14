@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 class AzkaarDuaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AzkaarDuaAppBar({super.key});
 
@@ -11,31 +13,58 @@ class AzkaarDuaAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AppBar(
-      backgroundColor: isDark ? AppTheme.darkScaffold : AppColors.emerald600,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 22),
-        onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/');
-          }
-        },
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? AppTheme.darkScaffold : null,
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.deepGreen, AppColors.emerald600],
+              ),
       ),
-      title: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Azkaar and Dua',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Row(
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/');
+                  }
+                },
+              ),
+              const SizedBox(width: 4),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Azkaar and Dua',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: AppSpacing.size16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Daily remembrance and supplications',
+                    style: TextStyle(color: Colors.white70, fontSize: AppSpacing.size12),
+                  ),
+                ],
+              ),
+            ],
           ),
-          Text(
-            'Daily remembrance and supplications',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-        ],
+        ),
       ),
     );
   }

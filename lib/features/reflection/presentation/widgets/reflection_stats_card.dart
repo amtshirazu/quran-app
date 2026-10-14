@@ -4,6 +4,8 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class ReflectionStatsCard extends ConsumerWidget {
   const ReflectionStatsCard({super.key});
 
@@ -14,7 +16,7 @@ class ReflectionStatsCard extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : null,
         gradient: isDark
@@ -34,11 +36,11 @@ class ReflectionStatsCard extends ConsumerWidget {
             "Your Reflection Stats",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: AppSpacing.size14,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -59,7 +61,7 @@ class ReflectionStatsCard extends ConsumerWidget {
           value,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 28,
+            fontSize: AppSpacing.size20,
             fontWeight: FontWeight.bold,
           ),
         ),

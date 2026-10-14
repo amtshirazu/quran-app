@@ -8,6 +8,8 @@ import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_tabs.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/delete_bookmark.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class BookmarkHeader extends ConsumerWidget {
   const BookmarkHeader({super.key});
 
@@ -40,7 +42,7 @@ class BookmarkHeader extends ConsumerWidget {
                     context.go('/');
                   }
                 },
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white),
+                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20,),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -51,13 +53,16 @@ class BookmarkHeader extends ConsumerWidget {
                       "Bookmarks",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: AppSpacing.size16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       "$totalCount saved",
-                      style: const TextStyle(color: AppColors.emerald100),
+                      style: const TextStyle(
+                          color: AppColors.emerald100,
+                          fontSize: AppSpacing.size12,
+                      ),
                     ),
                   ],
                 ),
@@ -67,13 +72,13 @@ class BookmarkHeader extends ConsumerWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(LucideIcons.trash2, color: Colors.white, size: 20),
+                    Icon(LucideIcons.trash2, color: Colors.white, size: 16),
                     SizedBox(width: 4),
                     Text(
                       "Delete All",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: AppSpacing.size12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

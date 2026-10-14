@@ -49,10 +49,10 @@ class ContinueReadingCard extends ConsumerWidget {
   }
 
   Widget _buildCard(
-    BuildContext context, {
-    required String subtitle,
-    required double progress,
-  }) {
+      BuildContext context, {
+        required String subtitle,
+        required double progress,
+      }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(

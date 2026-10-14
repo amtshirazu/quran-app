@@ -31,11 +31,18 @@ dependencies:
   adhan: ^2.0.0
   geolocator: ^13.0.0
   geocoding: ^3.0.0
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+  flutter_timezone: ^3.0.1
   quran: ^1.4.1
   shimmer: ^3.0.0
   qcf_quran_plus: ^0.0.8
   muslim_data_flutter: ^1.5.0
   share_plus: ^13.3.0
+  storage_space: ^1.2.0
+  url_launcher: ^6.3.1
+  in_app_review: ^2.0.9
+  google_fonts: ^9.0.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +61,7 @@ flutter:
 
   assets:
     - assets/app_icon.png
+    - assets/logo/
     - assets/metadata/
     - assets/reciters/
     - assets/database/translations/

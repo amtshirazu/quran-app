@@ -53,7 +53,7 @@ class SurahTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SurahVerseNumberBadge(surahNumber: surah.number),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class SurahTile extends ConsumerWidget {
                       surah.nameEnglish,
                       style: textTheme.titleMedium?.copyWith(
                         color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
-                        fontSize: AppSpacing.size14,
+                        fontSize: AppSpacing.size13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -71,7 +71,7 @@ class SurahTile extends ConsumerWidget {
                       surah.translation,
                       style: textTheme.bodyLarge?.copyWith(
                         color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
-                        fontSize: AppSpacing.size12,
+                        fontSize: AppSpacing.size10,
                       ),
                     ),
                   ],
@@ -95,6 +95,7 @@ class SurahTile extends ConsumerWidget {
                       Icon(
                         LucideIcons.chevronRight,
                         color: isDark ? AppTheme.darkTextSecondary : AppColors.gray400,
+                        size: AppSpacing.size16,
                       ),
                     ],
                   ),

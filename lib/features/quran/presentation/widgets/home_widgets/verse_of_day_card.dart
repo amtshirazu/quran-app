@@ -63,7 +63,7 @@ class DailyVerseCard extends ConsumerWidget {
                       "Verse of the Day",
                       style: textTheme.headlineLarge?.copyWith(
                         color: Colors.white,
-                        fontSize: AppSpacing.size16,
+                        fontSize: AppSpacing.size15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

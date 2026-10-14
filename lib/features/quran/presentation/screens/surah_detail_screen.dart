@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-//import 'package:quran_app/core/database/database_helper.dart';
 import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
-import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/paged/bottom_page_indicator.dart';
@@ -27,9 +25,7 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
   PageController? _pageController;
   int? _targetAyah;
-
-  int? _currentSurahForKeys;
-  bool _initialized = false;
+  int? _currentSurahNumber;
 
   @override
   void dispose() {
@@ -38,29 +34,18 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     super.dispose();
   }
 
-  void _initOnce() {
-    if (_initialized) return;
-    _initialized = true;
+  void _checkAndInitialize(int surahNumber) {
+    if (_currentSurahNumber == surahNumber) return;
+    _currentSurahNumber = surahNumber;
+    _ayahKeys.clear();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final progress = ref.read(progressServiceProvider);
-      // ONE unified streak trigger
-      await progress.updateStreak();
+      if (!mounted) return;
 
-      // final dbHelper = DatabaseHelper.instance;
-      // final db = await dbHelper.database;
-      // final result = await db.query('streak', limit: 1);
-      // print(result);
-
-      final selectedSurah = ref.read(selectedSurahProvider);
-      if (selectedSurah == null) return;
-
-      _resetKeysIfNeeded(selectedSurah.number);
-
-      final range = surahPageRanges[selectedSurah.number];
+      final range = surahPageRanges[surahNumber];
       int initialPage = range?.start ?? 1;
 
-      /// BOOKMARK JUMP (highest priority)
+      // 1. Check bookmark / jump target
       final jumpPage = ref.read(jumpToPageProvider);
       final jumpAyah = ref.read(targetAyahProvider);
 
@@ -73,28 +58,22 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         initialPage = jumpPage;
         ref.read(jumpToPageProvider.notifier).state = null;
       } else {
-        /// 🔥 2. LAST READ ONLY IF NO JUMP
+        // 2. Check resume target
         final shouldResume = ref.read(shouldResumeLastReadProvider);
-
         if (shouldResume) {
           final lastRead = ref.read(lastReadProvider).asData?.value;
-
           if (lastRead != null) {
             final mode = lastRead['mode'];
-
-            if (mode == 'ayah' &&
-                lastRead['surah_id'] == selectedSurah.number) {
+            if (mode == 'ayah' && lastRead['surah_id'] == surahNumber) {
               _targetAyah = lastRead['ayah'];
             } else if (mode == 'page' && lastRead['page'] is int) {
               initialPage = lastRead['page'];
             }
           }
         }
-
         ref.read(shouldResumeLastReadProvider.notifier).state = false;
       }
 
-      /// CONTROLLER SAFELY
       _pageController?.dispose();
       _pageController = PageController(initialPage: initialPage - 1);
 
@@ -102,57 +81,76 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     });
   }
 
-  void _resetKeysIfNeeded(int surahNumber) {
-    if (_currentSurahForKeys != surahNumber) {
-      _ayahKeys.clear();
-      _currentSurahForKeys = surahNumber;
-    }
-  }
-
-  void _scrollToAyah(int ayah) {
-    if (!mounted) return;
+  /// Progressive convergence jump: accurately brings lazily-built Ayahs into view
+  void _scrollToAyah(int ayah, {int attempts = 0}) {
+    if (!mounted || attempts > 40) return;
 
     final key = _ayahKeys[ayah];
 
+    // 1. If target Ayah widget is in context, align it perfectly at top!
     if (key?.currentContext != null) {
       Scrollable.ensureVisible(
         key!.currentContext!,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 250),
         curve: Curves.fastOutSlowIn,
-        alignment: 0.1,
+        alignment: 0.0,
       );
-    } else {
-      // Fast jump directly to estimated offset of target ayah
-      final estimatedOffset = (ayah - 1) * 180.0;
-      if (_scrollController.hasClients) {
-        final maxScroll = _scrollController.position.maxScrollExtent;
-        final targetOffset = estimatedOffset.clamp(0.0, maxScroll);
-        _scrollController.jumpTo(targetOffset);
+      return;
+    }
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollToAyah(ayah);
-        });
+    // 2. If target Ayah is not yet in context, step scroll position downwards to expand layout
+    if (_scrollController.hasClients) {
+      final selectedSurah = ref.read(selectedSurahProvider);
+      final hasBasmallah = selectedSurah != null &&
+          selectedSurah.number != 1 &&
+          selectedSurah.number != 9;
+
+      final headerOffset = 380.0 + (hasBasmallah ? 80.0 : 0.0);
+      final estimatedOffset = headerOffset + ((ayah - 1) * 260.0);
+      final maxScroll = _scrollController.position.maxScrollExtent;
+
+      if (attempts == 0) {
+        final initialTarget = estimatedOffset.clamp(0.0, maxScroll);
+        _scrollController.jumpTo(initialTarget);
+      } else {
+        // Step forward by 800px per frame until target Ayah widget is generated in context
+        final nextTarget = (_scrollController.offset + 800.0).clamp(0.0, maxScroll);
+        if ((_scrollController.offset - nextTarget).abs() > 1.0) {
+          _scrollController.jumpTo(nextTarget);
+        }
       }
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _scrollToAyah(ayah, attempts: attempts + 1);
+        }
+      });
     }
   }
 
   void _onAyahListBuilt() {
     if (_targetAyah != null) {
-      _scrollToAyah(_targetAyah!);
+      final ayah = _targetAyah!;
       _targetAyah = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _scrollToAyah(ayah);
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _initOnce();
-
-    final readingMode = ref.watch(readingModeProvider);
     final selectedSurah = ref.watch(selectedSurahProvider);
 
     if (selectedSurah == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+
+    _checkAndInitialize(selectedSurah.number);
+
+    final readingMode = ref.watch(readingModeProvider);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -164,42 +162,41 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
       ),
       body: readingMode == ReadingMode.translation
           ? Column(
-              children: [
-                Expanded(
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      SliverToBoxAdapter(child: SurahInfo()),
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                const SliverToBoxAdapter(child: SurahInfo()),
 
-                      if (selectedSurah.number != 1 &&
-                          selectedSurah.number != 9)
-                        const SliverToBoxAdapter(child: Basmallah()),
+                if (selectedSurah.number != 1 &&
+                    selectedSurah.number != 9)
+                  const SliverToBoxAdapter(child: Basmallah()),
 
-                      const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-                      AyahList(
-                        ayahkeys: _ayahKeys,
-                        onListBuilt: _onAyahListBuilt,
-                      ),
-
-                      SurahNavigationCard(),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          : Column(
-              children: [
-                const SizedBox(height: 16),
-                Expanded(
-                  child: _pageController == null
-                      ? const Center(child: CircularProgressIndicator())
-                      : QuranPagedReaderScreen(controller: _pageController!),
+                AyahList(
+                  ayahkeys: _ayahKeys,
+                  onListBuilt: _onAyahListBuilt,
                 ),
 
-                BottomPageIndicator(),
+                const SurahNavigationCard(),
               ],
             ),
+          ),
+        ],
+      )
+          : Column(
+        children: [
+          const SizedBox(height: 16),
+          Expanded(
+            child: _pageController == null
+                ? const Center(child: CircularProgressIndicator())
+                : QuranPagedReaderScreen(controller: _pageController!),
+          ),
+          const BottomPageIndicator(),
+        ],
+      ),
     );
   }
 }

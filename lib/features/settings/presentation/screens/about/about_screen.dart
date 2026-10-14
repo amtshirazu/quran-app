@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -12,7 +14,7 @@ class AboutScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -21,13 +23,13 @@ class AboutScreen extends StatelessWidget {
             gradient: isDark
                 ? null
                 : const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
-                  ),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.deepGreen,
+                AppColors.emerald600,
+              ],
+            ),
           ),
           child: SafeArea(
             child: Padding(
@@ -40,7 +42,7 @@ class AboutScreen extends StatelessWidget {
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                     onPressed: () {
                       if (context.canPop()) {
@@ -50,12 +52,12 @@ class AboutScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'About',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -105,16 +107,16 @@ class AboutScreen extends StatelessWidget {
             Text(
               'Bayyinah Flow',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: AppSpacing.size18,
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Version 2.1.0',
+              'Version 1.1.0',
               style: TextStyle(
-                fontSize: 13,
+                fontSize: AppSpacing.size12,
                 color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
               ),
             ),
@@ -127,7 +129,7 @@ class AboutScreen extends StatelessWidget {
                 'A calm, focused space to read, listen to, and understand the Quran.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppSpacing.size13,
                   height: 1.4,
                   color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
                 ),
@@ -157,7 +159,7 @@ class AboutScreen extends StatelessWidget {
                     child: Text(
                       'Content reviewed with trusted translations and scholarly references.',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: AppSpacing.size12,
                         fontWeight: FontWeight.w600,
                         color: isDark ? AppColors.emerald600 : const Color(0xFF00695C),
                         height: 1.3,
@@ -212,24 +214,61 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 36),
+            const SizedBox(height: 40),
 
-            /// Footer
+            /// Developer / Branding Footer
             Text(
-              'Made with care by',
-              style: TextStyle(
-                fontSize: 12,
-                color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+              'DEVELOPER',
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: isDark
+                    ? AppTheme.darkTextSecondary.withAlpha(140)
+                    : AppColors.gray400,
+                letterSpacing: 1.5,
               ),
             ),
-            const SizedBox(height: 2),
-            Text(
-              'Abdullah',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
-              ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    'assets/logo/amtilyst.jpg',
+                    width: 24,
+                    height: 24,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.grey.shade900
+                            : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Icon(
+                        LucideIcons.code,
+                        size: 14,
+                        color:
+                        isDark ? AppColors.emerald600 : AppColors.gray600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'AMTILYST',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: AppSpacing.size14,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
+                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
           ],
@@ -239,16 +278,16 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _buildNavTile(
-    BuildContext context, {
-    required String title,
-    required String route,
-    required bool isDark,
-  }) {
+      BuildContext context, {
+        required String title,
+        required String route,
+        required bool isDark,
+      }) {
     return ListTile(
       title: Text(
         title,
         style: TextStyle(
-          fontSize: 15,
+          fontSize: AppSpacing.size14,
           fontWeight: FontWeight.w500,
           color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
         ),

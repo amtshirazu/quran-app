@@ -26,7 +26,7 @@ class SelectionCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: isDark ? AppTheme.darkSurface : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -48,14 +48,14 @@ class SelectionCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: isDark ? AppColors.emerald600.withAlpha(38) : const Color(0xFFE0F2F1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(icon, color: AppColors.emerald600),
+                  child: Icon(icon, color: AppColors.emerald600, size: 20),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,15 +64,16 @@ class SelectionCard extends StatelessWidget {
                         title,
                         style: const TextStyle(
                           color: AppColors.emerald600,
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         subtitle,
                         style: TextStyle(
-                          color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
-                          fontSize: 13,
+                          color: isDark ? AppTheme.darkTextSecondary : Colors.grey.shade600,
+                          fontSize: 11.5,
                         ),
                       ),
                     ],
@@ -81,18 +82,19 @@ class SelectionCard extends StatelessWidget {
                 Icon(
                   Icons.chevron_right,
                   color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
+                  size: 20,
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Row(
               children: tags
                   .map(
                     (tag) => Container(
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                        horizontal: 10,
+                        vertical: 4,
                       ),
                       decoration: BoxDecoration(
                         color: isDark ? AppTheme.darkScaffold : const Color(0xFFF1F8F7),
@@ -102,7 +104,8 @@ class SelectionCard extends StatelessWidget {
                         tag,
                         style: const TextStyle(
                           color: AppColors.emerald600,
-                          fontSize: 12,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

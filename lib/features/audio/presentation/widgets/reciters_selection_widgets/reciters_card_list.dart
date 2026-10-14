@@ -12,26 +12,29 @@ class RecitersCardList extends ConsumerWidget {
     final filteredReciters = ref.watch(filteredRecitersProvider);
     final audioPlayer = ref.read(audioServiceProvider);
 
-    return SliverGrid.builder(
-      itemCount: filteredReciters.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 0.85,
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      sliver: SliverGrid.builder(
+        itemCount: filteredReciters.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.82,
+        ),
+        itemBuilder: (context, index) {
+          final reciter = filteredReciters[index];
+          return ReciterCard(
+            reciter: reciter,
+            onTap: () {
+              ref.read(selectedReciterProvider.notifier).state = reciter;
+              ref.read(selectedSurahIndexProvider.notifier).state = 0;
+              audioPlayer.player.seek(Duration.zero);
+              context.go('/audioSong');
+            },
+          );
+        },
       ),
-      itemBuilder: (context, index) {
-        final reciter = filteredReciters[index];
-        return ReciterCard(
-          reciter: reciter,
-          onTap: () {
-            ref.read(selectedReciterProvider.notifier).state = reciter;
-            ref.read(selectedSurahIndexProvider.notifier).state = 0;
-            audioPlayer.player.seek(Duration.zero);
-            context.go('/audioSong');
-          },
-        );
-      },
     );
   }
 }

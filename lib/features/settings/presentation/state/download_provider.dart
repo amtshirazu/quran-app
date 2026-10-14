@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:storage_space/storage_space.dart';
 import 'package:quran_app/features/audio/data/reciters_list.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
@@ -97,7 +98,7 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
     }
 
     try {
-      updateProgress(key, 0.01);
+      updateProgress(key, 0.0);
       await file.parent.create(recursive: true);
       final tempPath = "$localPath.temp";
 
@@ -159,7 +160,7 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
 }
 
 final downloadManagerProvider =
-    StateNotifierProvider<DownloadManagerNotifier, Map<String, double>>((ref) {
+StateNotifierProvider<DownloadManagerNotifier, Map<String, double>>((ref) {
   return DownloadManagerNotifier();
 });
 
@@ -168,7 +169,7 @@ final downloadRefreshTriggerProvider = StateProvider<int>((ref) => 0);
 
 /// Provider fetching ALL reciters download info summaries
 final downloadedRecitersProvider =
-    FutureProvider<List<ReciterDownloadInfo>>((ref) async {
+FutureProvider<List<ReciterDownloadInfo>>((ref) async {
   ref.watch(downloadRefreshTriggerProvider);
   final directory = await getApplicationDocumentsDirectory();
 
@@ -260,9 +261,9 @@ final storageSummaryProvider = FutureProvider<StorageSummary>((ref) async {
     }
   }
 
-  // Scan local app databases & assets directory for Quran text/Tafseer/Azkaar vs Translations
-  double quranTextBytes = 28 * 1024 * 1024.0; // Base Databases (Azkaar, Find Guidance, Tafseer) ~28MB
-  double translationsBytes = 18 * 1024 * 1024.0; // Base Translations Databases ~18MB
+  // Base text and translation databases
+  double quranTextBytes = 28 * 1024 * 1024.0;
+  double translationsBytes = 18 * 1024 * 1024.0;
 
   try {
     final dbDir = Directory("${directory.path}/databases");
@@ -280,8 +281,17 @@ final storageSummaryProvider = FutureProvider<StorageSummary>((ref) async {
     }
   } catch (_) {}
 
-  // Estimated free space: 2.1 GB default fallback
-  double freeSpaceBytes = 2.1 * 1024 * 1024 * 1024.0;
+  // REAL HARDWARE DISK CHECK
+  double freeSpaceBytes = 0.0;
+  try {
+    final space = await getStorageSpace(
+      lowOnSpaceThreshold: 1024 * 1024 * 500, // 500 MB threshold
+      fractionDigits: 1,
+    );
+    freeSpaceBytes = space.free.toDouble();
+  } catch (_) {
+    freeSpaceBytes = 0.0;
+  }
 
   return StorageSummary(
     quranTextBytes: quranTextBytes,

@@ -17,7 +17,7 @@ class QuranAudioHeader extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        height: 160,
+        height: 140,
         decoration: BoxDecoration(
           color: isDark ? AppTheme.darkScaffold : null,
           gradient: isDark
@@ -29,23 +29,10 @@ class QuranAudioHeader extends ConsumerWidget {
                 ),
           border: const Border(bottom: BorderSide(color: Colors.black12, width: 1)),
         ),
-        padding: const EdgeInsets.only(right: 20, left: 20, top: 40, bottom: 30),
+        padding: const EdgeInsets.fromLTRB(20, 48, 20, 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(51),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                LucideIcons.bookOpen,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -59,11 +46,12 @@ class QuranAudioHeader extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: 2),
                   Text(
                     "Listen to beautiful recitations",
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: AppSpacing.size13,
+                      fontSize: AppSpacing.size12,
                     ),
                     softWrap: true,
                   ),
@@ -71,19 +59,19 @@ class QuranAudioHeader extends ConsumerWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
                   const Icon(
                     LucideIcons.star,
-                    size: 14,
+                    size: AppSpacing.size13,
                     color: AppColors.emerald600,
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 6),
                   Text(
                     "$recitersCount Reciters",
                     style: const TextStyle(

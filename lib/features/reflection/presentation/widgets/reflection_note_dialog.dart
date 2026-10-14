@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 Future<String?> showReflectionDialog(
   BuildContext context, {
   required String surahName,
@@ -39,7 +41,7 @@ Future<String?> showReflectionDialog(
                   Text(
                     "Write Your Reflection",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: AppSpacing.size15,
                       fontWeight: FontWeight.bold,
                       color: textColor,
                     ),
@@ -61,7 +63,7 @@ Future<String?> showReflectionDialog(
                 style: const TextStyle(
                   color: AppColors.emerald600,
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
               const SizedBox(height: 10),
@@ -69,7 +71,7 @@ Future<String?> showReflectionDialog(
                 "What does this verse mean to you? How can you apply it in your life?",
                 style: TextStyle(
                   color: subtextColor,
-                  fontSize: 12,
+                  fontSize: AppSpacing.size10,
                   height: 1.4,
                 ),
               ),
@@ -83,7 +85,7 @@ Future<String?> showReflectionDialog(
                   hintText: "Write your thoughts and reflections here...",
                   hintStyle: TextStyle(
                     color: subtextColor,
-                    fontSize: 12,
+                    fontSize: AppSpacing.size10,
                   ),
                   filled: true,
                   fillColor: fieldBg,
@@ -107,7 +109,7 @@ Future<String?> showReflectionDialog(
                   Expanded(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         side: BorderSide(color: borderColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -119,6 +121,7 @@ Future<String?> showReflectionDialog(
                         style: TextStyle(
                           color: subtextColor,
                           fontWeight: FontWeight.bold,
+                          fontSize: AppSpacing.size12,
                         ),
                       ),
                     ),
@@ -127,7 +130,7 @@ Future<String?> showReflectionDialog(
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         backgroundColor: AppColors.emerald600,
                         foregroundColor: Colors.white,
                         elevation: 0,
@@ -140,7 +143,10 @@ Future<String?> showReflectionDialog(
                       },
                       child: const Text(
                         "Save Reflection",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppSpacing.size12,
+                        ),
                       ),
                     ),
                   ),

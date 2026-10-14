@@ -22,8 +22,8 @@ class SurahVersesBadge extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-      height: 40,
-      width: 85,
+      height: 30,
+      width: 65,
       padding: EdgeInsets.all(AppSpacing.size8),
       decoration: BoxDecoration(
         color: AppColors.gray400.withOpacity(0.5),
@@ -35,7 +35,7 @@ class SurahVersesBadge extends StatelessWidget {
           "$totalAyahs verses",
           style: textTheme.bodyMedium?.copyWith(
             color: AppColors.gray900,
-            fontSize: AppSpacing.size10,
+            fontSize: AppSpacing.size8,
           ),
         ),
       ),

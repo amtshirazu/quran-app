@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 
 class DuaSearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
@@ -8,20 +9,39 @@ class DuaSearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
+      height: 38,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F5F2),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.black12.withOpacity(0.05)),
+        color: isDark ? AppTheme.darkSurface : const Color(0xFFF0F5F2),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: isDark ? AppTheme.darkBorder : Colors.black12,
+        ),
       ),
       child: TextField(
         onChanged: (value) => onChanged(value.trim()),
-        decoration: const InputDecoration(
+        textAlignVertical: TextAlignVertical.center,
+        style: TextStyle(
+          fontSize: 12,
+          color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
+        ),
+        decoration: InputDecoration(
+          isDense: true,
           hintText: "Search duas by title, meaning, or category...",
-          hintStyle: TextStyle(color: Colors.black38, fontSize: 14),
-          prefixIcon: Icon(LucideIcons.search, color: Colors.black38, size: 20),
+          hintStyle: TextStyle(
+            color: isDark ? AppTheme.darkTextSecondary : Colors.black38,
+            fontSize: 12,
+          ),
+          prefixIcon: Icon(
+            LucideIcons.search,
+            color: isDark ? AppTheme.darkTextSecondary : Colors.black38,
+            size: 16,
+          ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 14),
+          contentPadding: EdgeInsets.zero,
         ),
       ),
     );

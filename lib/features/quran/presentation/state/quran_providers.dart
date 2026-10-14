@@ -11,6 +11,8 @@ final jumpToPageProvider = StateProvider<int?>((ref) => null);
 
 final targetAyahProvider = StateProvider<int?>((ref) => null);
 
+final isAutoScrollingProvider = StateProvider<bool>((ref) => false);
+
 final surahRepositoryProvider = Provider<SurahMetadataRepository>((ref) {
   return SurahMetadataRepository(surahs: SurahLocalDatasource());
 });

@@ -29,7 +29,7 @@ class FeaturedRecitersCard extends ConsumerWidget {
             Text(
               "Featured Reciters",
               style: TextStyle(
-                fontSize: AppSpacing.size16,
+                fontSize: AppSpacing.size13,
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppTheme.darkTextPrimary : Colors.black,
               ),
@@ -38,46 +38,64 @@ class FeaturedRecitersCard extends ConsumerWidget {
             Text(
               "Choose from renowned Quran reciters from around the world",
               style: TextStyle(
-                fontSize: AppSpacing.size12,
+                fontSize: AppSpacing.size10,
                 color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
               ),
             ),
             const SizedBox(height: 16),
-            TextField(
-              onChanged: (value) {
-                ref.read(recitersSearchQueryProvider.notifier).state = value;
-              },
-              style: TextStyle(
-                color: isDark ? AppTheme.darkTextPrimary : Colors.black,
-                fontSize: 14,
-              ),
-              decoration: InputDecoration(
-                hintText: "Search by reciter name or country...",
-                hintStyle: TextStyle(
-                  fontSize: AppSpacing.size12,
-                  color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
+            SizedBox(
+              height: 38, // Adjust overall height here (e.g. 36 - 40)
+              child: TextField(
+                onChanged: (value) {
+                  ref.read(recitersSearchQueryProvider.notifier).state = value;
+                },
+                style: TextStyle(
+                  color: isDark ? AppTheme.darkTextPrimary : Colors.black,
+                  fontSize: AppSpacing.size10,
                 ),
-                prefixIcon: Icon(
-                  LucideIcons.search,
-                  size: 20,
-                  color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 6,
-                  horizontal: 12,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: isDark ? AppTheme.darkBorder : Colors.grey,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: "Search by reciter name or country...",
+                  hintStyle: TextStyle(
+                    fontSize: AppSpacing.size10,
+                    color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 8),
+                    child: Icon(
+                      LucideIcons.search,
+                      size: 14,
+                      color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
+                    ),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 32,
+                    minHeight: 32,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 10,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: isDark ? AppTheme.darkBorder : Colors.grey.shade300,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: isDark ? AppTheme.darkBorder : Colors.grey.shade300,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.emerald600),
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.emerald600),
-                ),
               ),
-            ),
+            )
           ],
         ),
       ),

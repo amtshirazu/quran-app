@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 class AboutLicensesScreen extends StatelessWidget {
   const AboutLicensesScreen({super.key});
 
@@ -35,7 +37,7 @@ class AboutLicensesScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -63,7 +65,7 @@ class AboutLicensesScreen extends StatelessWidget {
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                     onPressed: () {
                       if (context.canPop()) {
@@ -73,12 +75,12 @@ class AboutLicensesScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'Open-source licenses',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -99,7 +101,7 @@ class AboutLicensesScreen extends StatelessWidget {
               child: Text(
                 'This app uses the following open-source packages.',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: AppSpacing.size13,
                   color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
                 ),
               ),
@@ -135,7 +137,7 @@ class AboutLicensesScreen extends StatelessWidget {
                         Text(
                           item['name']!,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppSpacing.size12,
                             fontWeight: FontWeight.w600,
                             color: isDark
                                 ? AppTheme.darkTextPrimary
@@ -145,7 +147,7 @@ class AboutLicensesScreen extends StatelessWidget {
                         Text(
                           item['license']!,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppSpacing.size12,
                             fontWeight: FontWeight.w500,
                             color: isDark
                                 ? AppTheme.darkTextSecondary

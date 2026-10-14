@@ -28,7 +28,7 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           child: Row(
             children: [
               IconButton(
@@ -37,7 +37,7 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
                 icon: const Icon(
                   LucideIcons.arrowLeft,
                   color: Colors.white,
-                  size: 22,
+                  size: 20,
                 ),
                 onPressed: () {
                   if (context.canPop()) {
@@ -47,12 +47,12 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
                   }
                 },
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 4),
               const Text(
                 'Settings',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),

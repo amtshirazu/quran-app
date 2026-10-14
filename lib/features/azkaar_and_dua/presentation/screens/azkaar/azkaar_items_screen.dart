@@ -24,8 +24,9 @@ class AzkarItemsScreen extends ConsumerWidget {
         child: AppBar(
           backgroundColor: isDark ? AppTheme.darkScaffold : AppColors.emerald600,
           elevation: 0,
+          titleSpacing: 0,
           leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 22),
+            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
             onPressed: () {
               if (context.canPop()) {
                 context.pop();
@@ -42,7 +43,7 @@ class AzkarItemsScreen extends ConsumerWidget {
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
               const Text(

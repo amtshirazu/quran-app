@@ -13,15 +13,16 @@ class ProgressSection extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 50),
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.only(top: 8, bottom: 12),
             child: Text(
               "Your Progress",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: TextStyle(
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827),
               ),
@@ -38,7 +39,7 @@ class ProgressSection extends ConsumerWidget {
                     iconColor: const Color(0xFF059669),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _StatCard(
                     icon: LucideIcons.bookOpen,
@@ -47,11 +48,11 @@ class ProgressSection extends ConsumerWidget {
                     iconColor: const Color(0xFF3B82F6),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _StatCard(
                     icon: LucideIcons.calendar,
-                    value: "${state.progress.toInt()}%",
+                    value: "${state.progress.round()}%",
                     label: "Complete",
                     iconColor: const Color(0xFF7C3AED),
                   ),
@@ -85,31 +86,32 @@ class _StatCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isDark ? AppTheme.darkBorder : Colors.grey.shade200,
         ),
       ),
       child: Column(
         children: [
-          Icon(icon, color: iconColor, size: 20),
-          const SizedBox(height: 12),
+          Icon(icon, color: iconColor, size: 18),
+          const SizedBox(height: 6),
           Text(
             value,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827),
             ),
           ),
+          const SizedBox(height: 2),
           Text(
             label,
             style: TextStyle(
               color: isDark ? AppTheme.darkTextSecondary : Colors.grey.shade600,
-              fontSize: 11,
+              fontSize: 10.5,
             ),
           ),
         ],

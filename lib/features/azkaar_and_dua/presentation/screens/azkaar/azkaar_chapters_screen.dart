@@ -21,41 +21,64 @@ class AzkarChaptersScreen extends ConsumerWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          backgroundColor: isDark ? AppTheme.darkScaffold : AppColors.emerald600,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 22),
-            onPressed: () {
-              if (context.canPop()) {
-                context.pop();
-              } else {
-                context.go('/');
-              }
-            },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppTheme.darkScaffold : null,
+            gradient: isDark
+                ? null
+                : const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
+                  ),
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                category.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+              child: Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        category.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'Select a specific occasion',
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const Text(
-                'Select a specific occasion',
-                style: TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-            ],
+            ),
           ),
         ),
       ),
       body: chaptersAsync.when(
         data: (chapters) => ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           itemCount: chapters.length,
           itemBuilder: (context, index) {
             final chapter = chapters[index];

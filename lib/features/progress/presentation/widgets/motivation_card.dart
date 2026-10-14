@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class MotivationCard extends ConsumerWidget {
   final String? title;
   final String? subtitle;
@@ -39,22 +41,26 @@ class MotivationCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.verified, color: Colors.white, size: 28),
-          const SizedBox(height: 12),
-          Text(
-            displayTitle,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              const Icon(Icons.verified, color: Colors.white, size: 22),
+              const SizedBox(width: 12),
+              Text(
+                displayTitle,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: AppSpacing.size16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 14),
           Text(
             displaySubtitle,
             style: const TextStyle(
               color: AppColors.emerald100,
-              fontSize: 13,
+              fontSize:  AppSpacing.size11,
               height: 1.4,
             ),
           ),

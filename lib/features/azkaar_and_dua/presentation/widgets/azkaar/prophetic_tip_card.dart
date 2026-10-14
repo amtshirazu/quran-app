@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
 class PropheticTipCard extends StatelessWidget {
@@ -30,7 +31,7 @@ class PropheticTipCard extends StatelessWidget {
                 'Tip',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: AppSpacing.size15,
                   color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
                 ),
               ),
@@ -40,7 +41,7 @@ class PropheticTipCard extends StatelessWidget {
           Text(
             'The Prophet ﷺ said: "Whoever says \'SubhanAllahi wa bihamdihi\' (Glory and praise be to Allah) one hundred times a day, his sins will be forgiven even if they are like the foam of the sea."',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: AppSpacing.size12,
               height: 1.5,
               color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF5D4037),
             ),

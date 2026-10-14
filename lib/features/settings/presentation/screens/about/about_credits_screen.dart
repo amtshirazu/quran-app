@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 class AboutCreditsScreen extends StatelessWidget {
   const AboutCreditsScreen({super.key});
 
@@ -12,7 +14,7 @@ class AboutCreditsScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -40,7 +42,7 @@ class AboutCreditsScreen extends StatelessWidget {
                     icon: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                     onPressed: () {
                       if (context.canPop()) {
@@ -50,12 +52,12 @@ class AboutCreditsScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'Credits',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -115,7 +117,7 @@ class AboutCreditsScreen extends StatelessWidget {
             _buildSectionTitle('VERSES FOR YOUR MOOD', isDark),
             _buildTextCard(
               text:
-                  'An original feature of Bayyinah Flow. Verses were grouped by mood and paired with reflection notes, organized with AI assistance.',
+                  'An original feature of Bayyinah Flow. Ayahs are thoughtfully curated by emotional state and theme, paired with reflective insights to offer comfort, guidance, and peace when you need it most.',
               isDark: isDark,
             ),
             const SizedBox(height: 20),
@@ -124,7 +126,7 @@ class AboutCreditsScreen extends StatelessWidget {
             _buildSectionTitle('COMPILATION NOTE', isDark),
             _buildTextCard(
               text:
-                  'Dua content in this app was compiled from the sources above and organized with AI assistance.',
+                  'Supplications in this section have been gathered from the verified classical sources listed above and organized into structured themes for daily reference and ease of use.',
               isDark: isDark,
             ),
             const SizedBox(height: 24),
@@ -140,7 +142,7 @@ class AboutCreditsScreen extends StatelessWidget {
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: AppSpacing.size12,
           fontWeight: FontWeight.bold,
           color: isDark ? AppTheme.darkCategoryTitle : AppColors.emerald600,
           letterSpacing: 0.8,
@@ -170,7 +172,7 @@ class AboutCreditsScreen extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: AppSpacing.size12,
               fontWeight: FontWeight.bold,
               color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
             ),
@@ -179,7 +181,7 @@ class AboutCreditsScreen extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: AppSpacing.size11,
               color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
             ),
           ),
@@ -205,7 +207,7 @@ class AboutCreditsScreen extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 13,
+          fontSize: AppSpacing.size12,
           height: 1.5,
           color: isDark ? AppTheme.darkTextSecondary : AppColors.gray700,
         ),

@@ -24,7 +24,7 @@ class ReciterDownloadsScreen extends ConsumerWidget {
     final fileDetailsAsync = ref.watch(reciterFileDetailsProvider(reciter));
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkScaffold : const Color(0xFFF8F9FA),
+      backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: Container(
@@ -33,13 +33,13 @@ class ReciterDownloadsScreen extends ConsumerWidget {
             gradient: isDark
                 ? null
                 : const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
-                  ),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.deepGreen,
+                AppColors.emerald600,
+              ],
+            ),
           ),
           child: SafeArea(
             child: Padding(
@@ -55,7 +55,7 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                         icon: const Icon(
                           LucideIcons.arrowLeft,
                           color: Colors.white,
-                          size: 22,
+                          size: 20,
                         ),
                         onPressed: () {
                           if (context.canPop()) {
@@ -78,11 +78,12 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () async {
+                      final container = ProviderScope.containerOf(context, listen: false);
                       final manager = ref.read(downloadManagerProvider.notifier);
                       await manager.deleteAllReciterSurahs(
                         reciter: reciter,
                         onCompleted: () {
-                          ref.read(downloadRefreshTriggerProvider.notifier).state++;
+                          container.read(downloadRefreshTriggerProvider.notifier).state++;
                         },
                       );
                     },
@@ -202,12 +203,15 @@ class _SurahDownloadItemTile extends ConsumerWidget {
     return InkWell(
       onTap: () async {
         if (!isDownloaded && !isDownloading) {
-          final manager = ref.read(downloadManagerProvider.notifier);
+          // Grab the root container to avoid calling ref on a disposed tile
+          final container = ProviderScope.containerOf(context, listen: false);
+          final manager = container.read(downloadManagerProvider.notifier);
+
           await manager.downloadSurah(
             reciter: reciter,
             surah: surah,
             onCompleted: () {
-              ref.read(downloadRefreshTriggerProvider.notifier).state++;
+              container.read(downloadRefreshTriggerProvider.notifier).state++;
             },
           );
         }
@@ -299,19 +303,14 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                           color: Color(0xFFE53935),
                         ),
                         onPressed: () async {
-                          final manager = ref.read(
-                            downloadManagerProvider.notifier,
-                          );
+                          final container = ProviderScope.containerOf(context, listen: false);
+                          final manager = container.read(downloadManagerProvider.notifier);
+
                           await manager.deleteSurah(
                             reciter: reciter,
                             surahNum: surah.number,
                             onCompleted: () {
-                              ref
-                                  .read(
-                                    downloadRefreshTriggerProvider
-                                        .notifier,
-                                  )
-                                  .state++;
+                              container.read(downloadRefreshTriggerProvider.notifier).state++;
                             },
                           );
                         },

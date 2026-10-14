@@ -6,6 +6,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class BookmarkTabs extends ConsumerWidget {
   const BookmarkTabs({super.key});
 
@@ -62,9 +64,9 @@ class _TabButton extends ConsumerWidget {
           ref.read(bookmarkTabProvider.notifier).state = tab;
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 20),
           margin: const EdgeInsets.all(2),
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: isActive
                 ? AppColors.emerald600
@@ -84,7 +86,7 @@ class _TabButton extends ConsumerWidget {
                       : tab == BookmarkTab.pages
                           ? LucideIcons.bookOpen
                           : LucideIcons.layoutGrid,
-                  size: 16,
+                  size: AppSpacing.size14,
                   color: isSelectedColor(isActive, isDark),
                 ),
                 const SizedBox(width: 6),
@@ -93,6 +95,7 @@ class _TabButton extends ConsumerWidget {
                   style: TextStyle(
                     fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     color: isSelectedColor(isActive, isDark),
+                    fontSize: AppSpacing.size13,
                   ),
                 ),
               ],

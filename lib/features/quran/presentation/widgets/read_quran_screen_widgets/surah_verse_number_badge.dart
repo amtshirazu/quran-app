@@ -22,8 +22,8 @@ class SurahVerseNumberBadge extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-      height: 45,
-      width: 45,
+      height: 40,
+      width: 40,
       padding: EdgeInsets.all(AppSpacing.size8),
       decoration: BoxDecoration(
         color: AppColors.emerald600,
@@ -34,7 +34,7 @@ class SurahVerseNumberBadge extends StatelessWidget {
         child: Text(
           "$surahNumber",
           style: textTheme.titleLarge?.copyWith(
-            fontSize: AppSpacing.size12,
+            fontSize: AppSpacing.size8,
             color: Colors.white,
           ),
         ),

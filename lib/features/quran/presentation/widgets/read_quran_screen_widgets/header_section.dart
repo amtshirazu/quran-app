@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/presentation/widgets/read_quran_screen_widgets/search.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_spacing.dart';
 
 class ReadQuranHeaderSection extends StatelessWidget {
   const ReadQuranHeaderSection({super.key});
@@ -32,7 +33,7 @@ class ReadQuranHeaderSection extends StatelessWidget {
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 22),
+                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -41,7 +42,7 @@ class ReadQuranHeaderSection extends StatelessWidget {
                   }
                 },
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 6),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
@@ -49,7 +50,7 @@ class ReadQuranHeaderSection extends StatelessWidget {
                     'Read Quran',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -58,7 +59,7 @@ class ReadQuranHeaderSection extends StatelessWidget {
                     '114 Surahs',
                     style: TextStyle(
                       color: AppColors.emerald100,
-                      fontSize: 13,
+                      fontSize: AppSpacing.size12,
                     ),
                   ),
                 ],

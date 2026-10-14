@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-
 import 'package:quran_app/core/constants/app_colors.dart';
-import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
+
+import '../../../../../core/constants/app_spacing.dart';
 
 class ReciterHeader extends ConsumerWidget {
   const ReciterHeader({
@@ -18,109 +18,81 @@ class ReciterHeader extends ConsumerWidget {
   final Reciter reciter;
 
   @override
-  Widget build(
-      BuildContext context,
-      WidgetRef ref,
-      ) {
-    final selectedReciter =
-    ref.watch(selectedReciterProvider);
-
-    final isDark =
-        Theme.of(context).brightness ==
-            Brightness.dark;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedReciter = ref.watch(selectedReciterProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (selectedReciter == null) {
       return const SizedBox.shrink();
     }
 
     return Container(
-      color: isDark
-          ? AppTheme.darkScaffold
-          : AppColors.emerald600,
-      height: 160,
-      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? AppTheme.darkScaffold : null,
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.deepGreen, AppColors.emerald600],
+              ),
+      ),
       child: SafeArea(
         bottom: false,
-        child: Row(
-          children: [
-            // -----------------------------------------------------------------
-            // BACK BUTTON
-            // -----------------------------------------------------------------
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Row(
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: () async {
+                  final audioProvider = ref.read(audioServiceProvider);
+                  await audioProvider.reset();
+                  ref.read(selectedReciterProvider.notifier).state = null;
 
-            IconButton(
-              onPressed: () async {
-                final audioProvider =
-                ref.read(audioServiceProvider);
-
-                // Stop and clear the complete playlist.
-                await audioProvider.reset();
-
-                // Clear selected reciter.
-                ref
-                    .read(
-                  selectedReciterProvider
-                      .notifier,
-                )
-                    .state = null;
-
-                // Navigate back.
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.go('/audioHome');
-                }
-              },
-              icon: const Icon(
-                LucideIcons.arrowLeft,
-                size: 22,
-                color: Colors.white,
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/audioHome');
+                  }
+                },
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  size: 20,
+                  color: Colors.white,
+                ),
               ),
-            ),
-
-            const SizedBox(width: 12),
-
-            // -----------------------------------------------------------------
-            // RECITER INFORMATION
-            // -----------------------------------------------------------------
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment:
-                MainAxisAlignment.center,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    selectedReciter.name,
-                    style: const TextStyle(
-                      fontSize:
-                      AppSpacing.size18,
-                      fontWeight:
-                      FontWeight.bold,
-                      color: Colors.white,
+              const SizedBox(width: 4),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      selectedReciter.name,
+                      style: const TextStyle(
+                        fontSize: AppSpacing.size16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow:
-                    TextOverflow.ellipsis,
-                  ),
-
-                  const SizedBox(height: 2),
-
-                  Text(
-                    selectedReciter.arabicName,
-                    textDirection:
-                    TextDirection.rtl,
-                    style: const TextStyle(
-                      fontSize:
-                      AppSpacing.size14,
-                      color:
-                      Colors.white70,
+                    const SizedBox(height: 2),
+                    Text(
+                      selectedReciter.arabicName,
+                      textDirection: TextDirection.rtl,
+                      style: const TextStyle(
+                        fontSize: AppSpacing.size12,
+                        color: Colors.white70,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

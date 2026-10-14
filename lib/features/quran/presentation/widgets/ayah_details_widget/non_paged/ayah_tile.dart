@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -18,7 +19,6 @@ import 'package:quran_app/features/settings/presentation/state/display_settings_
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
 import '../../../../../progress/presentation/state/last_read_provider.dart';
 import 'package:quran/quran.dart' as quran;
@@ -38,9 +38,18 @@ class AyahTile extends ConsumerStatefulWidget {
 }
 
 class _AyahTileState extends ConsumerState<AyahTile> {
+  Timer? _visibilityTimer;
   bool _hasBeenTracked = false;
+  static const Duration _ayahDwellThreshold = Duration(seconds: 2);
+
+  @override
+  void dispose() {
+    _visibilityTimer?.cancel();
+    super.dispose();
+  }
 
   Future<void> _handleReflectionTap() async {
+    if (!mounted) return;
     final selectedSurah = ref.read(selectedSurahProvider);
     if (selectedSurah == null) return;
 
@@ -67,7 +76,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
       initialReflection: existingContent,
     );
 
-    if (content == null) return;
+    if (content == null || !mounted) return;
 
     final reflectionService = ref.read(reflectionServiceProvider);
     await reflectionService.addOrUpdateReflection(
@@ -184,27 +193,55 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     );
 
     return VisibilityDetector(
-      key: Key('visibility-${widget.ayahNumber}'),
-      onVisibilityChanged: (visibilityInfo) async {
-        if (visibilityInfo.visibleFraction >= 0.6 && !_hasBeenTracked) {
-          _hasBeenTracked = true;
+      key: Key('visibility-${widget.surahNumber}-${widget.ayahNumber}'),
+      onVisibilityChanged: (visibilityInfo) {
+        // Guard against execution if the widget is already unmounted/disposed
+        if (!mounted) return;
+
+        final isAutoScrolling = ref.read(isAutoScrollingProvider);
+
+        if (visibilityInfo.visibleFraction >= 0.6 && !isAutoScrolling) {
+          // 1. Immediately record place-marker (0s)
           final progressService = ref.read(progressServiceProvider);
-          await progressService.trackAyah(
-            selectedSurah.number,
-            widget.ayahNumber,
+          unawaited(
+            progressService.setBookmarkImmediate(
+              mode: 'ayah',
+              surahId: selectedSurah.number,
+              ayah: widget.ayahNumber,
+            ).then((_) {
+              if (mounted) {
+                ref.invalidate(lastReadProvider);
+                ref.invalidate(lastReadResolvedSurahProvider);
+                ref.invalidate(continueReadingProvider);
+              }
+            }),
           );
 
-          if (!mounted) return;
+          // 2. Start dwell countdown for verified progress credit (2s)
+          if (!_hasBeenTracked) {
+            _visibilityTimer?.cancel();
+            _visibilityTimer = Timer(_ayahDwellThreshold, () async {
+              if (!mounted || _hasBeenTracked) return;
+              _hasBeenTracked = true;
 
-          ref.invalidate(lastReadProvider);
-          ref.invalidate(lastReadResolvedSurahProvider);
-          ref.invalidate(profileProgressProvider);
-          ref.invalidate(continueReadingProvider);
-          setState(() {});
+              await progressService.updateStreak();
+              await progressService.trackAyah(
+                selectedSurah.number,
+                widget.ayahNumber,
+              );
+
+              if (!mounted) return;
+              ref.invalidate(profileProgressProvider);
+              ref.invalidate(continueReadingProvider);
+              setState(() {});
+            });
+          }
+        } else if (visibilityInfo.visibleFraction < 0.6) {
+          _visibilityTimer?.cancel();
         }
       },
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         color: isDark ? AppTheme.darkSurface : Colors.white,
         elevation: isDark ? 0 : 1,
         shape: RoundedRectangleBorder(
@@ -263,7 +300,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             isPageMode: false,
                           );
 
-                          if (note == null) return;
+                          if (note == null || !mounted) return;
                           await ref
                               .read(bookmarkServiceProvider)
                               .addOrUpdateVerseBookmark(
@@ -279,7 +316,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                               ? LucideIcons.bookmarkCheck
                               : LucideIcons.bookmark,
                           color: isBookmarked
-                              ? Colors.amber
+                              ? AppColors.emerald600
                               : AppColors.gray400,
                           size: 18,
                         ),
@@ -314,7 +351,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       IconButton(
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          // Prefer default reciter, fallback to currently selected reciter or first in list
                           final reciter = ref.read(defaultReciterProvider) ??
                               ref.read(selectedReciterProvider) ??
                               ref.read(recitersListProvider).first;

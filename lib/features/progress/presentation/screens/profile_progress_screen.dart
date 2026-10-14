@@ -10,11 +10,9 @@ class ProfileProgressScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final name = ref.watch(profileNameProvider);
     final sinceAsync = ref.watch(profileSinceProvider);
     final motivationTitle = ref.watch(motivationTitleProvider);
     final motivationSubtitle = ref.watch(motivationSubtitleProvider);
-
     final progressAsync = ref.watch(profileProgressProvider);
 
     return Scaffold(
@@ -24,21 +22,17 @@ class ProfileProgressScreen extends ConsumerWidget {
         child: progressAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Center(child: Text('Error: $e')),
-
           data: (data) {
             return sinceAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => _buildContent(
-                name: name,
                 since: 'Start your journey today',
                 data: data,
                 motivationTitle: motivationTitle,
                 motivationSubtitle: motivationSubtitle,
               ),
-
               data: (since) {
                 return _buildContent(
-                  name: name,
                   since: since,
                   data: data,
                   motivationTitle: motivationTitle,
@@ -53,7 +47,6 @@ class ProfileProgressScreen extends ConsumerWidget {
   }
 
   Widget _buildContent({
-    required String name,
     required String since,
     required dynamic data,
     required String motivationTitle,
@@ -62,8 +55,7 @@ class ProfileProgressScreen extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ProfileHeader(name: name, since: since),
-
+          ProfileHeader(since: since),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Transform.translate(

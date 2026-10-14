@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/core/notifications/notification_service.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
 import '../core/router/app_router.dart';
 import '../core/theme/app_theme.dart';
@@ -19,17 +20,9 @@ class _QuranAppState extends ConsumerState<QuranApp>
   void initState() {
     super.initState();
 
-    // CHANGE: removed `.init(ref as Ref<Object?>)`.
-    //
-    // `ref` in a ConsumerState is a WidgetRef, and casting a WidgetRef to
-    // Ref is invalid (it throws a type error at runtime). It is also not
-    // needed: audioServiceProvider already calls service.init(ref) itself
-    // with the correct Ref the first time the provider is read.
-    //
-    // Reading the provider here just makes sure the service is created
-    // (and initialized) at app start.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(audioServiceProvider);
+      await NotificationService.instance.init();
     });
 
     WidgetsBinding.instance.addObserver(this);

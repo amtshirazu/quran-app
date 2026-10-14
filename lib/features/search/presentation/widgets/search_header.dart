@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../state/search_provider.dart';
 
 class SearchHeader extends ConsumerStatefulWidget implements PreferredSizeWidget {
@@ -21,7 +22,7 @@ class SearchHeader extends ConsumerStatefulWidget implements PreferredSizeWidget
   ConsumerState<SearchHeader> createState() => _SearchHeaderState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(145);
+  Size get preferredSize => const Size.fromHeight(130);
 }
 
 class _SearchHeaderState extends ConsumerState<SearchHeader> {
@@ -46,7 +47,7 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,28 +66,27 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                     child: const Icon(
                       LucideIcons.arrowLeft,
                       color: Colors.white,
-                      size: 22,
+                      size: 20,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
                   const Text(
                     'Search Quran',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-
+              const SizedBox(height: 16),
               Container(
-                height: 44,
+                height: 38,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.darkSurface : Colors.white,
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(19),
                   border: Border.all(
                     color: isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB),
                   ),
@@ -95,7 +95,7 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                       : [
                           BoxShadow(
                             color: Colors.black.withAlpha(12),
-                            blurRadius: 8,
+                            blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
                         ],
@@ -114,7 +114,7 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                     ref.read(activeSearchQueryProvider.notifier).state = value;
                   },
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: isDark ? Colors.white : const Color(0xFF111827),
                   ),
                   decoration: InputDecoration(
@@ -122,33 +122,27 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                     hintText: 'Type surah, ayah, topic, or translation keyword...',
                     hintStyle: TextStyle(
                       color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF9CA3AF),
-                      fontSize: 13,
+                      fontSize: 12,
                     ),
                     prefixIcon: Icon(
                       LucideIcons.search,
                       color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF6B7280),
-                      size: 18,
+                      size: 16,
                     ),
                     suffixIcon: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (widget.controller.text.isNotEmpty)
                           IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
                             icon: Icon(
                               Icons.close,
-                              size: 18,
+                              size: 16,
                               color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF6B7280),
                             ),
                             onPressed: widget.onClear,
                           ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 12.0),
-                          child: Icon(
-                            LucideIcons.mic,
-                            color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF6B7280),
-                            size: 18,
-                          ),
-                        ),
                       ],
                     ),
                     border: InputBorder.none,
@@ -156,6 +150,7 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                   ),
                 ),
               ),
+              const SizedBox(height: 4),
             ],
           ),
         ),

@@ -40,7 +40,7 @@ class SurahList extends ConsumerWidget {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                 child: Align(
                   alignment: Alignment.center,
                   child: ModeSwitcher(

@@ -7,6 +7,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_states.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class EmptyBookmarksCard extends ConsumerWidget {
   const EmptyBookmarksCard({super.key});
 
@@ -56,13 +58,13 @@ class EmptyBookmarksCard extends ConsumerWidget {
                   : AppColors.emerald100,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 40, color: AppColors.emerald600),
+            child: Icon(icon, size: 25, color: AppColors.emerald600),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Text(
             title,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: AppSpacing.size16,
               fontWeight: FontWeight.bold,
               color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
             ),
@@ -72,20 +74,20 @@ class EmptyBookmarksCard extends ConsumerWidget {
             subtitle,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: AppSpacing.size12,
               color: isDark ? AppTheme.darkTextSecondary : Colors.grey[600],
               height: 1.5,
             ),
           ),
           const SizedBox(height: 32),
           SizedBox(
-            width: 180,
+            width: 160,
             child: ElevatedButton(
               onPressed: () => context.go('/surahs'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.emerald600,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -93,7 +95,10 @@ class EmptyBookmarksCard extends ConsumerWidget {
               ),
               child: Text(
                 buttonText,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppSpacing.size12,
+                ),
               ),
             ),
           ),

@@ -13,7 +13,7 @@ class EmptyCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       elevation: isDark ? 0 : 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -29,7 +29,7 @@ class EmptyCard extends StatelessWidget {
             Text(
               'Continue Reading',
               style: TextStyle(
-                fontSize: AppSpacing.size16,
+                fontSize: AppSpacing.size15,
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
               ),
@@ -40,18 +40,18 @@ class EmptyCard extends StatelessWidget {
                 children: [
                   const Icon(
                     LucideIcons.bookOpen,
-                    size: 48,
+                    size: 40,
                     color: AppColors.emerald600,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     'Start reading to continue',
                     style: TextStyle(
-                      fontSize: AppSpacing.size14,
+                      fontSize: AppSpacing.size12,
                       color: isDark ? AppTheme.darkTextSecondary : Colors.blueGrey,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       context.go('/surahs');
@@ -60,8 +60,8 @@ class EmptyCard extends StatelessWidget {
                       backgroundColor: AppColors.emerald600,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 12,
+                        horizontal: 16,
+                        vertical: 8,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -70,7 +70,7 @@ class EmptyCard extends StatelessWidget {
                     child: const Text(
                       'Start Reading',
                       style: TextStyle(
-                        fontSize: AppSpacing.size13,
+                        fontSize: AppSpacing.size11,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

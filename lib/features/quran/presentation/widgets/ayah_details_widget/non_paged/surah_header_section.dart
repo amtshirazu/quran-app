@@ -46,16 +46,16 @@ class SurahHeaderSection extends ConsumerWidget {
         : selectedSurah;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 25),
+      padding: const EdgeInsets.fromLTRB(16, 60, 16, 25),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkScaffold : null,
         gradient: isDark
             ? null
             : const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [AppColors.deepGreen, AppColors.emerald600],
-              ),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.deepGreen, AppColors.emerald600],
+        ),
       ),
       child: Row(
         children: [
@@ -63,60 +63,69 @@ class SurahHeaderSection extends ConsumerWidget {
             onPressed: () {
               audio.reset();
               ref.invalidate(lastReadProvider);
-              ref.invalidate(surahProgressProvider);
+              ref.invalidate(lastReadResolvedSurahProvider);
+              ref.invalidate(continueReadingProvider);
+              ref.invalidate(profileProgressProvider);
               ref.read(currentPageSurahIdProvider.notifier).state = null;
               context.go("/surahs");
             },
-            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 24),
+            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
           ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                headerSurah?.nameEnglish ?? "",
-                style: textTheme.titleLarge?.copyWith(
-                  fontSize: AppSpacing.size18,
-                  color: Colors.white,
+          const SizedBox(width: 4),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  headerSurah?.nameEnglish ?? "",
+                  style: textTheme.titleLarge?.copyWith(
+                    fontSize: AppSpacing.size16,
+                    color: Colors.white,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Text(
-                headerSurah?.translation ?? "",
-                style: textTheme.titleMedium?.copyWith(
-                  color: AppColors.gray400,
-                  fontSize: AppSpacing.size14,
+                Text(
+                  headerSurah?.translation ?? "",
+                  style: textTheme.titleMedium?.copyWith(
+                    color: AppColors.gray400,
+                    fontSize: AppSpacing.size12,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const Spacer(),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               if (mode == ReadingMode.reading)
                 IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () async {
-                    if (currentPage == null) return;
+                    if (currentPage == null || headerSurah == null) return;
 
                     final bookmarks = await ref.read(bookmarksProvider.future);
 
                     Bookmark? existingBookmark;
                     try {
                       existingBookmark = bookmarks.firstWhere(
-                        (b) =>
-                            b.type == BookmarkType.page &&
+                            (b) =>
+                        b.type == BookmarkType.page &&
                             b.page == currentPage,
                       );
                     } catch (_) {
                       existingBookmark = null;
                     }
 
+                    if (!context.mounted) return;
+
                     final note = await showBookmarkDialog(
                       context,
                       title: "Add Bookmark",
-                      subtitle:
-                          "${headerSurah?.nameEnglish} • Page $currentPage",
+                      subtitle: "${headerSurah.nameEnglish} • Page $currentPage",
                       initialNote: existingBookmark?.note,
                       isPageMode: true,
                     );
@@ -128,7 +137,7 @@ class SurahHeaderSection extends ConsumerWidget {
                     await service.addOrUpdatePageBookmark(
                       page: currentPage,
                       note: note,
-                      surahId: headerSurah!.number,
+                      surahId: headerSurah.number,
                     );
 
                     ref.invalidate(bookmarksProvider);
@@ -137,14 +146,17 @@ class SurahHeaderSection extends ConsumerWidget {
                     isBookmarked
                         ? LucideIcons.bookmarkCheck
                         : LucideIcons.bookmark,
-                    color: isBookmarked ? Colors.amber : AppColors.gray200,
+                    color: isBookmarked ? AppColors.emerald600 : AppColors.gray200,
                     size: 22,
                   ),
                 ),
+              const SizedBox(width: 12),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: () async {
+                  if (headerSurah == null) return;
+
                   final reciter = ref.read(defaultReciterProvider);
                   final surahs = ref.read(surahListProvider).value;
 
@@ -153,12 +165,15 @@ class SurahHeaderSection extends ConsumerWidget {
                     return;
                   }
 
-                  if (playerState?.processingState ==
-                      ProcessingState.completed) {
+                  if (playerState?.processingState == ProcessingState.completed) {
                     await audio.seekToStart();
                   }
 
-                  final surah = surahs?[headerSurah!.number - 1];
+                  final surahIndex = headerSurah.number - 1;
+                  final surah = (surahs != null && surahIndex >= 0 && surahIndex < surahs.length)
+                      ? surahs[surahIndex]
+                      : null;
+
                   if (!audio.hasLoadedSurah &&
                       reciter != null &&
                       surah != null &&

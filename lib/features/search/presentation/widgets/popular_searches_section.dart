@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../state/search_provider.dart';
 import 'search_chip.dart';
 
@@ -29,7 +30,7 @@ class PopularSearchesSection extends ConsumerWidget {
             Text(
               'POPULAR SEARCHES',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppSpacing.size13,
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppTheme.darkCategoryTitle : const Color(0xFF1F2421),
                 letterSpacing: 0.5,
@@ -40,11 +41,11 @@ class PopularSearchesSection extends ConsumerWidget {
                 ref.read(popularSearchesExpandedProvider.notifier).state =
                     !isExpanded;
               },
-              child: const Text(
-                'View All',
-                style: TextStyle(
+              child: Text(
+                isExpanded ? 'Show Less' : 'View All',
+                style: const TextStyle(
                   color: Color(0xFF1E824C),
-                  fontSize: 13,
+                  fontSize: AppSpacing.size12,
                   fontWeight: FontWeight.w600,
                 ),
               ),

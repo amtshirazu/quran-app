@@ -3,7 +3,7 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
-class SelectedButton extends StatefulWidget {
+class SelectedButton extends StatelessWidget {
   const SelectedButton({
     super.key,
     required this.text,
@@ -16,21 +16,11 @@ class SelectedButton extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<SelectedButton> createState() => _SelectedButtonState();
-}
-
-class _SelectedButtonState extends State<SelectedButton> {
-  bool isTapped = false;
-
-  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final bgColor = isDark
-        ? (isTapped ? AppTheme.darkBorder : AppTheme.darkScaffold)
-        : (isTapped ? AppColors.gray200 : Colors.white);
-
+    final bgColor = isDark ? AppTheme.darkScaffold : Colors.white;
     final borderColor = isDark ? AppTheme.darkBorder : AppColors.gray200;
     final contentColor = isDark ? AppTheme.darkTextPrimary : AppColors.gray900;
 
@@ -38,14 +28,9 @@ class _SelectedButtonState extends State<SelectedButton> {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          setState(() {
-            isTapped = !isTapped;
-          });
-          if (widget.onTap != null) {
-            widget.onTap!();
-          }
-        },
+        onTap: onTap,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
@@ -56,10 +41,10 @@ class _SelectedButtonState extends State<SelectedButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(widget.icon, size: 18, color: contentColor),
+              Icon(icon, size: 18, color: contentColor),
               const SizedBox(width: 8),
               Text(
-                widget.text,
+                text,
                 style: textTheme.bodyMedium?.copyWith(
                   color: contentColor,
                   fontSize: AppSpacing.size11,

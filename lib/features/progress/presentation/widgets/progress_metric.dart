@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_spacing.dart';
 
 class ProgressMetric extends StatelessWidget {
   const ProgressMetric({
@@ -23,13 +24,13 @@ class ProgressMetric extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: iconColor, size: 22),
-        const SizedBox(height: 8),
+        Icon(icon, color: iconColor, size: 20),
+        const SizedBox(height: 6),
         Text(
           value,
           style: TextStyle(
             color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
-            fontSize: 20,
+            fontSize:  AppSpacing.size20,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -39,7 +40,7 @@ class ProgressMetric extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
-            fontSize: 12,
+            fontSize:  AppSpacing.size11,
           ),
         ),
       ],

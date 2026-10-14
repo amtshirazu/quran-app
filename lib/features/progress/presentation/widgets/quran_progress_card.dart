@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_spacing.dart';
 import 'progress_metric.dart';
 
 class QuranProgressCard extends StatelessWidget {
@@ -45,7 +46,7 @@ class QuranProgressCard extends StatelessWidget {
           Text(
             'Quran Progress',
             style: TextStyle(
-              fontSize: 14,
+              fontSize:  AppSpacing.size15,
               fontWeight: FontWeight.w700,
               color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
             ),
@@ -57,7 +58,7 @@ class QuranProgressCard extends StatelessWidget {
               Text(
                 'Overall completion',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize:  AppSpacing.size11,
                   color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
                 ),
               ),

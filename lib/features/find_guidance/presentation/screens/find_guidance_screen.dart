@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quran_app/core/theme/app_theme.dart';
 import '../state/guidance_provider.dart';
 import '../widgets/guidance_header.dart';
 import '../widgets/guidance_subtitle.dart';
@@ -15,7 +14,6 @@ class FindGuidanceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedEmotion = ref.watch(selectedEmotionProvider);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return PopScope(
       canPop: selectedEmotion == null,
@@ -33,22 +31,38 @@ class FindGuidanceScreen extends ConsumerWidget {
           width: double.infinity,
           height: double.infinity,
           color: Theme.of(context).scaffoldBackgroundColor,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.0, 0.03),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
             child: selectedEmotion == null
-                ? const Column(
-                    children: [
-                      GuidanceSubtitle(),
-                      GuidanceFeelingsList(),
-                      GuidanceFeelingsMatterBanner(),
-                      SizedBox(height: 24),
-                    ],
+                ? const SingleChildScrollView(
+                    key: ValueKey('feelings_list'),
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        GuidanceSubtitle(),
+                        GuidanceFeelingsList(),
+                        GuidanceFeelingsMatterBanner(),
+                        SizedBox(height: 24),
+                      ],
+                    ),
                   )
-                : Column(
-                    children: [
-                      GuidanceVersesList(emotion: selectedEmotion),
-                      const SizedBox(height: 24),
-                    ],
+                : GuidanceVersesList(
+                    key: ValueKey('verses_$selectedEmotion'),
+                    emotion: selectedEmotion,
                   ),
           ),
         ),

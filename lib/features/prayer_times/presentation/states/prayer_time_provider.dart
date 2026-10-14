@@ -1,12 +1,49 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:quran_app/core/database/database_helper.dart';
+import 'package:quran_app/core/notifications/notification_service.dart';
 import 'package:quran_app/features/prayer_times/domain/models/next_prayer_time_model.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_times_service.dart';
 import 'package:geocoding/geocoding.dart';
 
 final prayerTimesServiceProvider = Provider((ref) => PrayerTimesService());
+
+class EnabledPrayersNotifier extends StateNotifier<List<String>> {
+  EnabledPrayersNotifier() : super(['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting('enabled_prayers_list');
+      if (saved != null && saved.isNotEmpty) {
+        final list = saved.split(',').where((s) => s.trim().isNotEmpty).toList();
+        if (list.isNotEmpty) {
+          state = list;
+        }
+      }
+    } catch (_) {}
+  }
+
+  Future<void> togglePrayer(String prayerName, bool enabled) async {
+    final copy = List<String>.from(state);
+    if (enabled && !copy.contains(prayerName)) {
+      copy.add(prayerName);
+    } else if (!enabled && copy.contains(prayerName)) {
+      copy.remove(prayerName);
+    }
+    state = copy;
+    await DatabaseHelper.instance.setSetting('enabled_prayers_list', copy.join(','));
+  }
+}
+
+final enabledPrayersProvider =
+    StateNotifierProvider<EnabledPrayersNotifier, List<String>>((ref) {
+  return EnabledPrayersNotifier();
+});
 
 String _firstNonEmpty(List<String?> candidates, String fallback) {
   for (final candidate in candidates) {
@@ -113,7 +150,6 @@ final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
         }
       }
 
-      // Fallback if city was empty in all placemarks
       final firstPlace = placemarks.first;
       final fallbackCity = _firstNonEmpty([
         firstPlace.administrativeArea,
@@ -140,14 +176,13 @@ final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
             (_) => {"city": "Unknown Location", "country": "Unknown Country"},
           );
   final service = ref.read(prayerTimesServiceProvider);
+  final enabledPrayers = ref.watch(enabledPrayersProvider);
 
   debugPrint("📍 LOCATION FETCHED:");
   debugPrint("   Latitude: ${position.latitude}");
   debugPrint("   Longitude: ${position.longitude}");
   debugPrint("   City: ${countryAndCityName['city']}");
   debugPrint("   Country: ${countryAndCityName['country']}");
-  debugPrint("   Device Time: ${DateTime.now()}");
-  debugPrint("   Timezone Offset: ${DateTime.now().timeZoneOffset}");
 
   final times = service.calculateTodayTimes(
     lat: position.latitude,
@@ -159,11 +194,20 @@ final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
     debugPrint("   $name: ${DateFormat.jm().format(time)} (Full: $time)");
   });
 
+  // Automatically schedule rolling 7 days of Adhan notifications
+  unawaited(
+    NotificationService.instance.schedule7DayPrayerNotifications(
+      todayTimes: times,
+      enabledPrayers: enabledPrayers,
+    ),
+  );
+
   return times;
 });
 
 final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
   final timesAsync = ref.watch(prayerTimesProvider);
+  final locationAsync = ref.watch(locationProvider);
 
   return timesAsync.maybeWhen(
     data: (times) {
@@ -171,6 +215,18 @@ final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
       try {
         return times.entries.firstWhere((e) => e.value.isAfter(now));
       } catch (_) {
+        final location = locationAsync.asData?.value;
+        if (location != null) {
+          final service = ref.read(prayerTimesServiceProvider);
+          final tomorrowTimes = service.calculateTomorrowTimes(
+            lat: location.latitude,
+            lng: location.longitude,
+          );
+          final tomorrowFajr = tomorrowTimes["Fajr"];
+          if (tomorrowFajr != null) {
+            return MapEntry("Fajr", tomorrowFajr);
+          }
+        }
         return null;
       }
     },

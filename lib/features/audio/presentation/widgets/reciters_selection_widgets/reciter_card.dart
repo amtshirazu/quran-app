@@ -21,6 +21,7 @@ class ReciterCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
       child: Card(
         elevation: isDark ? 0 : 3,
         shape: RoundedRectangleBorder(
@@ -29,14 +30,16 @@ class ReciterCard extends StatelessWidget {
         ),
         color: isDark ? AppTheme.darkSurface : Colors.white,
         clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// Top Image Section
             Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 130,
+                  height: 138,
                   child: Image.asset(reciter.image, fit: BoxFit.cover),
                 ),
                 Positioned.fill(
@@ -47,20 +50,20 @@ class ReciterCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withAlpha(178),
+                          Colors.black.withAlpha(180),
                         ],
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 10,
+                  top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha(230),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       reciter.country,
@@ -73,16 +76,17 @@ class ReciterCard extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  bottom: 8,
-                  left: 10,
-                  right: 10,
+                  bottom: 6,
+                  left: 8,
+                  right: 8,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         reciter.name,
                         style: const TextStyle(
-                          fontSize: AppSpacing.size13,
+                          fontSize: AppSpacing.size11,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -94,7 +98,7 @@ class ReciterCard extends StatelessWidget {
                         child: Text(
                           reciter.arabicName,
                           style: const TextStyle(
-                            fontSize: AppSpacing.size11,
+                            fontSize: AppSpacing.size8,
                             fontWeight: FontWeight.bold,
                             color: Colors.white70,
                           ),
@@ -108,42 +112,46 @@ class ReciterCard extends StatelessWidget {
                 ),
               ],
             ),
+
+            /// Bottom Compact Details Section
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              padding: const EdgeInsets.fromLTRB(10, 16, 10, 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           reciter.riwayah,
                           style: TextStyle(
                             fontSize: AppSpacing.size10,
-                            color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                            color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2,),
                         Text(
                           reciter.style,
                           style: const TextStyle(
-                            fontSize: AppSpacing.size10,
+                            fontSize: AppSpacing.size8,
                             fontWeight: FontWeight.w600,
                             color: AppColors.emerald600,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2,),
                         Text(
                           "${reciter.totalSurahs} Surahs",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
-                            fontSize: AppSpacing.size11,
+                            fontSize: AppSpacing.size8,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -153,7 +161,7 @@ class ReciterCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(7),
                     decoration: const BoxDecoration(
                       color: AppColors.emerald600,
                       shape: BoxShape.circle,
@@ -161,7 +169,7 @@ class ReciterCard extends StatelessWidget {
                     child: const Icon(
                       LucideIcons.play,
                       color: Colors.white,
-                      size: 16,
+                      size: 15,
                     ),
                   ),
                 ],

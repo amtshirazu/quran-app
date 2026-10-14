@@ -7,6 +7,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
 
+import '../../../../../core/constants/app_spacing.dart';
+
 class DuaCard extends ConsumerWidget {
   final QuranicDua dua;
 
@@ -65,7 +67,7 @@ class DuaCard extends ConsumerWidget {
                     Text(
                       formattedSubject,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: AppSpacing.size13,
                         fontWeight: FontWeight.bold,
                         color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
                       ),
@@ -85,7 +87,7 @@ class DuaCard extends ConsumerWidget {
                       child: Text(
                         isWitr ? "Witr & Qunoot" : "Quran",
                         style: const TextStyle(
-                          fontSize: 11,
+                          fontSize: AppSpacing.size8,
                           fontWeight: FontWeight.w600,
                           color: AppColors.emerald600,
                         ),

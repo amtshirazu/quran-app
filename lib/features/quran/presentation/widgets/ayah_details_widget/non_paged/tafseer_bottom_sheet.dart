@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
+import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/presentation/state/tafseer_provider.dart';
 
@@ -91,7 +92,7 @@ class _TafseerBottomSheetContent extends ConsumerWidget {
                       Text(
                         'Surah $surahName, Ayah $ayahNumber',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppSpacing.size15,
                           fontWeight: FontWeight.bold,
                           color: isDark
                               ? AppTheme.darkTextPrimary
@@ -103,7 +104,7 @@ class _TafseerBottomSheetContent extends ConsumerWidget {
                         data: (data) => Text(
                           data.model.name,
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: AppSpacing.size12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.emerald600,
                           ),
@@ -120,6 +121,7 @@ class _TafseerBottomSheetContent extends ConsumerWidget {
                     color: isDark
                         ? AppTheme.darkTextSecondary
                         : AppColors.gray600,
+                    size: 20,
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -146,7 +148,7 @@ class _TafseerBottomSheetContent extends ConsumerWidget {
                     textAlign: isArabic ? TextAlign.right : TextAlign.left,
                     textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
                     style: TextStyle(
-                      fontSize: isArabic ? 18 : 15,
+                      fontSize: isArabic ? AppSpacing.size18 : AppSpacing.size13,
                       height: 1.7,
                       fontFamily: isArabic ? 'Uthmanic' : null,
                       color: isDark

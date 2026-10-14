@@ -6,6 +6,8 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/reflection/presentation/states/reflection_provider.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class ReflectionHeader extends ConsumerWidget {
   const ReflectionHeader({super.key});
 
@@ -42,9 +44,9 @@ class ReflectionHeader extends ConsumerWidget {
                     context.go('/');
                   }
                 },
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white),
+                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20,),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +55,7 @@ class ReflectionHeader extends ConsumerWidget {
                       "Reflection Journal",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: AppSpacing.size16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -61,23 +63,36 @@ class ReflectionHeader extends ConsumerWidget {
                       "$count reflections",
                       style: const TextStyle(
                         color: AppColors.emerald100,
-                        fontSize: 13,
+                        fontSize: AppSpacing.size12,
                       ),
                     ),
                   ],
                 ),
               ),
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: () => context.go('/surahs'),
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text("New"),
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   backgroundColor: Colors.white,
                   foregroundColor: AppColors.emerald600,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add, size: 14),
+                    SizedBox(width: 4), // Adjust gap here (e.g. 4 or 6)
+                    Text(
+                      "New",
+                      style: TextStyle(
+                        fontSize: AppSpacing.size10,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

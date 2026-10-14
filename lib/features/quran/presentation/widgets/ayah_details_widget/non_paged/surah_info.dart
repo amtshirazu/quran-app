@@ -15,7 +15,7 @@ class SurahInfo extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.size16),
         side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
@@ -41,7 +41,7 @@ class SurahInfo extends ConsumerWidget {
             Text(
               surahMetadata?.nameArabic ?? "",
               style: TextStyle(
-                fontSize: AppSpacing.size22,
+                fontSize: AppSpacing.size18,
                 color: isDark ? AppTheme.darkTextPrimary : Colors.white,
                 fontFamily: "Uthmanic",
               ),
@@ -51,7 +51,7 @@ class SurahInfo extends ConsumerWidget {
               surahMetadata?.nameEnglish ?? "",
               style: textTheme.bodyMedium?.copyWith(
                 color: isDark ? AppTheme.darkTextSecondary : AppColors.gray400,
-                fontSize: AppSpacing.size16,
+                fontSize: AppSpacing.size14,
               ),
             ),
             const SizedBox(height: 4),
@@ -59,7 +59,7 @@ class SurahInfo extends ConsumerWidget {
               surahMetadata?.translation ?? "",
               style: textTheme.bodyMedium?.copyWith(
                 color: isDark ? AppTheme.darkTextSecondary : AppColors.gray400,
-                fontSize: AppSpacing.size14,
+                fontSize: AppSpacing.size11,
               ),
             ),
             const SizedBox(height: 12),
@@ -70,7 +70,7 @@ class SurahInfo extends ConsumerWidget {
                   '${surahMetadata?.totalAyahs} Verses',
                   style: TextStyle(
                     color: isDark ? AppTheme.darkTextPrimary : Colors.white,
-                    fontSize: AppSpacing.size14,
+                    fontSize: AppSpacing.size10,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -81,7 +81,7 @@ class SurahInfo extends ConsumerWidget {
                   surahMetadata?.revelationType ?? "",
                   style: TextStyle(
                     color: isDark ? AppTheme.darkTextPrimary : Colors.white,
-                    fontSize: AppSpacing.size14,
+                    fontSize: AppSpacing.size10,
                     fontStyle: FontStyle.italic,
                   ),
                 ),

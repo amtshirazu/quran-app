@@ -64,19 +64,19 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
               controller: _scrollController,
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
-                vertical: 20.0,
+                vertical: 14.0,
               ),
               children: [
                 const PowerOfDuaCard(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 const DuaCategoryToggle(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 DuaSearchField(
                   onChanged: (value) => setState(() => searchQuery = value),
                 ),
-                const SizedBox(height: 20),
-                const DuaSectionTitle(),
                 const SizedBox(height: 12),
+                const DuaSectionTitle(),
+                const SizedBox(height: 0),
                 duasAsync.when(
                   data: (duas) {
                     if (duas.isEmpty) {
@@ -97,6 +97,7 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
                     _scrollToDuaIfTargetSet();
 
                     return ListView.builder(
+                      padding: EdgeInsets.only(top: 20),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: duas.length,
