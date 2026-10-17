@@ -213,7 +213,8 @@ final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
     data: (times) {
       final now = DateTime.now();
       try {
-        return times.entries.firstWhere((e) => e.value.isAfter(now));
+        final obligatoryPrayers = times.entries.where((e) => e.key != "Sunrise");
+        return obligatoryPrayers.firstWhere((e) => e.value.isAfter(now));
       } catch (_) {
         final location = locationAsync.asData?.value;
         if (location != null) {
