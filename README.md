@@ -1,164 +1,136 @@
-# 📖 Quran App – Premium Streaming & Reading Ecosystem
+# Quran App
 
-A modern, high-performance Quran application built with Flutter, focused on **smooth reading, high-quality audio streaming, and offline access**.
+A Flutter Quran companion for reading, listening, and building a steady daily practice. The app brings Quran reading and recitation together with prayer times, duas and azkaar, bookmarks, reflections, and reading progress.
 
----
+## At a glance
 
-## 🚀 Features
+- **Read:** browse all 114 surahs, switch between translation and reading views, and open ayah details.
+- **Listen:** explore reciters, stream recitation in the background, and download surahs for offline listening.
+- **Learn and reflect:** access translations, tafseer, Quranic duas, azkaar, and topic-based guidance.
+- **Keep your place:** save ayah and page bookmarks, write reflections, and track reading activity.
+- **Make it yours:** choose display preferences, Quran script and text sizes, and manage audio downloads and storage.
+- **Daily tools:** view location-based prayer times and reminders.
 
-* 📚 **Offline Quran Reading** (Local JSON)
-* 🎧 **Audio Streaming** with multiple reciters
-* ⬇️ **Smart Caching System** for offline listening
-* 🔁 **Background Audio Playback**
-* 🔍 **Fast Surah Search**
-* 📌 **Bookmarking & Progress Tracking** *(in progress)*
-* ☁️ **Cloud Sync (Firebase)** *(planned)*
-* 🌙 **Dark Mode UI** *(planned)*
+The app is local-first for reading and personal data. Quran-related reference data is bundled with the app, and bookmarks, reflections, settings, and reading progress are stored locally. **Cloud sync and account sign-in are not currently implemented.**
 
----
+## Screenshots
 
-## 🛠️ Tech Stack
+Captured from the running Android app on an Android emulator.
 
-* **Flutter** (UI Framework)
-* **Riverpod** (State Management)
-* **GoRouter** (Navigation)
-* **Just Audio** (Audio Playback)
-* **SQLite** (Local Storage)
-* **Dio** (Networking)
-* **Firebase** *(Upcoming)*
+<p align="center">
+  <img src="screenshots/home_emulator.png" width="190" alt="Home screen with the daily verse, continue reading, and daily features" />
+  &nbsp;
+  <img src="screenshots/reading_emulator.png" width="190" alt="Surah browser with search and reading options" />
+  &nbsp;
+  <img src="screenshots/mushaf_emulator.png" width="190" alt="Ayah-by-ayah Quran reading view" />
+  &nbsp;
+  <img src="screenshots/audio_emulator.png" width="190" alt="Reciter browser and audio playback options" />
+</p>
 
----
+## Features
 
-## 🗺️ Roadmap
+### Quran reading
 
-### 🟢 Month 1: Core Foundation & Audio ✅
+- Surah browser with search and quick access to reading.
+- Ayah-by-ayah and page-based reading experiences.
+- Arabic Quran text with dedicated Quran fonts, translations, and tafseer options.
+- Bookmarks for verses and pages, plus a continue-reading position.
 
-* Project architecture setup
-* Offline reading engine
-* Audio streaming with background playback
-* Smart caching system
+### Recitation and downloads
 
-### 🟡 Month 2: Progress & Sync 🕒
+- Reciter browser with search and reciter information.
+- Background audio playback with playback controls.
+- Stream recitation or download surahs for offline listening.
+- Download and storage management.
 
-* Local storage (bookmarks & tracking)
-* Continue reading & streak system
-* Firebase authentication
-* Cloud sync
+### Daily practice and study
 
-### 🔴 Month 3: Polish & Launch 🚀
+- Prayer times calculated for the user's location, with notification support.
+- Quranic duas, duas, and azkaar.
+- Daily verse, topic-based Quran guidance, and reflections on verses.
+- Search, bookmarks, reading history, and progress views.
 
-* UI/UX improvements
-* Performance optimization
-* App branding (icon & screenshots)
-* Play Store deployment
+### Personalization
 
----
+- Light and dark themes.
+- Reading display options, including script and text-size preferences.
+- Reciter and audio download settings.
 
-## 📊 Milestones
+## Built with
 
-| Date         | Milestone               | Status         |
-| ------------ | ----------------------- | -------------- |
-| March 25     | Offline Audio & Reading | ✅ Complete     |
-| April 30     | Progress & Cloud Sync   | 🕒 In Progress |
-| June 1, 2026 | Official Launch         | 🚀 Planned     |
+- **Flutter and Dart** for the app.
+- **Riverpod** for state management and **GoRouter** for navigation.
+- **just_audio** and **audio_service** for playback and background audio.
+- **SQLite (`sqflite`)** for local app data.
+- **Dio** for network requests and audio downloads.
+- **adhan**, **geolocator**, and Flutter notifications packages for prayer-time features.
+- Quran data/rendering packages and bundled Arabic fonts for the reading experience.
 
----
+## Project structure
 
-## 📁 Project Structure
-
-```
+```text
 lib/
- ├── app/            # App-level configuration (routing, themes, setup)
- ├── assets/         # Local assets (images, JSON, icons)
- ├── core/           # Shared logic (constants, utils, services)
- ├── features/       # Feature-based architecture
- │    ├── audio/     # Audio playback & streaming
- │    ├── progress/  # User progress, bookmarks, tracking
- │    └── quran/     # Quran reading & UI
- └── main.dart       # Entry point
+├── app/          # App widget and app-level setup
+├── core/         # Shared database, routing, theme, notifications, and widgets
+├── features/     # Feature-based app code
+│   ├── audio/
+│   ├── azkaar_and_dua/
+│   ├── bookmark/
+│   ├── find_guidance/
+│   ├── prayer_times/
+│   ├── progress/
+│   ├── quran/
+│   ├── reflection/
+│   ├── search/
+│   └── settings/
+└── main.dart
+
+assets/
+├── database/     # Bundled translations, tafseer, duas, and guidance data
+├── fonts/        # Arabic Quran and display fonts
+├── metadata/     # Surah metadata
+└── reciters/     # Reciter images
 ```
 
----
+## Run the app
 
-## ⚙️ Getting Started
+### Requirements
 
-### 1. Clone the repository
+- Flutter SDK with Dart **3.10.4 or newer** (the Dart constraint is `^3.10.4`).
+- A configured Android emulator or device for the Android experience.
 
-```bash
-git clone https://github.com/YOUR_USERNAME/quran_app.git
-cd quran_app
-```
-
-### 2. Install dependencies
+### Setup
 
 ```bash
 flutter pub get
-```
-
-### 3. Run the app
-
-```bash
+flutter devices
 flutter run
 ```
 
----
+To run on a particular connected device, pass its ID from `flutter devices`:
 
-## 📸 Screenshots
+```bash
+flutter run -d <device-id>
+```
 
-### 🏠 Home & Navigation
-<p align="center">
-  <img src="screenshots/home_1.png" width="220"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="screenshots/home_2.png" width="220"/>
-</p>
+## Checks
 
----
+Run the project's static analysis and tests with:
 
-### 📖 Reading Experience
+```bash
+flutter analyze
+flutter test
+```
 
-#### Surah List
-<p align="center">
-  <img src="screenshots/surah_list.png" width="260"/>
-</p>
+The current `test/widget_test.dart` is still Flutter's starter counter test. It does not cover Quran reading, audio, bookmarks, prayer times, or other app workflows, so treat it as a placeholder rather than meaningful feature coverage.
 
-<br/>
+## Data and privacy notes
 
-#### Ayah-by-Ayah Mode
-<p align="center">
-  <img src="screenshots/ayah_by_ayah_reading_mode.png" width="260"/>
-</p>
+- Reading reference data and personal app data are available locally; audio streaming requires a network connection.
+- Downloaded recitation files are stored on the device and can be managed in the app.
+- The app does not currently provide account-based cloud backup or cross-device synchronization.
+- Data bundled with the app may have its own attribution or usage terms; see the in-app About and Credits pages.
 
-<br/>
-
-#### Paged Mode
-<p align="center">
-  <img src="screenshots/paged_reading_mode.png" width="260"/>
-</p>
-
----
-
-### 🎧 Audio Experience
-<p align="center">
-  <img src="screenshots/quran_audio.png" width="220"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="screenshots/quran_audio_2.png" width="220"/>
-</p>
-
----
-
-### 📊 Profile & Progress
-<p align="center">
-  <img src="screenshots/profile_and_progress.png" width="260"/>
-</p>
-
----
-
-## 👨‍💻 Developer
+## Maintainer
 
 **Abdul Muhsin Tiyumba Shirazu**
-
----
-
-## ⭐️ Support
-
-If you like this project, consider giving it a ⭐ on GitHub!
