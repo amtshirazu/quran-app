@@ -156,6 +156,6 @@ The current `test/widget_test.dart` is still Flutter's starter counter test. It 
 ## Developer
 
 <p align="center">
-  <img src="assets/logo/amtilyst.jpg" width="88" alt="AMTILYST icon" style="margin-bottom: 24px;" /><br />
+  <img src="assets/logo/amtilyst.jpg" width="88" alt="AMTILYST icon" style="margin-bottom: 30px;" /><br />
   <strong>AMTILYST</strong>
 </p>
