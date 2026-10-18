@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import 'package:quran_app/features/quran/presentation/state/daily_verse_provider.dart';
+import 'package:quran_app/features/settings/presentation/state/notification_settings_provider.dart';
 
 class NotificationService {
   NotificationService._();
@@ -101,6 +104,25 @@ class NotificationService {
     }
 
     _initialized = true;
+  }
+
+  /// Automatically checks settings and schedules Daily Verse & Prayer Alarms on app launch
+  Future<void> autoScheduleOnLaunch(WidgetRef ref) async {
+    await init();
+    try {
+      final isEnabled = ref.read(dailyVerseNotifEnabledProvider);
+      if (isEnabled) {
+        final time = ref.read(dailyVerseNotifTimeProvider);
+        final verseData = ref.read(dailyVerseWithTranslationProvider).asData?.value;
+        final text = verseData?.translation ?? "Verily, with hardship comes ease.";
+        await scheduleDailyVerseNotification(
+          time: time,
+          verseText: text,
+        );
+      }
+    } catch (e) {
+      debugPrint("⚠️ NOTIFICATIONS: Auto-schedule on launch error: $e");
+    }
   }
 
   /// Checks whether system notification permission is currently granted
@@ -259,6 +281,7 @@ class NotificationService {
               channelDescription: 'Adhan reminders for prayer times',
               importance: Importance.max,
               priority: Priority.high,
+              category: AndroidNotificationCategory.alarm,
               playSound: true,
               sound: RawResourceAndroidNotificationSound('adhan'),
             ),
@@ -320,6 +343,7 @@ class NotificationService {
           channelDescription: 'Daily Verse of the Day notifications',
           importance: Importance.max,
           priority: Priority.max,
+          category: AndroidNotificationCategory.reminder,
           playSound: true,
         ),
         iOS: DarwinNotificationDetails(

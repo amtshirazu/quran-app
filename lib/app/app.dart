@@ -23,6 +23,7 @@ class _QuranAppState extends ConsumerState<QuranApp>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(audioServiceProvider);
       await NotificationService.instance.init();
+      await NotificationService.instance.autoScheduleOnLaunch(ref);
     });
 
     WidgetsBinding.instance.addObserver(this);
