@@ -11,50 +11,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('quran.db');
-    await _ensureRecentSearchesTableExists(_database!);
-    await _ensureSettingsTableExists(_database!);
     return _database!;
-  }
-
-  Future<void> _ensureRecentSearchesTableExists(Database db) async {
-    await db.execute('''
-    CREATE TABLE IF NOT EXISTS recent_searches (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      query TEXT UNIQUE,
-      timestamp INTEGER
-    )
-    ''');
-  }
-
-  Future<void> _ensureSettingsTableExists(Database db) async {
-    await db.execute('''
-    CREATE TABLE IF NOT EXISTS user_settings (
-      key TEXT PRIMARY KEY,
-      value TEXT
-    )
-    ''');
-  }
-
-  Future<void> setSetting(String key, String value) async {
-    final db = await database;
-    await db.insert(
-      'user_settings',
-      {'key': key, 'value': value},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<String?> getSetting(String key) async {
-    final db = await database;
-    final maps = await db.query(
-      'user_settings',
-      where: 'key = ?',
-      whereArgs: [key],
-    );
-    if (maps.isNotEmpty) {
-      return maps.first['value'] as String?;
-    }
-    return null;
   }
 
   Future<Database> _initDB(String filePath) async {
@@ -69,23 +26,8 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    for (var version = oldVersion + 1; version <= newVersion; version++) {
-      switch (version) {
-        // Add one migration case per schema version, for example:
-        // case 2:
-        //   await _migrateToV2(db);
-        //   break;
-        default:
-          throw StateError(
-            'Missing database migration for version $version. '
-            'Refusing to open an unsupported schema.',
-          );
-      }
-    }
-  }
-
-  Future _createDB(Database db, int version) async {
+  // Runs ONLY on fresh installs when quran.db does not exist yet
+  Future<void> _createDB(Database db, int version) async {
     await db.execute('''
     CREATE TABLE reading_sessions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,7 +61,7 @@ class DatabaseHelper {
     await db.execute('''
     CREATE TABLE bookmarks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      surah_id INTEGER ,
+      surah_id INTEGER,
       ayah_number INTEGER,
       page INTEGER,
       note TEXT,
@@ -129,16 +71,67 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-  CREATE TABLE reflections (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    surah_id INTEGER NOT NULL,
-    ayah_number INTEGER NOT NULL,
-    content TEXT NOT NULL,
-    created_at TEXT NOT NULL
-  )
-''');
+    CREATE TABLE reflections (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      surah_id INTEGER NOT NULL,
+      ayah_number INTEGER NOT NULL,
+      content TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    )
+    ''');
 
-    await _ensureRecentSearchesTableExists(db);
-    await _ensureSettingsTableExists(db);
+    await db.execute('''
+    CREATE TABLE recent_searches (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      query TEXT UNIQUE,
+      timestamp INTEGER
+    )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE user_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT
+    )
+    ''');
+  }
+
+  // Runs sequentially whenever _databaseVersion is incremented
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    for (var version = oldVersion + 1; version <= newVersion; version++) {
+      switch (version) {
+        // Example future update:
+        // case 2:
+        //   await db.execute('ALTER TABLE bookmarks ADD COLUMN category_id INTEGER DEFAULT 0;');
+        //   break;
+        default:
+          throw StateError(
+            'Missing database migration for version $version. '
+            'Refusing to open an unsupported schema.',
+          );
+      }
+    }
+  }
+
+  // Settings helper methods
+  Future<void> setSetting(String key, String value) async {
+    final db = await database;
+    await db.insert('user_settings', {
+      'key': key,
+      'value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> getSetting(String key) async {
+    final db = await database;
+    final maps = await db.query(
+      'user_settings',
+      where: 'key = ?',
+      whereArgs: [key],
+    );
+    if (maps.isNotEmpty) {
+      return maps.first['value'] as String?;
+    }
+    return null;
   }
 }
