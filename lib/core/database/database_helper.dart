@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
+  static const int _databaseVersion = 1;
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
@@ -60,7 +61,28 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    for (var version = oldVersion + 1; version <= newVersion; version++) {
+      switch (version) {
+        // Add one migration case per schema version, for example:
+        // case 2:
+        //   await _migrateToV2(db);
+        //   break;
+        default:
+          throw StateError(
+            'Missing database migration for version $version. '
+            'Refusing to open an unsupported schema.',
+          );
+      }
+    }
   }
 
   Future _createDB(Database db, int version) async {

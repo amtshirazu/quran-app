@@ -27,6 +27,28 @@ Captured from the running Android app on an Android emulator.
   <img src="screenshots/audio_emulator.png" width="190" alt="Reciter browser and audio playback options" />
 </p>
 
+Additional views show settings, daily practice, guidance, and personal tools.
+
+<p align="center">
+  <img src="screenshots/settings.png" width="190" alt="Reading, audio, notification, and display settings" />
+  &nbsp;
+  <img src="screenshots/azkaar_and_dua.png" width="190" alt="Azkaar and dua browsing" />
+  &nbsp;
+  <img src="screenshots/find_guidance.png" width="190" alt="Find Quran guidance by life situation" />
+  &nbsp;
+  <img src="screenshots/prayer_times.png" width="190" alt="Daily prayer times and reminders" />
+</p>
+
+<p align="center">
+  <img src="screenshots/reflections.png" width="190" alt="Personal Quran reflection journal" />
+  &nbsp;
+  <img src="screenshots/bookmarks.png" width="190" alt="Saved ayah and page bookmarks" />
+  &nbsp;
+  <img src="screenshots/profile_and_progress.png" width="190" alt="Profile and Quran reading progress" />
+  &nbsp;
+  <img src="screenshots/paged_reading_mode.png" width="190" alt="Page-based Quran reading" />
+</p>
+
 ## Features
 
 ### Quran reading
@@ -65,6 +87,10 @@ Captured from the running Android app on an Android emulator.
 - **Dio** for network requests and audio downloads.
 - **adhan**, **geolocator**, and Flutter notifications packages for prayer-time features.
 - Quran data/rendering packages and bundled Arabic fonts for the reading experience.
+
+### Local database upgrades
+
+The local SQLite database has a versioned upgrade callback and is currently at schema version 1. No schema migration is needed yet. When changing the schema, increment the version and add a migration for each new version in `DatabaseHelper._upgradeDB`. For example, adding a nullable `color` column to `bookmarks` in version 2 can use `ALTER TABLE bookmarks ADD COLUMN color TEXT`; SQLite keeps existing bookmark rows and their new `color` values are `NULL`. For a required column, choose a safe default for existing rows. The callback fails clearly if a version has no migration, rather than silently opening an unsupported schema. Test upgrades from a copy of a prior-version database before shipping.
 
 ## Project structure
 
