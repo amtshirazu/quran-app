@@ -43,10 +43,6 @@ Additional views show settings, daily practice, guidance, and personal tools.
   <img src="screenshots/reflections.png" width="190" alt="Personal Quran reflection journal" />
   &nbsp;
   <img src="screenshots/bookmarks.png" width="190" alt="Saved ayah and page bookmarks" />
-  &nbsp;
-  <img src="screenshots/profile_and_progress.png" width="190" alt="Profile and Quran reading progress" />
-  &nbsp;
-  <img src="screenshots/paged_reading_mode.png" width="190" alt="Page-based Quran reading" />
 </p>
 
 ## Features
@@ -157,6 +153,16 @@ The current `test/widget_test.dart` is still Flutter's starter counter test. It 
 - The app does not currently provide account-based cloud backup or cross-device synchronization.
 - Data bundled with the app may have its own attribution or usage terms; see the in-app About and Credits pages.
 
-## Developer and Maintainer
+## Developer
 
-**AMTILYST**
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="assets/logo/amtilyst.jpg" width="88" alt="AMTILYST developer icon" />
+    </td>
+    <td>
+      <strong>AMTILYST</strong><br />
+      Developer
+    </td>
+  </tr>
+</table>
