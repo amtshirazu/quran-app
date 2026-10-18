@@ -70,13 +70,10 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
               gradient: isDark
                   ? null
                   : const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppColors.deepGreen,
-                  AppColors.emerald600,
-                ],
-              ),
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [AppColors.deepGreen, AppColors.emerald600],
+                    ),
               color: isDark ? const Color(0xFF162320) : null,
             ),
             child: Center(
@@ -162,9 +159,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             max: maxSeconds,
                             onChanged: (value) {
                               audioPlayer.seek(
-                                Duration(
-                                  seconds: value.toInt(),
-                                ),
+                                Duration(seconds: value.toInt()),
                               );
                             },
                           ),
@@ -199,8 +194,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     // Repeat Mode Button
                     IconButton(
                       onPressed: () async {
-                        final repeatNotifier =
-                        ref.read(repeatModeProvider.notifier);
+                        final repeatNotifier = ref.read(
+                          repeatModeProvider.notifier,
+                        );
                         final audio = ref.read(audioServiceProvider);
 
                         final newMode = switch (repeatNotifier.state) {
@@ -219,9 +215,10 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                           RepeatStates.repeatOne => LucideIcons.repeat1,
                         },
                         color: switch (repeatMode) {
-                          RepeatStates.off => isDark
-                              ? AppTheme.darkTextSecondary
-                              : AppColors.gray600,
+                          RepeatStates.off =>
+                            isDark
+                                ? AppTheme.darkTextSecondary
+                                : AppColors.gray600,
                           RepeatStates.repeatAll => AppColors.emerald600,
                           RepeatStates.repeatOne => AppColors.emerald600,
                         },
@@ -258,8 +255,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                         ),
                         onPressed: () async {
                           final audio = ref.read(audioServiceProvider);
-                          final currentReciter =
-                          ref.read(selectedReciterProvider);
+                          final currentReciter = ref.read(
+                            selectedReciterProvider,
+                          );
                           final surah = ref.read(selectedAudioSurahProvider);
                           final surahs = ref.read(surahListProvider).value;
 
@@ -301,12 +299,15 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     // Volume Increment Button
                     IconButton(
                       onPressed: () {
-                        final volumeNotifier =
-                        ref.read(volumeProvider.notifier);
+                        final volumeNotifier = ref.read(
+                          volumeProvider.notifier,
+                        );
                         final audio = ref.read(audioServiceProvider);
 
-                        final newVolume =
-                        (volumeNotifier.state + 0.05).clamp(0.0, 1.0);
+                        final newVolume = (volumeNotifier.state + 0.05).clamp(
+                          0.0,
+                          1.0,
+                        );
 
                         volumeNotifier.state = newVolume;
                         audio.setVolume(newVolume);
@@ -357,8 +358,9 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                     Text(
                       '${(volume * 100).toInt()}%',
                       style: TextStyle(
-                        color:
-                        isDark ? AppTheme.darkTextSecondary : Colors.grey,
+                        color: isDark
+                            ? AppTheme.darkTextSecondary
+                            : Colors.grey,
                         fontSize: 12,
                       ),
                     ),
@@ -385,7 +387,7 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                               ShareParams(
                                 text: shareText,
                                 subject:
-                                'Surah ${selectedAudioSurah.nameEnglish}',
+                                    'Surah ${selectedAudioSurah.nameEnglish}',
                               ),
                             );
                           }
@@ -418,8 +420,8 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                               onCompleted: () {
                                 ref
                                     .read(
-                                  downloadRefreshTriggerProvider.notifier,
-                                )
+                                      downloadRefreshTriggerProvider.notifier,
+                                    )
                                     .state++;
 
                                 if (context.mounted) {
