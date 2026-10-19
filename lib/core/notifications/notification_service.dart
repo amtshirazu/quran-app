@@ -90,16 +90,6 @@ class NotificationService {
       if (androidImplementation != null) {
         await androidImplementation.createNotificationChannel(prayerChannel);
         await androidImplementation.createNotificationChannel(verseChannel);
-        try {
-          await androidImplementation.requestNotificationsPermission();
-        } catch (e) {
-          debugPrint("⚠️ NOTIFICATIONS: requestNotificationsPermission skipped: $e");
-        }
-        try {
-          await androidImplementation.requestExactAlarmsPermission();
-        } catch (e) {
-          debugPrint("⚠️ NOTIFICATIONS: requestExactAlarmsPermission skipped: $e");
-        }
       }
     }
 
@@ -226,19 +216,23 @@ class NotificationService {
       debugPrint("✅ NOTIFICATION [$id] scheduled for $scheduledDate (exact)");
     } catch (e) {
       debugPrint("⚠️ NOTIFICATION [$id] exact schedule failed, falling back to inexact: $e");
-      await _notificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        scheduledDate,
-        notificationDetails,
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: matchDateTimeComponents,
-        payload: payload,
-      );
-      debugPrint("✅ NOTIFICATION [$id] scheduled for $scheduledDate (inexact)");
+      try {
+        await _notificationsPlugin.zonedSchedule(
+          id,
+          title,
+          body,
+          scheduledDate,
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: matchDateTimeComponents,
+          payload: payload,
+        );
+        debugPrint("✅ NOTIFICATION [$id] scheduled for $scheduledDate (inexact fallback)");
+      } catch (err) {
+        debugPrint("❌ NOTIFICATION [$id] scheduling failed completely: $err");
+      }
     }
   }
 

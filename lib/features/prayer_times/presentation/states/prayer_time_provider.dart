@@ -54,27 +54,23 @@ String _firstNonEmpty(List<String?> candidates, String fallback) {
   return fallback;
 }
 
-// Fetches GPS location with diagnostic logging and fallback
+// Inverted Fast Location Retrieval Strategy (0-delay last known + 7s current position)
 final locationProvider = FutureProvider<Position>((ref) async {
-  debugPrint("📍 LOCATION: Starting location detection...");
+  debugPrint("📍 LOCATION: Starting inverted location retrieval...");
 
   final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  debugPrint("📍 LOCATION: Service enabled = $serviceEnabled");
   if (!serviceEnabled) {
     throw 'Location services are disabled on device.';
   }
 
   LocationPermission permission = await Geolocator.checkPermission();
-  debugPrint("📍 LOCATION: Current permission = $permission");
-
   if (permission == LocationPermission.deniedForever) {
     throw 'Location permissions are permanently denied. Please enable them in app settings.';
   }
 
   if (permission == LocationPermission.denied) {
-    debugPrint("📍 LOCATION: Requesting location permission...");
+    debugPrint("📍 LOCATION: Requesting location permission sequentially...");
     permission = await Geolocator.requestPermission();
-    debugPrint("📍 LOCATION: Permission after request = $permission");
 
     if (permission == LocationPermission.deniedForever) {
       throw 'Location permissions are permanently denied. Please enable them in app settings.';
@@ -84,36 +80,28 @@ final locationProvider = FutureProvider<Position>((ref) async {
     }
   }
 
-  const locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.low,
-    distanceFilter: 100,
-    timeLimit: Duration(seconds: 60),
-  );
+  // Strategy Step 1: Immediately fetch last known position for 0-delay display
+  final lastKnown = await Geolocator.getLastKnownPosition();
+  if (lastKnown != null) {
+    debugPrint("⚡ LOCATION: Instant last known position retrieved (${lastKnown.latitude}, ${lastKnown.longitude})");
+  }
 
+  // Strategy Step 2: Fetch current position with strict 7-second timeout
   try {
-    debugPrint("📍 LOCATION: Requesting current position...");
-    final position = await Geolocator.getCurrentPosition(
+    const locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.low,
+      distanceFilter: 100,
+      timeLimit: Duration(seconds: 7),
+    );
+    final currentPosition = await Geolocator.getCurrentPosition(
       locationSettings: locationSettings,
     );
-    debugPrint("✅ LOCATION: Position received");
-    debugPrint("   Latitude: ${position.latitude}");
-    debugPrint("   Longitude: ${position.longitude}");
-    debugPrint("   Accuracy: ${position.accuracy}");
-    return position;
+    debugPrint("✅ LOCATION: Fresh position received (${currentPosition.latitude}, ${currentPosition.longitude})");
+    return currentPosition;
   } catch (e) {
-    debugPrint("⚠️ LOCATION: getCurrentPosition failed: $e");
-    debugPrint("📍 LOCATION: Attempting to fetch last known position...");
-    final lastKnown = await Geolocator.getLastKnownPosition();
-
-    if (lastKnown != null) {
-      debugPrint("✅ LOCATION: Last known position fetched successfully");
-      debugPrint("   Latitude: ${lastKnown.latitude}");
-      debugPrint("   Longitude: ${lastKnown.longitude}");
-      return lastKnown;
-    }
-
-    debugPrint("❌ LOCATION: No last known position available.");
-    throw 'Failed to acquire current or last known GPS location: $e';
+    debugPrint("⚠️ LOCATION: Fresh position timed out (7s). Using last known position: $e");
+    if (lastKnown != null) return lastKnown;
+    rethrow;
   }
 });
 
@@ -169,38 +157,30 @@ final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
   }
 });
 
+String? _lastScheduledNotificationSignature;
+
 final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
   final position = await ref.watch(locationProvider.future);
-  final countryAndCityName =
-      await ref.watch(countryAndCityNameProvider.future).catchError(
-            (_) => {"city": "Unknown Location", "country": "Unknown Country"},
-          );
   final service = ref.read(prayerTimesServiceProvider);
   final enabledPrayers = ref.watch(enabledPrayersProvider);
-
-  debugPrint("📍 LOCATION FETCHED:");
-  debugPrint("   Latitude: ${position.latitude}");
-  debugPrint("   Longitude: ${position.longitude}");
-  debugPrint("   City: ${countryAndCityName['city']}");
-  debugPrint("   Country: ${countryAndCityName['country']}");
 
   final times = service.calculateTodayTimes(
     lat: position.latitude,
     lng: position.longitude,
   );
 
-  debugPrint("🕌 CALCULATED PRAYER TIMES:");
-  times.forEach((name, time) {
-    debugPrint("   $name: ${DateFormat.jm().format(time)} (Full: $time)");
-  });
-
-  // Automatically schedule rolling 7 days of Adhan notifications
-  unawaited(
-    NotificationService.instance.schedule7DayPrayerNotifications(
-      todayTimes: times,
-      enabledPrayers: enabledPrayers,
-    ),
-  );
+  // Execution Guard: Deduping notification scheduling sessions
+  final signature = "${position.latitude.toStringAsFixed(3)}_${position.longitude.toStringAsFixed(3)}_${enabledPrayers.join('-')}";
+  if (_lastScheduledNotificationSignature != signature) {
+    _lastScheduledNotificationSignature = signature;
+    debugPrint("🕌 NOTIFICATIONS: Scheduling fresh 7-day batch for signature [$signature]");
+    unawaited(
+      NotificationService.instance.schedule7DayPrayerNotifications(
+        todayTimes: times,
+        enabledPrayers: enabledPrayers,
+      ),
+    );
+  }
 
   return times;
 });
