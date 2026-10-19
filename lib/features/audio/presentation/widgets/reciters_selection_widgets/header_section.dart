@@ -29,7 +29,7 @@ class QuranAudioHeader extends ConsumerWidget {
                 ),
           border: const Border(bottom: BorderSide(color: Colors.black12, width: 1)),
         ),
-        padding: const EdgeInsets.fromLTRB(20, 48, 20, 20),
+        padding: const EdgeInsets.fromLTRB(16, 48, 20, 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

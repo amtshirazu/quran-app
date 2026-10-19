@@ -43,7 +43,7 @@ class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: const EdgeInsets.fromLTRB(4, 12, 16, 16),
           child: Row(
             children: [
               IconButton(

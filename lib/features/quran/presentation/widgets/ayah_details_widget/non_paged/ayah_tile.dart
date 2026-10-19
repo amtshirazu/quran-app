@@ -19,6 +19,7 @@ import 'package:quran_app/features/settings/presentation/state/display_settings_
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../audio/presentation/state/audio_providers.dart';
 import '../../../../../progress/presentation/state/last_read_provider.dart';
 import 'package:quran/quran.dart' as quran;
@@ -252,11 +253,12 @@ class _AyahTileState extends ConsumerState<AyahTile> {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
             children: [
+              // ================= TOP ROW =================
               Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 38,
+                    height: 38,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.emerald600,
@@ -267,19 +269,20 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                          fontSize: AppSpacing.size12,
                         ),
                       ),
                     ),
                   ),
                   const Spacer(),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        onPressed: () async {
-                          final bookmarks = await ref.read(
-                            bookmarksProvider.future,
-                          );
+                      // 1. Bookmark Icon
+                      InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () async {
+                          final bookmarks = await ref.read(bookmarksProvider.future);
                           Bookmark? existing;
                           try {
                             existing = bookmarks.firstWhere(
@@ -294,16 +297,13 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           final note = await showBookmarkDialog(
                             context,
                             title: "Add Bookmark",
-                            subtitle:
-                            "${selectedSurah.nameEnglish} • Verse ${widget.ayahNumber}",
+                            subtitle: "${selectedSurah.nameEnglish} Verse ${widget.ayahNumber}",
                             initialNote: existing?.note,
                             isPageMode: false,
                           );
 
                           if (note == null || !mounted) return;
-                          await ref
-                              .read(bookmarkServiceProvider)
-                              .addOrUpdateVerseBookmark(
+                          await ref.read(bookmarkServiceProvider).addOrUpdateVerseBookmark(
                             surahId: selectedSurah.number,
                             ayahNumber: widget.ayahNumber,
                             note: note,
@@ -311,23 +311,27 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           if (!mounted) return;
                           ref.invalidate(bookmarksProvider);
                         },
-                        icon: Icon(
-                          isBookmarked
-                              ? LucideIcons.bookmarkCheck
-                              : LucideIcons.bookmark,
-                          color: isBookmarked
-                              ? AppColors.emerald600
-                              : AppColors.gray400,
-                          size: 18,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            isBookmarked ? LucideIcons.bookmarkCheck : LucideIcons.bookmark,
+                            color: isBookmarked ? AppColors.emerald600 : AppColors.gray400,
+                            size: 16,
+                          ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () async {
+
+                      // 🎛️ TIGHT CONTROL: Change this width to adjust gap between 1 & 2
+                      const SizedBox(width: 12),
+
+                      // 2. Share Icon
+                      InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () async {
                           final translationText = quran.getVerseTranslation(
                             widget.surahNumber,
                             widget.ayahNumber,
                           );
-
                           final shareText =
                               '"$ayahText"\n\n'
                               '"$translationText"\n\n'
@@ -337,19 +341,27 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           await SharePlus.instance.share(
                             ShareParams(
                               text: shareText,
-                              subject:
-                              "Surah ${selectedSurah.nameEnglish} (${selectedSurah.number}:${widget.ayahNumber})",
+                              subject: "Surah ${selectedSurah.nameEnglish} (${selectedSurah.number}:${widget.ayahNumber})",
                             ),
                           );
                         },
-                        icon: const Icon(
-                          LucideIcons.share2,
-                          color: AppColors.gray400,
-                          size: 18,
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(
+                            LucideIcons.share2,
+                            color: AppColors.gray400,
+                            size: 16,
+                          ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () async {
+
+                      // 🎛️ TIGHT CONTROL: Change this width to adjust gap between 2 & 3
+                      const SizedBox(width: 12),
+
+                      // 3. Audio Icon
+                      InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () async {
                           final audio = ref.read(audioServiceProvider);
                           final reciter = ref.read(defaultReciterProvider) ??
                               ref.read(selectedReciterProvider) ??
@@ -372,17 +384,22 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             }
                           }
                         },
-                        icon: const Icon(
-                          LucideIcons.volume2,
-                          color: AppColors.gray400,
-                          size: 18,
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(
+                            LucideIcons.volume2,
+                            color: AppColors.gray400,
+                            size: 16,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
+
+              // ================= ARABIC & TRANSLATION =================
               if (showAyahBefore) ...[
                 Align(
                   alignment: Alignment.centerRight,
@@ -392,15 +409,17 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                       fontFamily: fontName,
                       fontSize: ayahTextSize,
+                      // LINE-HEIGHT MULTIPLIER FOR ARABIC TEXT
+                      height: 2.1,
                     ),
                     textAlign: TextAlign.right,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Align(alignment: Alignment.centerLeft, child: translationWidget),
               ] else ...[
                 Align(alignment: Alignment.centerLeft, child: translationWidget),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
@@ -409,6 +428,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                       fontFamily: fontName,
                       fontSize: ayahTextSize,
+                      height: 2.1,
                     ),
                     textAlign: TextAlign.right,
                   ),

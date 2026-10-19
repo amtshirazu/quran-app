@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -99,13 +100,8 @@ final guidanceCategoriesProvider = FutureProvider<List<GuidanceCategory>>((ref) 
   return categories;
 });
 
-/// Fetches verses for a specific emotion and enriches them with in-memory Quran data
-final guidanceVersesProvider = FutureProvider.family<List<GuidanceVerse>, String>((ref, emotion) async {
-  ref.keepAlive();
-  final dbService = ref.watch(guidanceDatabaseServiceProvider);
-
-  final rawVerses = await dbService.getVersesByEmotion(emotion);
-
+/// Offloads heavy string lookups and model enrichment to a background isolate
+List<GuidanceVerse> _enrichVersesWorker(List<GuidanceVerse> rawVerses) {
   final List<GuidanceVerse> enriched = [];
 
   for (final verse in rawVerses) {
@@ -128,4 +124,18 @@ final guidanceVersesProvider = FutureProvider.family<List<GuidanceVerse>, String
   }
 
   return enriched;
+}
+
+/// Fetches verses for a specific emotion and enriches them in a background isolate
+final guidanceVersesProvider = FutureProvider.family<List<GuidanceVerse>, String>((ref, emotion) async {
+  ref.keepAlive();
+  final dbService = ref.watch(guidanceDatabaseServiceProvider);
+
+  final rawVerses = await dbService.getVersesByEmotion(emotion);
+
+  if (rawVerses.length < 50) {
+    return _enrichVersesWorker(rawVerses);
+  }
+
+  return await Isolate.run(() => _enrichVersesWorker(rawVerses));
 });

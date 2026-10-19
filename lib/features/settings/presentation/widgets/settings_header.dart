@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
   const SettingsHeader({super.key});
 
@@ -28,7 +30,7 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: const EdgeInsets.fromLTRB(4, 12, 16, 16),
           child: Row(
             children: [
               IconButton(
@@ -52,7 +54,7 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
                 'Settings',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17,
+                  fontSize: AppSpacing.size16,
                   fontWeight: FontWeight.bold,
                 ),
               ),

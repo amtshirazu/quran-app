@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -55,16 +56,23 @@ class DuaDatabaseService {
     return await openDatabase(path, readOnly: true);
   }
 
-  /// Fetch all duas for selected category
+  /// Fetch all duas for selected category offloading mapping to background isolate
   Future<List<QuranicDua>> getDuasByCategory(DuaCategory category) async {
     final db = await _getDatabase(category);
     final List<Map<String, dynamic>> maps = await db.query('duas');
 
     final categoryType = category == DuaCategory.quranic ? 'quranic' : 'witr';
-    return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+
+    if (maps.length < 50) {
+      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+    }
+
+    return await Isolate.run(() {
+      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+    });
   }
 
-  /// Search duas within selected category
+  /// Search duas within selected category offloading mapping to background isolate
   Future<List<QuranicDua>> searchDuasByCategory(DuaCategory category, String query) async {
     final db = await _getDatabase(category);
     final wildCardQuery = "%$query%";
@@ -86,6 +94,12 @@ class DuaDatabaseService {
       );
     }
 
-    return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+    if (maps.length < 50) {
+      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+    }
+
+    return await Isolate.run(() {
+      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+    });
   }
 }

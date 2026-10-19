@@ -33,7 +33,7 @@ class AboutScreen extends StatelessWidget {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Row(
                 children: [
                   IconButton(
@@ -201,13 +201,6 @@ class AboutScreen extends StatelessWidget {
                     context,
                     title: 'Privacy Policy',
                     route: '/aboutPrivacy',
-                    isDark: isDark,
-                  ),
-                  _buildDivider(isDark),
-                  _buildNavTile(
-                    context,
-                    title: 'Open-source licenses',
-                    route: '/aboutLicenses',
                     isDark: isDark,
                   ),
                 ],

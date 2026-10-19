@@ -9,6 +9,8 @@ import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class ReciterSelectionScreen extends ConsumerStatefulWidget {
   const ReciterSelectionScreen({super.key});
 
@@ -79,7 +81,7 @@ class _ReciterSelectionScreenState
       child: Scaffold(
         backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(130),
+          preferredSize: const Size.fromHeight(120),
           child: Container(
             decoration: BoxDecoration(
               color: isDark ? AppTheme.darkScaffold : null,
@@ -96,7 +98,7 @@ class _ReciterSelectionScreenState
             ),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
                 child: Column(
                   children: [
                     Row(
@@ -114,12 +116,12 @@ class _ReciterSelectionScreenState
                               ),
                               onPressed: _stopAudioAndPop,
                             ),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 4),
                             const Text(
                               'Choose a reciter',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: AppSpacing.size16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -131,18 +133,19 @@ class _ReciterSelectionScreenState
                             'Done',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: AppSpacing.size12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
 
                     /// Search Bar
                     Container(
-                      height: 42,
+                      margin: const EdgeInsets.only(left: 24, right: 16),
+                      height: 32,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: isDark ? AppTheme.darkSurface : Colors.white,
@@ -158,19 +161,19 @@ class _ReciterSelectionScreenState
                         },
                         style: TextStyle(
                           color: isDark ? Colors.white : AppColors.gray900,
-                          fontSize: 14,
+                          fontSize: AppSpacing.size12,
                         ),
                         decoration: const InputDecoration(
                           isDense: true,
                           hintText: 'Search reciters',
                           hintStyle: TextStyle(
                             color: AppColors.gray400,
-                            fontSize: 14,
+                            fontSize: AppSpacing.size11,
                           ),
                           prefixIcon: Icon(
                             LucideIcons.search,
                             color: AppColors.gray400,
-                            size: 18,
+                            size: 16,
                           ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
@@ -193,7 +196,7 @@ class _ReciterSelectionScreenState
               Text(
                 'SELECTED',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: AppSpacing.size13,
                   fontWeight: FontWeight.bold,
                   color: isDark ? AppTheme.darkCategoryTitle : AppColors.emerald600,
                   letterSpacing: 0.8,
@@ -208,7 +211,7 @@ class _ReciterSelectionScreenState
                       (_playingSampleId == selectedReciter.id);
 
                   return Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: isDark ? AppTheme.darkSurface : const Color(0xFFE8F5E9),
                       borderRadius: BorderRadius.circular(16),
@@ -223,12 +226,12 @@ class _ReciterSelectionScreenState
                           borderRadius: BorderRadius.circular(12),
                           child: Image.asset(
                             selectedReciter.image,
-                            width: 52,
-                            height: 52,
+                            width: 48,
+                            height: 48,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +239,7 @@ class _ReciterSelectionScreenState
                               Text(
                                 selectedReciter.name,
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: AppSpacing.size13,
                                   fontWeight: FontWeight.bold,
                                   color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
                                 ),
@@ -245,7 +248,7 @@ class _ReciterSelectionScreenState
                               Text(
                                 '${selectedReciter.style} • Default',
                                 style: const TextStyle(
-                                  fontSize: 12,
+                                  fontSize: AppSpacing.size10,
                                   color: AppColors.emerald600,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -259,7 +262,7 @@ class _ReciterSelectionScreenState
                                 ? LucideIcons.pauseCircle
                                 : LucideIcons.playCircle,
                             color: AppColors.emerald600,
-                            size: 32,
+                            size: 26,
                           ),
                           onPressed: () => _toggleSamplePlay(selectedReciter),
                         ),
@@ -275,7 +278,7 @@ class _ReciterSelectionScreenState
               Text(
                 'ALL RECITERS',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: AppSpacing.size13,
                   fontWeight: FontWeight.bold,
                   color: isDark ? AppTheme.darkCategoryTitle : AppColors.gray700,
                   letterSpacing: 0.8,
@@ -288,7 +291,7 @@ class _ReciterSelectionScreenState
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: filteredReciters.length,
-                separatorBuilder: (_, index) => const SizedBox(height: 10),
+                separatorBuilder: (_, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final reciter = filteredReciters[index];
                   final isSelected = selectedReciter?.id == reciter.id;
@@ -323,8 +326,8 @@ class _ReciterSelectionScreenState
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.asset(
                                   reciter.image,
-                                  width: 48,
-                                  height: 48,
+                                  width: 44,
+                                  height: 44,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -336,7 +339,7 @@ class _ReciterSelectionScreenState
                                     Text(
                                       reciter.name,
                                       style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: AppSpacing.size13,
                                         fontWeight: FontWeight.bold,
                                         color: isDark
                                             ? AppTheme.darkTextPrimary
@@ -347,7 +350,7 @@ class _ReciterSelectionScreenState
                                     Text(
                                       '${reciter.style} • ${reciter.country}',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: AppSpacing.size10,
                                         color: isDark
                                             ? AppTheme.darkTextSecondary
                                             : AppColors.gray600,
@@ -362,7 +365,7 @@ class _ReciterSelectionScreenState
                                       ? LucideIcons.pauseCircle
                                       : LucideIcons.playCircle,
                                   color: AppColors.emerald600,
-                                  size: 28,
+                                  size: 24,
                                 ),
                                 onPressed: () => _toggleSamplePlay(reciter),
                               ),
@@ -374,7 +377,7 @@ class _ReciterSelectionScreenState
                                 color: isSelected
                                     ? AppColors.emerald600
                                     : AppColors.gray400,
-                                size: 22,
+                                size: 20,
                               ),
                             ],
                           ),

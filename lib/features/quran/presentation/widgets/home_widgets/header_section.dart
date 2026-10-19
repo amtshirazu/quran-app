@@ -12,7 +12,7 @@ class HeaderSection extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 0),
+      padding: const EdgeInsets.fromLTRB(16, 60, 24, 0),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkScaffold : null,
         gradient: isDark

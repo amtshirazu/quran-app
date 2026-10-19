@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran_app/core/notifications/notification_service.dart';
+import 'package:quran_app/core/services/permission_service.dart';
 import 'package:quran_app/features/prayer_times/presentation/states/prayer_time_provider.dart';
 import '../core/router/app_router.dart';
 import '../core/theme/app_theme.dart';
@@ -23,6 +24,7 @@ class _QuranAppState extends ConsumerState<QuranApp>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(audioServiceProvider);
       await NotificationService.instance.init();
+      await PermissionCoordinator.requestInitialPermissions();
       await NotificationService.instance.autoScheduleOnLaunch(ref);
     });
 

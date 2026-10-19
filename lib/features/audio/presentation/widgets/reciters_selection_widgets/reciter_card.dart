@@ -39,7 +39,7 @@ class ReciterCard extends StatelessWidget {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 138,
+                  height: 125,
                   child: Image.asset(reciter.image, fit: BoxFit.cover),
                 ),
                 Positioned.fill(
@@ -115,7 +115,7 @@ class ReciterCard extends StatelessWidget {
 
             /// Bottom Compact Details Section
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 16, 10, 4),
+              padding: const EdgeInsets.fromLTRB(10, 16, 10, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,

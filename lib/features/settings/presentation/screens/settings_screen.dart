@@ -54,7 +54,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   style: TextStyle(
                     fontSize: AppSpacing.size15,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                    color: isDark
+                        ? AppTheme.darkTextPrimary
+                        : AppColors.gray900,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -65,7 +67,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     style: TextStyle(
                       fontSize: AppSpacing.size13,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDark
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                     ),
                   ),
                   trailing: const Icon(
@@ -108,12 +112,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ? defaultReciter.name
         : 'Abu Bakr Ash-Shaatree';
 
+    final activeDownloads = ref.watch(downloadManagerProvider);
+    final isDownloading = activeDownloads.isNotEmpty;
+
     final storageSummaryAsync = ref.watch(storageSummaryProvider);
-    final String downloadsSubtitle = storageSummaryAsync.when(
-      data: (s) => s.formattedTotalUsed,
-      loading: () => 'Calculating...',
-      error: (_, __) => '0 MB',
-    );
+    final String downloadsSubtitle = isDownloading
+        ? 'Calculating...'
+        : storageSummaryAsync.when(
+            skipLoadingOnReload: true,
+            skipLoadingOnRefresh: true,
+            data: (s) => s.formattedTotalUsed,
+            loading: () => 'Calculating...',
+            error: (_, __) => '0 MB',
+          );
 
     final quranScript = ref.watch(quranScriptProvider);
     final ayahTextSize = ref.watch(ayahTextSizeProvider);
@@ -149,12 +160,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         translationSubtitle,
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size11,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -170,12 +187,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         tafseerSubtitle,
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size11,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -185,14 +208,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 SettingsRow(
                   icon: LucideIcons.moon,
                   title: 'Dark mode',
-                  subtitle: 'App theme switches instantly to a dark palette for night reading',
+                  subtitle:
+                      'App theme switches instantly to a dark palette for night reading',
                   showDivider: false,
-                  trailing: Switch(
-                    value: isDarkMode,
-                    activeTrackColor: AppColors.emerald600,
-                    onChanged: (val) {
-                      ref.read(themeModeProvider.notifier).toggleDarkMode(val);
-                    },
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isDarkMode,
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) {
+                        ref
+                            .read(themeModeProvider.notifier)
+                            .toggleDarkMode(val);
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -211,12 +240,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         reciterSubtitle,
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size11,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -228,12 +263,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: 'Streaming',
                   subtitle: 'Stream audio instead of downloading',
                   showDivider: false,
-                  trailing: Switch(
-                    value: ref.watch(streamingModeProvider),
-                    activeTrackColor: AppColors.emerald600,
-                    onChanged: (val) {
-                      ref.read(streamingModeProvider.notifier).toggleStreaming(val);
-                    },
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: ref.watch(streamingModeProvider),
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) {
+                        ref
+                            .read(streamingModeProvider.notifier)
+                            .toggleStreaming(val);
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -247,17 +287,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   icon: LucideIcons.bell,
                   title: 'Daily Verse Notification',
                   subtitle: 'Receive a daily inspiration from the Quran',
-                  trailing: Switch(
-                    value: isDailyVerseEnabled,
-                    activeTrackColor: AppColors.emerald600,
-                    onChanged: (val) async {
-                      if (val) {
-                        final hasPermission = await NotificationService.instance
-                            .checkAndRequestPermission(context);
-                        if (!hasPermission) return;
-                      }
-                      ref.read(dailyVerseNotifEnabledProvider.notifier).setEnabled(val);
-                    },
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isDailyVerseEnabled,
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) async {
+                        if (val) {
+                          final hasPermission = await NotificationService
+                              .instance
+                              .checkAndRequestPermission(context);
+                          if (!hasPermission) return;
+                        }
+                        ref
+                            .read(dailyVerseNotifEnabledProvider.notifier)
+                            .setEnabled(val);
+                      },
+                    ),
                   ),
                 ),
                 SettingsRow(
@@ -271,13 +317,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         dailyVerseTime.format(context),
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size11,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () async {
@@ -286,14 +338,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       initialTime: dailyVerseTime,
                     );
                     if (newTime != null) {
-                      await ref.read(dailyVerseNotifTimeProvider.notifier).setTime(newTime);
-                      final dailyVerseAsync = ref.read(dailyVerseWithTranslationProvider);
-                      final verseText = dailyVerseAsync.asData?.value.translation ??
-                          "Verily, with hardship comes ease.";
-                      await NotificationService.instance.scheduleDailyVerseNotification(
-                        time: newTime,
-                        verseText: verseText,
+                      await ref
+                          .read(dailyVerseNotifTimeProvider.notifier)
+                          .setTime(newTime);
+                      final dailyVerseAsync = ref.read(
+                        dailyVerseWithTranslationProvider,
                       );
+                      final verseText =
+                          dailyVerseAsync.asData?.value.translation ??
+                          "Verily, with hardship comes ease.";
+                      await NotificationService.instance
+                          .scheduleDailyVerseNotification(
+                            time: newTime,
+                            verseText: verseText,
+                          );
                     }
                   },
                 ),
@@ -307,12 +365,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 SettingsRow(
                   title: 'Ayah before translation',
                   subtitle: 'Show Arabic above the translation',
-                  trailing: Switch(
-                    value: showAyahBefore,
-                    activeTrackColor: AppColors.emerald600,
-                    onChanged: (val) {
-                      ref.read(showAyahBeforeTranslationProvider.notifier).toggle(val);
-                    },
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: showAyahBefore,
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) {
+                        ref
+                            .read(showAyahBeforeTranslationProvider.notifier)
+                            .toggle(val);
+                      },
+                    ),
                   ),
                 ),
                 SettingsStepperRow(
@@ -328,40 +391,50 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     style: TextStyle(
                       fontFamily: fontName,
                       fontSize: ayahTextSize,
-                      color: isDarkMode ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDarkMode
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                     ),
                   ),
                 ),
                 SettingsStepperRow(
                   title: 'Transliteration text size',
                   value: transliterationTextSize,
-                  onDecrement: () =>
-                      ref.read(transliterationTextSizeProvider.notifier).decrement(),
-                  onIncrement: () =>
-                      ref.read(transliterationTextSizeProvider.notifier).increment(),
+                  onDecrement: () => ref
+                      .read(transliterationTextSizeProvider.notifier)
+                      .decrement(),
+                  onIncrement: () => ref
+                      .read(transliterationTextSizeProvider.notifier)
+                      .increment(),
                   previewWidget: Text(
                     "Rabbanaa afrigh 'alaynaa sabran wa thabbit aqdaamanaa",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: transliterationTextSize,
                       fontStyle: FontStyle.italic,
-                      color: isDarkMode ? AppTheme.darkTextSecondary : AppColors.gray700,
+                      color: isDarkMode
+                          ? AppTheme.darkTextSecondary
+                          : AppColors.gray700,
                     ),
                   ),
                 ),
                 SettingsStepperRow(
                   title: 'Translation text size',
                   value: translationTextSize,
-                  onDecrement: () =>
-                      ref.read(translationTextSizeProvider.notifier).decrement(),
-                  onIncrement: () =>
-                      ref.read(translationTextSizeProvider.notifier).increment(),
+                  onDecrement: () => ref
+                      .read(translationTextSizeProvider.notifier)
+                      .decrement(),
+                  onIncrement: () => ref
+                      .read(translationTextSizeProvider.notifier)
+                      .increment(),
                   previewWidget: Text(
                     "Our Lord! Pour forth on us patience and make us victorious over the disbelieving people.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: translationTextSize,
-                      color: isDarkMode ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDarkMode
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                     ),
                   ),
                 ),
@@ -393,7 +466,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 SettingsRow(
                   title: 'IndoPak',
                   trailing: quranScript == 'IndoPak'
-                      ? const Icon(Icons.check_circle, color: AppColors.emerald600, size: 20)
+                      ? const Icon(
+                          Icons.check_circle,
+                          color: AppColors.emerald600,
+                          size: 20,
+                        )
                       : const SizedBox.shrink(),
                   onTap: () {
                     ref.read(quranScriptProvider.notifier).setScript('IndoPak');
@@ -403,10 +480,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: 'Uthmanic',
                   showDivider: false,
                   trailing: quranScript == 'Uthmanic'
-                      ? const Icon(Icons.check_circle, color: AppColors.emerald600, size: 20)
+                      ? const Icon(
+                          Icons.check_circle,
+                          color: AppColors.emerald600,
+                          size: 20,
+                        )
                       : const SizedBox.shrink(),
                   onTap: () {
-                    ref.read(quranScriptProvider.notifier).setScript('Uthmanic');
+                    ref
+                        .read(quranScriptProvider.notifier)
+                        .setScript('Uthmanic');
                   },
                 ),
               ],
@@ -425,12 +508,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         'English',
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size12,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -446,12 +535,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         downloadsSubtitle,
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size12,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -468,12 +563,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Text(
                         'v1.1.0',
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white70 : AppColors.gray600,
+                          color: isDarkMode
+                              ? Colors.white70
+                              : AppColors.gray600,
                           fontSize: AppSpacing.size12,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.gray400,
+                        size: 20,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -491,7 +592,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   icon: LucideIcons.messageSquare,
                   title: 'Feedback / Chat',
                   subtitle: "Let's share your thoughts with us",
-                  trailing: const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: AppColors.gray400,
+                    size: 20,
+                  ),
                   onTap: () async {
                     final platform = Platform.isAndroid ? 'Android' : 'iOS';
                     final uri = Uri(
@@ -499,11 +604,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       path: 'abdulmuhsintiyumbashirazu@gmail.com',
                       queryParameters: {
                         'subject': 'Bayyinah Flow Feedback & Support',
-                        'body': '\n\n---\nApp Version: 2.1.0\nPlatform: $platform\n',
+                        'body':
+                            '\n\n---\nApp Version: 2.1.0\nPlatform: $platform\n',
                       },
                     );
                     try {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
                     } catch (e) {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -519,8 +628,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 SettingsRow(
                   icon: LucideIcons.star,
                   title: 'Rate Us',
-                  subtitle: 'Your feedback will help millions of users worldwide',
-                  trailing: const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                  subtitle:
+                      'Your feedback will help millions of users worldwide',
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: AppColors.gray400,
+                    size: 20,
+                  ),
                   onTap: () async {
                     final inAppReview = InAppReview.instance;
                     try {
@@ -539,17 +653,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: 'Share App',
                   subtitle: 'Invite & Share with Friends and Family',
                   showDivider: false,
-                  trailing: const Icon(Icons.chevron_right, color: AppColors.gray400, size: 20),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: AppColors.gray400,
+                    size: 20,
+                  ),
                   onTap: () async {
                     const message =
                         "Discover Bayyinah Flow — A calm, focused space to read, listen to, and understand the Quran.\n\n"
                         "Download now: https://play.google.com/store/apps/details?id=com.example.quran_app";
 
                     await SharePlus.instance.share(
-                      ShareParams(
-                        text: message,
-                        subject: "Bayyinah Flow App",
-                      ),
+                      ShareParams(text: message, subject: "Bayyinah Flow App"),
                     );
                   },
                 ),

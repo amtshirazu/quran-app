@@ -23,7 +23,7 @@ class ProfileHeader extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 52, 16, 32),
+      padding: const EdgeInsets.fromLTRB(4, 52, 16, 32),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkScaffold : null,
         gradient: isDark
@@ -81,19 +81,20 @@ class ProfileHeader extends ConsumerWidget {
             "Your Quran Journey",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 15,
+              fontSize: AppSpacing.size14,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             since ?? (sinceAsync.asData?.value ?? 'Start your journey today'),
             style: const TextStyle(
               color: AppColors.emerald100,
-              fontSize: 12,
+              fontSize: AppSpacing.size11,
               fontWeight: FontWeight.w500,
             ),
           ),
+          const SizedBox(height: 4),
         ],
       ),
     );

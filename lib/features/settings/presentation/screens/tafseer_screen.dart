@@ -7,6 +7,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/presentation/state/tafseer_provider.dart';
 import 'package:quran_app/features/settings/domain/model/tafseer_model.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class TafseerScreen extends ConsumerWidget {
   const TafseerScreen({super.key});
 
@@ -40,7 +42,7 @@ class TafseerScreen extends ConsumerWidget {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Row(
                 children: [
                   IconButton(
@@ -59,12 +61,12 @@ class TafseerScreen extends ConsumerWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'Tafseer Selection',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -91,7 +93,7 @@ class TafseerScreen extends ConsumerWidget {
                   child: Text(
                     language.toUpperCase(),
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: AppSpacing.size12,
                       fontWeight: FontWeight.bold,
                       color: isDark ? AppTheme.darkCategoryTitle : AppColors.emerald600,
                       letterSpacing: 0.8,
@@ -152,7 +154,7 @@ class TafseerScreen extends ConsumerWidget {
                                       Text(
                                         item.name,
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: AppSpacing.size12,
                                           fontWeight: FontWeight.bold,
                                           color: isDark
                                               ? AppTheme.darkTextPrimary
@@ -163,7 +165,7 @@ class TafseerScreen extends ConsumerWidget {
                                       Text(
                                         item.description,
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: AppSpacing.size10,
                                           color: isDark
                                               ? AppTheme.darkTextSecondary
                                               : AppColors.gray600,
@@ -176,7 +178,7 @@ class TafseerScreen extends ConsumerWidget {
                                   const Icon(
                                     Icons.check_circle,
                                     color: AppColors.emerald600,
-                                    size: 22,
+                                    size: 18,
                                   ),
                               ],
                             ),

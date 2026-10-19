@@ -7,6 +7,18 @@ import 'package:quran_app/features/audio/data/reciters_list.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/quran/domain/models/surah.dart';
 
+/// Formats byte sizes dynamically: shows MB below 1000 MB, and GB (1.1 GB, 1.23 GB) above 1000 MB
+String formatBytesHelper(double bytes) {
+  if (bytes <= 0) return '0 MB';
+  final mb = bytes / (1024 * 1024);
+  if (mb >= 1000) {
+    final gb = mb / 1024.0;
+    final formatted = gb.toStringAsFixed(gb >= 10 ? 1 : 2).replaceAll(RegExp(r'\.?0+$'), '');
+    return '$formatted GB';
+  }
+  return '${mb.toStringAsFixed(1)} MB';
+}
+
 class ReciterDownloadInfo {
   final Reciter reciter;
   final int downloadedCount;
@@ -26,14 +38,7 @@ class ReciterDownloadInfo {
     this.currentDownloadingSurahNum,
   });
 
-  String get formattedSize {
-    if (totalSizeBytes <= 0) return '0 MB';
-    final mb = totalSizeBytes / (1024 * 1024);
-    if (mb >= 1024) {
-      return '${(mb / 1024).toStringAsFixed(1)} GB';
-    }
-    return '${mb.toStringAsFixed(1)} MB';
-  }
+  String get formattedSize => formatBytesHelper(totalSizeBytes);
 }
 
 class StorageSummary {
@@ -51,17 +56,8 @@ class StorageSummary {
 
   double get totalUsedBytes => quranTextBytes + audioBytes + translationsBytes;
 
-  String formatBytes(double bytes) {
-    if (bytes <= 0) return '0 MB';
-    final mb = bytes / (1024 * 1024);
-    if (mb >= 1024) {
-      return '${(mb / 1024).toStringAsFixed(1)} GB';
-    }
-    return '${mb.toStringAsFixed(1)} MB';
-  }
-
-  String get formattedTotalUsed => formatBytes(totalUsedBytes);
-  String get formattedFreeSpace => formatBytes(freeSpaceBytes);
+  String get formattedTotalUsed => formatBytesHelper(totalUsedBytes);
+  String get formattedFreeSpace => formatBytesHelper(freeSpaceBytes);
 }
 
 class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
@@ -211,10 +207,7 @@ class ReciterSurahFileDetails {
   double get totalSizeBytes => downloadedSurahSizeMap.values
       .fold(0.0, (sum, size) => sum + size);
 
-  String get formattedTotalSize {
-    final mb = totalSizeBytes / (1024 * 1024);
-    return '${mb.toStringAsFixed(1)} MB';
-  }
+  String get formattedTotalSize => formatBytesHelper(totalSizeBytes);
 }
 
 /// Provider fetching Map of downloaded surah files for a specific reciter

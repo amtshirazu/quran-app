@@ -9,13 +9,12 @@ import 'package:quran_app/features/quran/domain/models/surah.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/settings/presentation/state/download_provider.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class ReciterDownloadsScreen extends ConsumerWidget {
   final Reciter reciter;
 
-  const ReciterDownloadsScreen({
-    super.key,
-    required this.reciter,
-  });
+  const ReciterDownloadsScreen({super.key, required this.reciter});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,17 +32,14 @@ class ReciterDownloadsScreen extends ConsumerWidget {
             gradient: isDark
                 ? null
                 : const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.deepGreen,
-                AppColors.emerald600,
-              ],
-            ),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
+                  ),
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -65,12 +61,12 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                           }
                         },
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 4),
                       Text(
                         reciter.name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: AppSpacing.size16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -78,12 +74,19 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () async {
-                      final container = ProviderScope.containerOf(context, listen: false);
-                      final manager = ref.read(downloadManagerProvider.notifier);
+                      final container = ProviderScope.containerOf(
+                        context,
+                        listen: false,
+                      );
+                      final manager = ref.read(
+                        downloadManagerProvider.notifier,
+                      );
                       await manager.deleteAllReciterSurahs(
                         reciter: reciter,
                         onCompleted: () {
-                          container.read(downloadRefreshTriggerProvider.notifier).state++;
+                          container
+                              .read(downloadRefreshTriggerProvider.notifier)
+                              .state++;
                         },
                       );
                     },
@@ -91,7 +94,7 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                       'Delete All',
                       style: TextStyle(
                         color: Color(0xFFFF8A80),
-                        fontSize: 14,
+                        fontSize: AppSpacing.size10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -103,6 +106,8 @@ class ReciterDownloadsScreen extends ConsumerWidget {
         ),
       ),
       body: surahsAsync.when(
+        skipLoadingOnReload: true,
+        skipLoadingOnRefresh: true,
         data: (surahList) {
           final fileDetails = fileDetailsAsync.asData?.value;
           final downloadedMap = fileDetails?.downloadedSurahSizeMap ?? {};
@@ -119,7 +124,7 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                 Text(
                   '$totalDownloadedCount of 114 surahs downloaded • $totalMb',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: AppSpacing.size12,
                     fontWeight: FontWeight.w600,
                     color: isDark
                         ? AppTheme.darkTextSecondary
@@ -144,7 +149,9 @@ class ReciterDownloadsScreen extends ConsumerWidget {
                     separatorBuilder: (_, index) => Divider(
                       height: 1,
                       thickness: 1,
-                      color: isDark ? AppTheme.darkBorder : const Color(0xFFF3F4F6),
+                      color: isDark
+                          ? AppTheme.darkBorder
+                          : const Color(0xFFF3F4F6),
                     ),
                     itemBuilder: (context, index) {
                       final surah = surahList[index];
@@ -217,10 +224,7 @@ class _SurahDownloadItemTile extends ConsumerWidget {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -229,8 +233,8 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                 /// Left Icon
                 if (isDownloading)
                   const SizedBox(
-                    width: 18,
-                    height: 18,
+                    width: 14,
+                    height: 14,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       color: AppColors.emerald600,
@@ -240,7 +244,7 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                   Text(
                     '${surah.number}.',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: AppSpacing.size12,
                       fontWeight: FontWeight.bold,
                       color: isDark
                           ? AppTheme.darkTextPrimary
@@ -250,7 +254,7 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                 else
                   const Icon(
                     LucideIcons.download,
-                    size: 18,
+                    size: 16,
                     color: AppColors.gray400,
                   ),
                 const SizedBox(width: 12),
@@ -262,7 +266,7 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                         ? surah.nameEnglish
                         : '${surah.number}. ${surah.nameEnglish}',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: AppSpacing.size12,
                       fontWeight: FontWeight.bold,
                       color: isDark
                           ? AppTheme.darkTextPrimary
@@ -276,44 +280,55 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                   Text(
                     '${(progress * 100).toInt()}%',
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: AppSpacing.size10,
                       fontWeight: FontWeight.bold,
                       color: AppColors.emerald600,
                     ),
                   )
                 else if (isDownloaded)
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         formattedSize,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: AppSpacing.size10,
                           color: isDark
                               ? AppTheme.darkTextSecondary
                               : AppColors.gray500,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: const Icon(
-                          LucideIcons.trash2,
-                          size: 18,
-                          color: Color(0xFFE53935),
-                        ),
-                        onPressed: () async {
-                          final container = ProviderScope.containerOf(context, listen: false);
-                          final manager = container.read(downloadManagerProvider.notifier);
+                      // 💡 Replaced IconButton with InkWell to prevent vertical height expansion
+                      InkWell(
+                        borderRadius: BorderRadius.circular(4),
+                        onTap: () async {
+                          final container = ProviderScope.containerOf(
+                            context,
+                            listen: false,
+                          );
+                          final manager = container.read(
+                            downloadManagerProvider.notifier,
+                          );
 
                           await manager.deleteSurah(
                             reciter: reciter,
                             surahNum: surah.number,
                             onCompleted: () {
-                              container.read(downloadRefreshTriggerProvider.notifier).state++;
+                              container
+                                  .read(downloadRefreshTriggerProvider.notifier)
+                                  .state++;
                             },
                           );
                         },
+                        child: const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Icon(
+                            LucideIcons.trash2,
+                            size: 14,
+                            color: Color(0xFFE53935),
+                          ),
+                        ),
                       ),
                     ],
                   )
@@ -321,7 +336,7 @@ class _SurahDownloadItemTile extends ConsumerWidget {
                   const Text(
                     'Not downloaded',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: AppSpacing.size10,
                       color: AppColors.gray400,
                     ),
                   ),
@@ -330,15 +345,13 @@ class _SurahDownloadItemTile extends ConsumerWidget {
 
             /// Active Download Linear Progress Bar
             if (isDownloading) ...[
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               LinearProgressIndicator(
                 value: progress,
                 backgroundColor: isDark
                     ? AppTheme.darkBorder
                     : AppColors.gray200,
-                valueColor: const AlwaysStoppedAnimation(
-                  AppColors.emerald600,
-                ),
+                valueColor: const AlwaysStoppedAnimation(AppColors.emerald600),
               ),
             ],
           ],

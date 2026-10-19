@@ -54,8 +54,9 @@ String _firstNonEmpty(List<String?> candidates, String fallback) {
   return fallback;
 }
 
-// Inverted Fast Location Retrieval Strategy (0-delay last known + 7s current position)
-final locationProvider = FutureProvider<Position>((ref) async {
+Future<Position>? _activeLocationFuture;
+
+Future<Position> _fetchLocationInverted() async {
   debugPrint("📍 LOCATION: Starting inverted location retrieval...");
 
   final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -64,20 +65,10 @@ final locationProvider = FutureProvider<Position>((ref) async {
   }
 
   LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.deniedForever) {
-    throw 'Location permissions are permanently denied. Please enable them in app settings.';
-  }
-
-  if (permission == LocationPermission.denied) {
-    debugPrint("📍 LOCATION: Requesting location permission sequentially...");
-    permission = await Geolocator.requestPermission();
-
-    if (permission == LocationPermission.deniedForever) {
-      throw 'Location permissions are permanently denied. Please enable them in app settings.';
-    }
-    if (permission == LocationPermission.denied) {
-      throw 'Location permissions were denied.';
-    }
+  if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
+    final lastKnown = await Geolocator.getLastKnownPosition();
+    if (lastKnown != null) return lastKnown;
+    throw 'Location permission not granted. Please enable location permissions.';
   }
 
   // Strategy Step 1: Immediately fetch last known position for 0-delay display
@@ -91,7 +82,7 @@ final locationProvider = FutureProvider<Position>((ref) async {
     const locationSettings = LocationSettings(
       accuracy: LocationAccuracy.low,
       distanceFilter: 100,
-      timeLimit: Duration(seconds: 7),
+      timeLimit: Duration(seconds: 60),
     );
     final currentPosition = await Geolocator.getCurrentPosition(
       locationSettings: locationSettings,
@@ -99,9 +90,25 @@ final locationProvider = FutureProvider<Position>((ref) async {
     debugPrint("✅ LOCATION: Fresh position received (${currentPosition.latitude}, ${currentPosition.longitude})");
     return currentPosition;
   } catch (e) {
-    debugPrint("⚠️ LOCATION: Fresh position timed out (7s). Using last known position: $e");
+    debugPrint("⚠️ LOCATION: Fresh position timed out (60s). Using last known position: $e");
     if (lastKnown != null) return lastKnown;
     rethrow;
+  }
+}
+
+// Inverted Fast Location Retrieval Strategy (Re-entrancy Guarded)
+final locationProvider = FutureProvider<Position>((ref) async {
+  if (_activeLocationFuture != null) {
+    debugPrint("⚡ LOCATION: Reusing active location retrieval in progress...");
+    return await _activeLocationFuture!;
+  }
+
+  _activeLocationFuture = _fetchLocationInverted();
+  try {
+    final position = await _activeLocationFuture!;
+    return position;
+  } finally {
+    _activeLocationFuture = null;
   }
 });
 

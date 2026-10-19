@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:isolate';
 import 'package:muslim_data_flutter/muslim_data_flutter.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:quran_app/core/database/database_helper.dart';
@@ -110,9 +111,8 @@ class SearchService {
     );
   }
 
-  /// Helper: Search Ayahs in Pickthall Translation Database
+  /// Helper: Search Ayahs in Translation Database (Sahih International) offloading mapping & quran lookups to Isolate
   Future<List<AyahSearchResult>> searchAyahs(String trimmedQuery) async {
-    final List<AyahSearchResult> ayahs = [];
     try {
       final db = await translationService.database;
       final List<Map<String, dynamic>> rows = await db.query(
@@ -122,27 +122,32 @@ class SearchService {
         limit: 100,
       );
 
-      for (final row in rows) {
-        final sura = row['sura'] as int;
-        final ayah = row['ayah'] as int;
-        final text = row['text'] as String;
-        final surahName = quran.getSurahName(sura);
-        final arabicText = quran.getVerse(sura, ayah, verseEndSymbol: false);
+      if (rows.isEmpty) return [];
 
-        ayahs.add(
-          AyahSearchResult(
-            surahNum: sura,
-            ayahNum: ayah,
-            surahName: surahName,
-            arabicText: arabicText,
-            translationText: text,
-          ),
-        );
-      }
+      return await Isolate.run(() {
+        final List<AyahSearchResult> ayahs = [];
+        for (final row in rows) {
+          final sura = row['sura'] as int;
+          final ayah = row['ayah'] as int;
+          final text = row['text'] as String;
+          final surahName = quran.getSurahName(sura);
+          final arabicText = quran.getVerse(sura, ayah, verseEndSymbol: false);
+
+          ayahs.add(
+            AyahSearchResult(
+              surahNum: sura,
+              ayahNum: ayah,
+              surahName: surahName,
+              arabicText: arabicText,
+              translationText: text,
+            ),
+          );
+        }
+        return ayahs;
+      });
     } catch (_) {
-      // Gracefully handle errors and return empty list on failure
+      return [];
     }
-    return ayahs;
   }
 
   /// Helper: Search Surahs by English Name, Arabic Name, or Translation

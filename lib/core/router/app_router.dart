@@ -18,7 +18,6 @@ import 'package:quran_app/features/quran/presentation/screens/surah_detail_scree
 import 'package:quran_app/features/reflection/presentation/screens/reflection_screen.dart';
 import 'package:quran_app/features/search/presentation/screens/search_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/about/about_credits_screen.dart';
-import 'package:quran_app/features/settings/presentation/screens/about/about_licenses_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/about/about_privacy_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/about/about_screen.dart';
 import 'package:quran_app/features/settings/presentation/screens/about/about_terms_screen.dart';
@@ -99,10 +98,6 @@ class AppRouter {
       GoRoute(
         path: '/aboutPrivacy',
         builder: (context, state) => const AboutPrivacyScreen(),
-      ),
-      GoRoute(
-        path: '/aboutLicenses',
-        builder: (context, state) => const AboutLicensesScreen(),
       ),
       GoRoute(
         path: '/selectReciter',

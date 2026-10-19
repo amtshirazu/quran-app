@@ -46,7 +46,7 @@ class SurahHeaderSection extends ConsumerWidget {
         : selectedSurah;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 60, 16, 25),
+      padding: const EdgeInsets.fromLTRB(4, 60, 16, 25),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkScaffold : null,
         gradient: isDark
@@ -147,10 +147,10 @@ class SurahHeaderSection extends ConsumerWidget {
                         ? LucideIcons.bookmarkCheck
                         : LucideIcons.bookmark,
                     color: isBookmarked ? AppColors.emerald600 : AppColors.gray200,
-                    size: 22,
+                    size: 18,
                   ),
                 ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 4),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -192,7 +192,7 @@ class SurahHeaderSection extends ConsumerWidget {
                       ? LucideIcons.pause
                       : LucideIcons.play,
                   color: AppColors.gray200,
-                  size: 22,
+                  size: 18,
                 ),
               ),
             ],

@@ -33,7 +33,7 @@ class AboutTermsScreen extends StatelessWidget {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Row(
                 children: [
                   IconButton(

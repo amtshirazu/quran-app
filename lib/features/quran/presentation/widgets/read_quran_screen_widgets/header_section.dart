@@ -14,7 +14,7 @@ class ReadQuranHeaderSection extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+      padding: const EdgeInsets.fromLTRB(4, 50, 20, 20),
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkScaffold : null,
         gradient: isDark
@@ -67,7 +67,10 @@ class ReadQuranHeaderSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const SearchField(),
+          Container(
+              margin: const EdgeInsets.only(left: 24, right: 16),
+              child: const SearchField(),
+          ),
         ],
       ),
     );

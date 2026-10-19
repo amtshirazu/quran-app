@@ -87,9 +87,9 @@ class QuranScriptNotifier extends StateNotifier<String> {
   }
 }
 
-/// Ayah Text Size Notifier (Default: 18.0)
+/// Ayah Text Size Notifier (Default: 20.0)
 class AyahTextSizeNotifier extends StateNotifier<double> {
-  AyahTextSizeNotifier() : super(18.0) {
+  AyahTextSizeNotifier() : super(20.0) {
     _loadSaved();
   }
 
@@ -98,7 +98,7 @@ class AyahTextSizeNotifier extends StateNotifier<double> {
       final saved = await DatabaseHelper.instance.getSetting('ayah_text_size');
       if (saved != null) {
         final parsed = double.tryParse(saved);
-        if (parsed != null && parsed >= 12 && parsed <= 36) {
+        if (parsed != null && parsed >= 6 && parsed <= 36) {
           state = parsed;
         }
       }
@@ -106,7 +106,7 @@ class AyahTextSizeNotifier extends StateNotifier<double> {
   }
 
   Future<void> updateSize(double size) async {
-    final clamped = size.clamp(12.0, 36.0);
+    final clamped = size.clamp(6.0, 36.0);
     state = clamped;
     await DatabaseHelper.instance.setSetting('ayah_text_size', clamped.toString());
   }
@@ -115,37 +115,9 @@ class AyahTextSizeNotifier extends StateNotifier<double> {
   void decrement() => updateSize(state - 1.0);
 }
 
-/// Translation Text Size Notifier (Default: 14.0)
-class TranslationTextSizeNotifier extends StateNotifier<double> {
-  TranslationTextSizeNotifier() : super(14.0) {
-    _loadSaved();
-  }
-
-  Future<void> _loadSaved() async {
-    try {
-      final saved = await DatabaseHelper.instance.getSetting('translation_text_size');
-      if (saved != null) {
-        final parsed = double.tryParse(saved);
-        if (parsed != null && parsed >= 10 && parsed <= 28) {
-          state = parsed;
-        }
-      }
-    } catch (_) {}
-  }
-
-  Future<void> updateSize(double size) async {
-    final clamped = size.clamp(10.0, 28.0);
-    state = clamped;
-    await DatabaseHelper.instance.setSetting('translation_text_size', clamped.toString());
-  }
-
-  void increment() => updateSize(state + 1.0);
-  void decrement() => updateSize(state - 1.0);
-}
-
-/// Transliteration Text Size Notifier (Default: 13.0)
+/// Transliteration Text Size Notifier (Default: 12.0)
 class TransliterationTextSizeNotifier extends StateNotifier<double> {
-  TransliterationTextSizeNotifier() : super(13.0) {
+  TransliterationTextSizeNotifier() : super(12.0) {
     _loadSaved();
   }
 
@@ -154,7 +126,7 @@ class TransliterationTextSizeNotifier extends StateNotifier<double> {
       final saved = await DatabaseHelper.instance.getSetting('transliteration_text_size');
       if (saved != null) {
         final parsed = double.tryParse(saved);
-        if (parsed != null && parsed >= 10 && parsed <= 28) {
+        if (parsed != null && parsed >= 6 && parsed <= 28) {
           state = parsed;
         }
       }
@@ -162,7 +134,7 @@ class TransliterationTextSizeNotifier extends StateNotifier<double> {
   }
 
   Future<void> updateSize(double size) async {
-    final clamped = size.clamp(10.0, 28.0);
+    final clamped = size.clamp(6.0, 28.0);
     state = clamped;
     await DatabaseHelper.instance.setSetting('transliteration_text_size', clamped.toString());
   }
@@ -171,9 +143,37 @@ class TransliterationTextSizeNotifier extends StateNotifier<double> {
   void decrement() => updateSize(state - 1.0);
 }
 
-/// Reference Text Size Notifier (Default: 12.0)
+/// Translation Text Size Notifier (Default: 11.0)
+class TranslationTextSizeNotifier extends StateNotifier<double> {
+  TranslationTextSizeNotifier() : super(11.0) {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting('translation_text_size');
+      if (saved != null) {
+        final parsed = double.tryParse(saved);
+        if (parsed != null && parsed >= 6 && parsed <= 28) {
+          state = parsed;
+        }
+      }
+    } catch (_) {}
+  }
+
+  Future<void> updateSize(double size) async {
+    final clamped = size.clamp(6.0, 28.0);
+    state = clamped;
+    await DatabaseHelper.instance.setSetting('translation_text_size', clamped.toString());
+  }
+
+  void increment() => updateSize(state + 1.0);
+  void decrement() => updateSize(state - 1.0);
+}
+
+/// Reference Text Size Notifier (Default: 8.0)
 class ReferenceTextSizeNotifier extends StateNotifier<double> {
-  ReferenceTextSizeNotifier() : super(12.0) {
+  ReferenceTextSizeNotifier() : super(8.0) {
     _loadSaved();
   }
 
@@ -182,7 +182,7 @@ class ReferenceTextSizeNotifier extends StateNotifier<double> {
       final saved = await DatabaseHelper.instance.getSetting('reference_text_size');
       if (saved != null) {
         final parsed = double.tryParse(saved);
-        if (parsed != null && parsed >= 9 && parsed <= 24) {
+        if (parsed != null && parsed >= 6 && parsed <= 24) {
           state = parsed;
         }
       }
@@ -190,7 +190,7 @@ class ReferenceTextSizeNotifier extends StateNotifier<double> {
   }
 
   Future<void> updateSize(double size) async {
-    final clamped = size.clamp(9.0, 24.0);
+    final clamped = size.clamp(6.0, 24.0);
     state = clamped;
     await DatabaseHelper.instance.setSetting('reference_text_size', clamped.toString());
   }

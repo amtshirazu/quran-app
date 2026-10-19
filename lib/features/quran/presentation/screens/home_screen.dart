@@ -59,7 +59,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   SliverAppBar _buildHeader() {
     return const SliverAppBar(
-      expandedHeight: 220,
+      expandedHeight: 200,
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       forceElevated: false,

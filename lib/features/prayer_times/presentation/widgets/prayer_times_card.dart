@@ -49,7 +49,7 @@ class PrayerTimeCard extends StatelessWidget {
               Text(
                 prayerName,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: AppSpacing.size12,
                   fontWeight: FontWeight.bold,
                   color: isDark ? AppTheme.darkTextPrimary : Colors.black,
                 ),
@@ -58,7 +58,7 @@ class PrayerTimeCard extends StatelessWidget {
               Text(
                 "Adhan time",
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: AppSpacing.size12,
                   color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
                 ),
               ),
@@ -70,7 +70,7 @@ class PrayerTimeCard extends StatelessWidget {
               Text(
                 prayerTime,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: AppSpacing.size15,
                   fontWeight: FontWeight.bold,
                   color: AppColors.emerald600,
                 ),
@@ -82,17 +82,20 @@ class PrayerTimeCard extends StatelessWidget {
                     isEnabled
                         ? Icons.notifications_active_outlined
                         : Icons.notifications_off_outlined,
-                    size: 18,
+                    size: 16,
                     color: isEnabled
                         ? AppColors.emerald600
                         : (isDark ? AppTheme.darkTextSecondary : Colors.grey),
                   ),
                   const SizedBox(width: 4),
-                  Switch.adaptive(
-                    value: isEnabled,
-                    activeTrackColor: AppColors.emerald600,
-                    onChanged: onToggle,
-                  ),
+                  Transform.scale(
+                    scale: 0.8, // Adjust between 0.7 and 0.9 depending on desired size
+                    child: Switch.adaptive(
+                      value: isEnabled,
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: onToggle,
+                    ),
+                  )
                 ],
               ),
             ],

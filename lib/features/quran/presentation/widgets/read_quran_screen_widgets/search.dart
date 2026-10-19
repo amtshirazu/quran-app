@@ -23,7 +23,7 @@ class SearchField extends ConsumerWidget {
       cursorColor: AppColors.gray400,
 
       style: TextStyle(
-        color: AppColors.gray700,
+        color: AppColors.gray100,
         fontSize: AppSpacing.size12,
         decoration: TextDecoration.none,
       ),
@@ -31,21 +31,21 @@ class SearchField extends ConsumerWidget {
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.symmetric(
-          vertical: 12,
+          vertical: 10,
         ),
         prefixIconConstraints: BoxConstraints(
-          minHeight: 48,
+          minHeight: 32,
           minWidth: 48,
         ),
         hintText: "Search surah...",
         hintStyle: TextStyle(
           color: AppColors.gray300,
-            fontSize: AppSpacing.size14,
+            fontSize: AppSpacing.size11,
         ),
         prefixIcon: Icon(
           LucideIcons.search,
-          size: 20,
-          color: AppColors.gray400,
+          size: 16,
+          color: AppColors.gray300,
         ),
         filled: true,
          fillColor: Colors.white.withOpacity(0.1),

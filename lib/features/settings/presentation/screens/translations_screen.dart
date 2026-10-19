@@ -7,6 +7,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/presentation/state/translation_provider.dart';
 import 'package:quran_app/features/settings/domain/model/translation_model.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class TranslationsScreen extends ConsumerStatefulWidget {
   const TranslationsScreen({super.key});
 
@@ -32,7 +34,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(130),
+        preferredSize: const Size.fromHeight(120),
         child: Container(
           decoration: BoxDecoration(
             color: isDark ? AppTheme.darkScaffold : null,
@@ -49,7 +51,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Column(
                 children: [
                   Row(
@@ -70,29 +72,28 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                           }
                         },
                       ),
-                      const SizedBox(width: 12),
-                      const Text(
+                      const SizedBox(width: 4),
+                      Text(
                         'Translations',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: AppSpacing.size16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
                   /// Search Bar with Vertically Centered Text
                   Container(
-                    height: 42,
+                    margin: const EdgeInsets.only(left: 24, right: 16),
+                    height: 32,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isDark ? AppTheme.darkSurface : Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: isDark
-                          ? Border.all(color: AppTheme.darkBorder)
-                          : null,
+                      border: isDark ? Border.all(color: AppTheme.darkBorder) : null,
                     ),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
@@ -101,25 +102,31 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                       },
                       style: TextStyle(
                         color: isDark ? Colors.white : AppColors.gray900,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                       decoration: const InputDecoration(
                         isDense: true,
                         hintText: 'Search translations',
                         hintStyle: TextStyle(
                           color: AppColors.gray400,
-                          fontSize: 14,
+                          fontSize: AppSpacing.size10,
                         ),
-                        prefixIcon: Icon(
-                          LucideIcons.search,
-                          color: AppColors.gray400,
-                          size: 18,
+                        // Removes default 48x48 constraint
+                        prefixIconConstraints: BoxConstraints(),
+                        // Custom padding lets you tune the exact gap to the text
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(left: 16.0, right: 6.0),
+                          child: Icon(
+                            LucideIcons.search,
+                            color: AppColors.gray400,
+                            size: 14,
+                          ),
                         ),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -140,7 +147,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                 Text(
                   '${activeDbNames.length} ACTIVE',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: AppSpacing.size10,
                     fontWeight: FontWeight.bold,
                     color: AppColors.emerald600,
                     letterSpacing: 0.8,
@@ -157,7 +164,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                     Text(
                       'Default translation',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: AppSpacing.size10,
                         color: AppColors.emerald600,
                         fontWeight: FontWeight.w500,
                       ),
@@ -211,7 +218,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                             .toggleTranslation(item.dbFileName);
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -228,7 +235,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                                 size: 22,
                               ),
                             ),
-                            const SizedBox(width: 14),
+                            const SizedBox(width: 12),
 
                             /// Translation Title & Language Subtitle
                             Expanded(
@@ -238,7 +245,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                                   Text(
                                     item.name,
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: AppSpacing.size13,
                                       fontWeight: FontWeight.bold,
                                       color: isDark
                                           ? AppTheme.darkTextPrimary
@@ -251,7 +258,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                                       Text(
                                         item.language,
                                         style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: AppSpacing.size12,
                                           color: isDark
                                               ? AppTheme.darkTextSecondary
                                               : AppColors.gray600,
@@ -261,7 +268,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                                         const Text(
                                           ' • Default',
                                           style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: AppSpacing.size12,
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.emerald600,
                                           ),

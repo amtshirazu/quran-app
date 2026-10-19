@@ -6,6 +6,8 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/settings/presentation/state/download_provider.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class DownloadsScreen extends ConsumerWidget {
   const DownloadsScreen({super.key});
 
@@ -32,7 +34,7 @@ class DownloadsScreen extends ConsumerWidget {
           ),
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 10, 16, 16),
               child: Row(
                 children: [
                   IconButton(
@@ -51,12 +53,12 @@ class DownloadsScreen extends ConsumerWidget {
                       }
                     },
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
                   const Text(
                     'Downloads',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -74,6 +76,8 @@ class DownloadsScreen extends ConsumerWidget {
           children: [
             /// 1. Storage Usage Card
             storageSummaryAsync.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
               data: (summary) {
                 // Calculate device total capacity = App Used + Real Free Storage
                 final totalDeviceSpace = summary.totalUsedBytes + summary.freeSpaceBytes;
@@ -86,7 +90,7 @@ class DownloadsScreen extends ConsumerWidget {
                 final freeFlex = (1000 - (audioFlex + translationsFlex + quranFlex)).clamp(1, 1000);
 
                 return Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.darkSurface : Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -112,7 +116,7 @@ class DownloadsScreen extends ConsumerWidget {
                           Text(
                             '${summary.formattedTotalUsed} used',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: AppSpacing.size13,
                               fontWeight: FontWeight.bold,
                               color: isDark
                                   ? AppTheme.darkTextPrimary
@@ -122,7 +126,7 @@ class DownloadsScreen extends ConsumerWidget {
                           Text(
                             '${summary.formattedFreeSpace} free storage',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: AppSpacing.size13,
                               color: isDark
                                   ? AppTheme.darkTextSecondary
                                   : AppColors.gray500,
@@ -136,7 +140,7 @@ class DownloadsScreen extends ConsumerWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(6),
                         child: SizedBox(
-                          height: 8,
+                          height: 6,
                           child: Row(
                             children: [
                               if (audioFlex > 0)
@@ -204,7 +208,7 @@ class DownloadsScreen extends ConsumerWidget {
             Text(
               'DOWNLOAD RECITATIONS',
               style: TextStyle(
-                fontSize: 13,
+                fontSize: AppSpacing.size11,
                 fontWeight: FontWeight.bold,
                 color: isDark
                     ? AppTheme.darkCategoryTitle
@@ -216,6 +220,8 @@ class DownloadsScreen extends ConsumerWidget {
 
             /// 3. Downloaded Reciters List
             downloadedRecitersAsync.when(
+              skipLoadingOnReload: true,
+              skipLoadingOnRefresh: true,
               data: (list) {
                 if (list.isEmpty) {
                   return Container(
@@ -268,7 +274,7 @@ class DownloadsScreen extends ConsumerWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: list.length,
-                  separatorBuilder: (_, index) => const SizedBox(height: 10),
+                  separatorBuilder: (_, index) => const SizedBox(height: 6),
                   itemBuilder: (context, index) {
                     final item = list[index];
                     return _ReciterDownloadTile(item: item);
@@ -294,15 +300,15 @@ class DownloadsScreen extends ConsumerWidget {
     return Row(
       children: [
         Container(
-          width: 8,
-          height: 8,
+          width: 6,
+          height: 6,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
         Text(
           label,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: AppSpacing.size10,
             color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
           ),
         ),
@@ -354,15 +360,15 @@ class _ReciterDownloadTile extends ConsumerWidget {
             context.push('/reciterDownloads', extra: item.reciter);
           },
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      width: 44,
-                      height: 44,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
                         color: isDark
                             ? AppColors.emerald600.withAlpha(38)
@@ -372,10 +378,10 @@ class _ReciterDownloadTile extends ConsumerWidget {
                       child: const Icon(
                         LucideIcons.headphones,
                         color: AppColors.emerald600,
-                        size: 22,
+                        size: 18,
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,7 +389,7 @@ class _ReciterDownloadTile extends ConsumerWidget {
                           Text(
                             item.reciter.name,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: AppSpacing.size13,
                               fontWeight: FontWeight.bold,
                               color: isDark
                                   ? AppTheme.darkTextPrimary
@@ -396,7 +402,7 @@ class _ReciterDownloadTile extends ConsumerWidget {
                                 ? 'Downloading Surah ${downloadingSurahNum ?? ''} of 114...'
                                 : '${item.downloadedCount} of ${item.totalSurahs} surahs • ${item.formattedSize}',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: AppSpacing.size10,
                               color: isDownloading
                                   ? AppColors.emerald600
                                   : (isDark
@@ -413,7 +419,7 @@ class _ReciterDownloadTile extends ConsumerWidget {
                     const Icon(
                       Icons.chevron_right,
                       color: AppColors.gray400,
-                      size: 20,
+                      size: 18,
                     ),
                   ],
                 ),
