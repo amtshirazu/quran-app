@@ -79,7 +79,9 @@ class _ReciterSelectionScreenState
         }
       },
       child: Scaffold(
-        backgroundColor: isDark ? AppTheme.darkScaffold : AppTheme.lightScaffold,
+        backgroundColor: isDark
+            ? AppTheme.darkScaffold
+            : AppTheme.lightScaffold,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(120),
           child: Container(
@@ -90,10 +92,7 @@ class _ReciterSelectionScreenState
                   : const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.deepGreen,
-                        AppColors.emerald600,
-                      ],
+                      colors: [AppColors.deepGreen, AppColors.emerald600],
                     ),
             ),
             child: SafeArea(
@@ -198,7 +197,9 @@ class _ReciterSelectionScreenState
                 style: TextStyle(
                   fontSize: AppSpacing.size13,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? AppTheme.darkCategoryTitle : AppColors.emerald600,
+                  color: isDark
+                      ? AppTheme.darkCategoryTitle
+                      : AppColors.emerald600,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -206,70 +207,77 @@ class _ReciterSelectionScreenState
 
               /// Highlighted Selected Reciter Card
               if (selectedReciter != null) ...[
-                Builder(builder: (context) {
-                  final isPlayingSelected = isAudioPlaying &&
-                      (_playingSampleId == selectedReciter.id);
+                Builder(
+                  builder: (context) {
+                    final isPlayingSelected =
+                        isAudioPlaying &&
+                        (_playingSampleId == selectedReciter.id);
 
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppTheme.darkSurface : const Color(0xFFE8F5E9),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppColors.emerald600,
-                        width: 1.5,
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppTheme.darkSurface
+                            : const Color(0xFFE8F5E9),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.emerald600,
+                          width: 1.5,
+                        ),
                       ),
-                    ),
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            selectedReciter.image,
-                            width: 48,
-                            height: 48,
-                            fit: BoxFit.cover,
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              selectedReciter.image,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                selectedReciter.name,
-                                style: TextStyle(
-                                  fontSize: AppSpacing.size13,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  selectedReciter.name,
+                                  style: TextStyle(
+                                    fontSize: AppSpacing.size13,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark
+                                        ? AppTheme.darkTextPrimary
+                                        : AppColors.gray900,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '${selectedReciter.style} • Default',
-                                style: const TextStyle(
-                                  fontSize: AppSpacing.size10,
-                                  color: AppColors.emerald600,
-                                  fontWeight: FontWeight.w600,
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${selectedReciter.style} • Default',
+                                  style: const TextStyle(
+                                    fontSize: AppSpacing.size10,
+                                    color: AppColors.emerald600,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            isPlayingSelected
-                                ? LucideIcons.pauseCircle
-                                : LucideIcons.playCircle,
-                            color: AppColors.emerald600,
-                            size: 26,
+                          IconButton(
+                            icon: Icon(
+                              isPlayingSelected
+                                  ? LucideIcons.pauseCircle
+                                  : LucideIcons.playCircle,
+                              color: AppColors.emerald600,
+                              size: 26,
+                            ),
+                            onPressed: () => _toggleSamplePlay(selectedReciter),
                           ),
-                          onPressed: () => _toggleSamplePlay(selectedReciter),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
 
               const SizedBox(height: 24),
@@ -280,7 +288,9 @@ class _ReciterSelectionScreenState
                 style: TextStyle(
                   fontSize: AppSpacing.size13,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? AppTheme.darkCategoryTitle : AppColors.gray700,
+                  color: isDark
+                      ? AppTheme.darkCategoryTitle
+                      : AppColors.gray700,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -295,7 +305,8 @@ class _ReciterSelectionScreenState
                 itemBuilder: (context, index) {
                   final reciter = filteredReciters[index];
                   final isSelected = selectedReciter?.id == reciter.id;
-                  final isPlayingThisCard = isAudioPlaying && (_playingSampleId == reciter.id);
+                  final isPlayingThisCard =
+                      isAudioPlaying && (_playingSampleId == reciter.id);
 
                   return Container(
                     decoration: BoxDecoration(
@@ -304,7 +315,9 @@ class _ReciterSelectionScreenState
                       border: Border.all(
                         color: isSelected
                             ? AppColors.emerald600
-                            : (isDark ? AppTheme.darkBorder : AppColors.gray200),
+                            : (isDark
+                                  ? AppTheme.darkBorder
+                                  : AppColors.gray200),
                         width: isSelected ? 1.5 : 1.0,
                       ),
                     ),

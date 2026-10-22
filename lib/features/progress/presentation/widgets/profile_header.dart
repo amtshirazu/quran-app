@@ -11,10 +11,7 @@ import '../../../../core/constants/app_spacing.dart';
 class ProfileHeader extends ConsumerWidget {
   final String? since;
 
-  const ProfileHeader({
-    super.key,
-    this.since,
-  });
+  const ProfileHeader({super.key, this.since});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,10 +28,7 @@ class ProfileHeader extends ConsumerWidget {
             : const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.deepGreen,
-                  AppColors.emerald600,
-                ],
+                colors: [AppColors.deepGreen, AppColors.emerald600],
               ),
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
@@ -45,7 +39,11 @@ class ProfileHeader extends ConsumerWidget {
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();

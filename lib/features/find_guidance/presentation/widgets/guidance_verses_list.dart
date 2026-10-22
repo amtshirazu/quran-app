@@ -3,16 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../state/guidance_provider.dart';
 import 'guidance_verse_card.dart';
 
 class GuidanceVersesList extends ConsumerWidget {
   final String emotion;
 
-  const GuidanceVersesList({
-    super.key,
-    required this.emotion,
-  });
+  const GuidanceVersesList({super.key, required this.emotion});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,13 +26,18 @@ class GuidanceVersesList extends ConsumerWidget {
           itemBuilder: (context, index) {
             if (index == 0) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
                 child: Text(
                   'Verses for You',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: AppSpacing.size14,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                    color: isDark
+                        ? AppTheme.darkTextPrimary
+                        : AppColors.gray900,
                   ),
                 ),
               );
@@ -51,10 +54,7 @@ class GuidanceVersesList extends ConsumerWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.emerald500,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.emerald500, AppColors.emerald600],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -67,11 +67,7 @@ class GuidanceVersesList extends ConsumerWidget {
                 ),
                 child: Column(
                   children: const [
-                    Icon(
-                      LucideIcons.heart,
-                      color: Colors.white,
-                      size: 32,
-                    ),
+                    Icon(LucideIcons.heart, color: Colors.white, size: 32),
                     SizedBox(height: 12),
                     Text(
                       'May Allah ease your heart',
@@ -105,9 +101,7 @@ class GuidanceVersesList extends ConsumerWidget {
       loading: () => SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         child: const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.emerald600,
-          ),
+          child: CircularProgressIndicator(color: AppColors.emerald600),
         ),
       ),
       error: (err, stack) => Center(

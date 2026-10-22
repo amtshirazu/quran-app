@@ -30,8 +30,8 @@ class DuaCard extends ConsumerWidget {
     final formattedSubject = isWitr
         ? 'Qunoot & Supplication'
         : (dua.subject.isNotEmpty
-            ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
-            : 'General');
+              ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
+              : 'General');
 
     final referenceText = isWitr
         ? (dua.source ?? "Hadith / Sunnah")
@@ -69,7 +69,9 @@ class DuaCard extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: AppSpacing.size13,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
+                        color: isDark
+                            ? AppTheme.darkTextPrimary
+                            : Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -115,7 +117,9 @@ class DuaCard extends ConsumerWidget {
                     icon: Icon(
                       LucideIcons.copy,
                       size: 20,
-                      color: isDark ? AppTheme.darkTextSecondary : Colors.black38,
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : Colors.black38,
                     ),
                   ),
                 ],

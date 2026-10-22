@@ -21,7 +21,10 @@ class QuranicDua {
     this.categoryType = 'quranic',
   });
 
-  factory QuranicDua.fromMap(Map<String, dynamic> map, {String categoryType = 'quranic'}) {
+  factory QuranicDua.fromMap(
+    Map<String, dynamic> map, {
+    String categoryType = 'quranic',
+  }) {
     return QuranicDua(
       id: map['id'] as int,
       surahNum: map['surah_num'] as int?,

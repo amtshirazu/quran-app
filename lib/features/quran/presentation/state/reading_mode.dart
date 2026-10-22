@@ -1,4 +1,1 @@
-enum ReadingMode {
-  reading,
-  translation,
-}
+enum ReadingMode { reading, translation }

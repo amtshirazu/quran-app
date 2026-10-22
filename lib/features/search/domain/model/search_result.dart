@@ -23,11 +23,7 @@ class AzkarSearchResult {
   final AzkarChapter chapter;
   final AzkarItem? item;
 
-  AzkarSearchResult({
-    required this.category,
-    required this.chapter,
-    this.item,
-  });
+  AzkarSearchResult({required this.category, required this.chapter, this.item});
 }
 
 class UnifiedSearchResults {

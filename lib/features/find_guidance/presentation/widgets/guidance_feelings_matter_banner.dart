@@ -3,6 +3,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class GuidanceFeelingsMatterBanner extends StatelessWidget {
   const GuidanceFeelingsMatterBanner({super.key});
 
@@ -20,28 +22,21 @@ class GuidanceFeelingsMatterBanner extends StatelessWidget {
             : const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  AppColors.deepGreen,
-                  AppColors.emerald600,
-                ],
+                colors: [AppColors.deepGreen, AppColors.emerald600],
               ),
         borderRadius: BorderRadius.circular(20),
         border: isDark ? Border.all(color: AppTheme.darkBorder) : null,
       ),
       child: Column(
         children: const [
-          Icon(
-            LucideIcons.heart,
-            color: Colors.white,
-            size: 32,
-          ),
+          Icon(LucideIcons.heart, color: Colors.white, size: 32),
           SizedBox(height: 12),
           Text(
             'Your feelings matter',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: AppSpacing.size16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -51,7 +46,7 @@ class GuidanceFeelingsMatterBanner extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.emerald100,
-              fontSize: 13,
+              fontSize: AppSpacing.size12,
               height: 1.4,
             ),
           ),

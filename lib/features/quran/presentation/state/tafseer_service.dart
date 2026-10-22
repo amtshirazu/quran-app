@@ -31,7 +31,9 @@ class TafseerDatabaseService {
 
         await File(path).writeAsBytes(bytes, flush: true);
       } catch (e) {
-        throw Exception("Error copying tafseer database $fileName from assets: $e");
+        throw Exception(
+          "Error copying tafseer database $fileName from assets: $e",
+        );
       }
     }
 
@@ -69,14 +71,18 @@ class TafseerDatabaseService {
       final key = "$surah:$verse";
 
       // Inspect tables in SQLite database
-      final tables = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'");
+      final tables = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table'",
+      );
 
       for (final tableMap in tables) {
         final tableName = tableMap['name'] as String;
         if (tableName.startsWith('sqlite_')) continue;
 
         final columnsInfo = await db.rawQuery("PRAGMA table_info($tableName)");
-        final columnNames = columnsInfo.map((c) => (c['name'] as String).toLowerCase()).toList();
+        final columnNames = columnsInfo
+            .map((c) => (c['name'] as String).toLowerCase())
+            .toList();
 
         String? textCol;
         for (final c in ['text', 'content', 'tafsir', 'body']) {
@@ -130,7 +136,8 @@ class TafseerDatabaseService {
           results = await db.query(
             tableName,
             columns: [textCol],
-            where: 'ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys = ?',
+            where:
+                'ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys LIKE ? OR ayah_keys = ?',
             whereArgs: ['%,$key,%', '$key,%', '%,$key', key],
           );
 
@@ -147,7 +154,8 @@ class TafseerDatabaseService {
           results = await db.query(
             tableName,
             columns: [textCol],
-            where: 'group_ayah_key = ? AND $textCol IS NOT NULL AND $textCol != ""',
+            where:
+                'group_ayah_key = ? AND $textCol IS NOT NULL AND $textCol != ""',
             whereArgs: [key],
           );
 

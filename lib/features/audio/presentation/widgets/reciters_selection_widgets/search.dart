@@ -19,7 +19,9 @@ class FeaturedRecitersCard extends ConsumerWidget {
       color: isDark ? AppTheme.darkSurface : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -80,13 +82,17 @@ class FeaturedRecitersCard extends ConsumerWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: isDark ? AppTheme.darkBorder : Colors.grey.shade300,
+                      color: isDark
+                          ? AppTheme.darkBorder
+                          : Colors.grey.shade300,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: isDark ? AppTheme.darkBorder : Colors.grey.shade300,
+                      color: isDark
+                          ? AppTheme.darkBorder
+                          : Colors.grey.shade300,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -95,7 +101,7 @@ class FeaturedRecitersCard extends ConsumerWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

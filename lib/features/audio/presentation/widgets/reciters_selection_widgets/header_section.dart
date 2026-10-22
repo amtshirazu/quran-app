@@ -27,7 +27,9 @@ class QuranAudioHeader extends ConsumerWidget {
                   end: Alignment.bottomCenter,
                   colors: [AppColors.deepGreen, AppColors.emerald600],
                 ),
-          border: const Border(bottom: BorderSide(color: Colors.black12, width: 1)),
+          border: const Border(
+            bottom: BorderSide(color: Colors.black12, width: 1),
+          ),
         ),
         padding: const EdgeInsets.fromLTRB(16, 48, 20, 20),
         child: Row(

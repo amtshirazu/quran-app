@@ -26,7 +26,9 @@ class ChapterCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: isDark ? AppTheme.darkBorder : AppColors.emerald600.withAlpha(12),
+            color: isDark
+                ? AppTheme.darkBorder
+                : AppColors.emerald600.withAlpha(12),
           ),
         ),
         elevation: isDark ? 0 : 1,
@@ -34,12 +36,16 @@ class ChapterCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: ListTile(
           dense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 2,
+          ),
           leading: Text(
             index.toString().padLeft(2, '0'),
             style: TextStyle(
-              color: isDark ? AppTheme.darkTextSecondary : AppColors.emerald600.withAlpha(76),
+              color: isDark
+                  ? AppTheme.darkTextSecondary
+                  : AppColors.emerald600.withAlpha(76),
               fontWeight: FontWeight.bold,
               fontSize: 13,
             ),
@@ -49,7 +55,9 @@ class ChapterCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 13.5,
               fontWeight: FontWeight.w500,
-              color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF2D3436),
+              color: isDark
+                  ? AppTheme.darkTextPrimary
+                  : const Color(0xFF2D3436),
             ),
           ),
           trailing: const Icon(

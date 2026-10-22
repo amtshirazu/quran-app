@@ -27,7 +27,10 @@ class DuaSectionTitle extends ConsumerWidget {
           isWitr
               ? "Special supplications for Witr prayer and Qunoot"
               : "Essential supplications from the Holy Quran",
-          style: const TextStyle(fontSize: AppSpacing.size12, color: Colors.black54),
+          style: const TextStyle(
+            fontSize: AppSpacing.size12,
+            color: Colors.black54,
+          ),
         ),
       ],
     );

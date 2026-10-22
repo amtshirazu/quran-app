@@ -7,13 +7,7 @@ import '../../data/search_service.dart';
 import '../../domain/model/recent_search.dart';
 import '../../domain/model/search_result.dart';
 
-enum SearchTab {
-  all,
-  ayah,
-  surah,
-  azkaar,
-  dua,
-}
+enum SearchTab { all, ayah, surah, azkaar, dua }
 
 /// Service Provider injecting cross-domain dependencies into SearchService
 final searchServiceProvider = Provider<SearchService>((ref) {
@@ -55,8 +49,5 @@ final unifiedSearchResultsProvider =
     FutureProvider.family<UnifiedSearchResults, String>((ref, query) async {
       final service = ref.watch(searchServiceProvider);
       final surahList = await ref.watch(surahListProvider.future);
-      return await service.searchAll(
-        query: query,
-        allSurahs: surahList,
-      );
+      return await service.searchAll(query: query, allSurahs: surahList);
     });

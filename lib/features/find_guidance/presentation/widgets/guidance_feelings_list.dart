@@ -32,9 +32,7 @@ class GuidanceFeelingsList extends ConsumerWidget {
       loading: () => SizedBox(
         height: MediaQuery.of(context).size.height * 0.5,
         child: const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.emerald600,
-          ),
+          child: CircularProgressIndicator(color: AppColors.emerald600),
         ),
       ),
       error: (err, stack) => Center(

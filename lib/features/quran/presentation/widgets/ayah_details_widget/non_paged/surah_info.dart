@@ -18,7 +18,9 @@ class SurahInfo extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.size16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       elevation: isDark ? 0 : 6,
       color: isDark ? AppTheme.darkSurface : null,
@@ -75,7 +77,12 @@ class SurahInfo extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Text('•', style: TextStyle(color: isDark ? AppTheme.darkTextPrimary : Colors.white)),
+                Text(
+                  '•',
+                  style: TextStyle(
+                    color: isDark ? AppTheme.darkTextPrimary : Colors.white,
+                  ),
+                ),
                 const SizedBox(width: 4),
                 Text(
                   surahMetadata?.revelationType ?? "",

@@ -3,11 +3,7 @@ class RecentSearch {
   final String query;
   final int timestamp;
 
-  const RecentSearch({
-    this.id,
-    required this.query,
-    required this.timestamp,
-  });
+  const RecentSearch({this.id, required this.query, required this.timestamp});
 
   factory RecentSearch.fromMap(Map<String, dynamic> map) {
     return RecentSearch(
@@ -18,10 +14,6 @@ class RecentSearch {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      if (id != null) 'id': id,
-      'query': query,
-      'timestamp': timestamp,
-    };
+    return {if (id != null) 'id': id, 'query': query, 'timestamp': timestamp};
   }
 }

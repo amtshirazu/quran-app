@@ -5,7 +5,6 @@ import '../widgets/reciter_audio_widgets/player_card.dart';
 import '../widgets/reciter_audio_widgets/playlist.dart';
 import '../widgets/reciter_audio_widgets/reciter_header.dart';
 
-
 class ReciterAudioScreen extends ConsumerWidget {
   const ReciterAudioScreen({super.key});
 
@@ -19,32 +18,21 @@ class ReciterAudioScreen extends ConsumerWidget {
 
     return Scaffold(
       body: Scrollbar(
-          thumbVisibility: true,
-          child: CustomScrollView(
-            slivers: [
+        thumbVisibility: true,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: ReciterHeader(reciter: selectedReciter)),
 
-              SliverToBoxAdapter(
-                child: ReciterHeader(reciter: selectedReciter),
-              ),
+            const SliverToBoxAdapter(child: SizedBox(height: 25)),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 25,),
-              ),
+            const SliverToBoxAdapter(child: PlayerCard()),
 
-              const SliverToBoxAdapter(
-                child: PlayerCard(),
-              ),
+            const SliverToBoxAdapter(child: SizedBox(height: 25)),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 25,),
-              ),
-
-              Playlist(),
-            ],
-          ),
+            Playlist(),
+          ],
         ),
+      ),
     );
   }
 }
-
-

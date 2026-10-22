@@ -24,10 +24,7 @@ class ReflectionJourneyCard extends StatelessWidget {
             : const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [
-                  AppColors.deepGreen,
-                  AppColors.emerald600,
-                ],
+                colors: [AppColors.deepGreen, AppColors.emerald600],
               ),
       ),
       child: Row(

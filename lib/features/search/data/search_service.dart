@@ -215,13 +215,16 @@ class SearchService {
       final db = await _databaseHelper.database;
       await _ensureRecentSearchesTableExists(db);
 
-      final maps = await db.rawQuery('''
+      final maps = await db.rawQuery(
+        '''
         SELECT query, MAX(timestamp) as timestamp
         FROM recent_searches
         GROUP BY query
         ORDER BY timestamp DESC
         LIMIT ?
-      ''', [limit]);
+      ''',
+        [limit],
+      );
 
       return maps.map((map) => RecentSearch.fromMap(map)).toList();
     } catch (e) {
@@ -246,13 +249,10 @@ class SearchService {
         whereArgs: [trimmed],
       );
 
-      await db.insert(
-        'recent_searches',
-        {
-          'query': trimmed,
-          'timestamp': timestamp,
-        },
-      );
+      await db.insert('recent_searches', {
+        'query': trimmed,
+        'timestamp': timestamp,
+      });
     } catch (e) {
       // Handle error gracefully
     }

@@ -8,10 +8,7 @@ import 'package:quran_app/features/audio/presentation/state/audio_providers.dart
 import 'package:quran_app/features/quran/domain/models/surah.dart';
 
 class PlaylistCard extends ConsumerWidget {
-  const PlaylistCard({
-    super.key,
-    required this.surahs,
-  });
+  const PlaylistCard({super.key, required this.surahs});
 
   final List<Surah> surahs;
 
@@ -35,11 +32,11 @@ class PlaylistCard extends ConsumerWidget {
             ? (isDark ? AppTheme.darkBorder : AppColors.gray200)
             : (isDark ? AppTheme.darkSurface : Colors.white);
 
-        final textColor =
-        isDark ? AppTheme.darkTextPrimary : Colors.black;
+        final textColor = isDark ? AppTheme.darkTextPrimary : Colors.black;
 
-        final subtextColor =
-        isDark ? AppTheme.darkTextSecondary : AppColors.gray600;
+        final subtextColor = isDark
+            ? AppTheme.darkTextSecondary
+            : AppColors.gray600;
 
         return InkWell(
           onTap: () async {
@@ -61,10 +58,7 @@ class PlaylistCard extends ConsumerWidget {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: itemBgColor,
               border: Border(
@@ -86,9 +80,7 @@ class PlaylistCard extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.emerald600
-                        : (isDark
-                        ? AppTheme.darkScaffold
-                        : AppColors.gray200),
+                        : (isDark ? AppTheme.darkScaffold : AppColors.gray200),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(

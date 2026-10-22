@@ -25,7 +25,9 @@ Future<String?> showBookmarkDialog(
   const colorEmerald = AppColors.emerald600;
 
   final textColor = isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827);
-  final subtextColor = isDark ? AppTheme.darkTextSecondary : const Color(0xFF71717A);
+  final subtextColor = isDark
+      ? AppTheme.darkTextSecondary
+      : const Color(0xFF71717A);
   final fieldBg = isDark ? AppTheme.darkScaffold : const Color(0xFFF9FAFB);
   final borderColor = isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB);
 
@@ -38,7 +40,9 @@ Future<String?> showBookmarkDialog(
         surfaceTintColor: isDark ? AppTheme.darkSurface : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+          side: isDark
+              ? const BorderSide(color: AppTheme.darkBorder)
+              : BorderSide.none,
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -59,11 +63,7 @@ Future<String?> showBookmarkDialog(
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      Icons.close,
-                      color: subtextColor,
-                      size: 20,
-                    ),
+                    icon: Icon(Icons.close, color: subtextColor, size: 20),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -80,7 +80,10 @@ Future<String?> showBookmarkDialog(
               const SizedBox(height: 10),
               Text(
                 noteHint,
-                style: TextStyle(color: subtextColor, fontSize: AppSpacing.size10),
+                style: TextStyle(
+                  color: subtextColor,
+                  fontSize: AppSpacing.size10,
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -103,7 +106,10 @@ Future<String?> showBookmarkDialog(
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: colorEmerald, width: 1.5),
+                    borderSide: const BorderSide(
+                      color: colorEmerald,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -148,8 +154,8 @@ Future<String?> showBookmarkDialog(
                       child: const Text(
                         "Save Bookmark",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppSpacing.size12,
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppSpacing.size12,
                         ),
                       ),
                     ),

@@ -9,16 +9,13 @@ class MotivationCard extends ConsumerWidget {
   final String? title;
   final String? subtitle;
 
-  const MotivationCard({
-    super.key,
-    this.title,
-    this.subtitle,
-  });
+  const MotivationCard({super.key, this.title, this.subtitle});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String displayTitle = title ?? ref.watch(motivationTitleProvider);
-    final String displaySubtitle = subtitle ?? ref.watch(motivationSubtitleProvider);
+    final String displaySubtitle =
+        subtitle ?? ref.watch(motivationSubtitleProvider);
 
     return Container(
       width: double.infinity,
@@ -60,7 +57,7 @@ class MotivationCard extends ConsumerWidget {
             displaySubtitle,
             style: const TextStyle(
               color: AppColors.emerald100,
-              fontSize:  AppSpacing.size11,
+              fontSize: AppSpacing.size11,
               height: 1.4,
             ),
           ),

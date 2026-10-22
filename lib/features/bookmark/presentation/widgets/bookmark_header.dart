@@ -42,7 +42,11 @@ class BookmarkHeader extends ConsumerWidget {
                     context.go('/');
                   }
                 },
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20,),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -60,8 +64,8 @@ class BookmarkHeader extends ConsumerWidget {
                     Text(
                       "$totalCount saved",
                       style: const TextStyle(
-                          color: AppColors.emerald100,
-                          fontSize: AppSpacing.size12,
+                        color: AppColors.emerald100,
+                        fontSize: AppSpacing.size12,
                       ),
                     ),
                   ],

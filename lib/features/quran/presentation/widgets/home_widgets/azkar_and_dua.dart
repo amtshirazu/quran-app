@@ -49,7 +49,10 @@ class AzkaarDuaCard extends StatelessWidget {
           const SizedBox(height: 8),
           const Text(
             "Daily remembrance and supplications from the Quran and Sunnah",
-            style: TextStyle(color: AppColors.emerald100, fontSize: AppSpacing.size12,),
+            style: TextStyle(
+              color: AppColors.emerald100,
+              fontSize: AppSpacing.size12,
+            ),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -70,8 +73,8 @@ class AzkaarDuaCard extends StatelessWidget {
               child: const Text(
                 "Explore",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: AppSpacing.size12,
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppSpacing.size12,
                 ),
               ),
             ),

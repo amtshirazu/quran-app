@@ -66,7 +66,9 @@ class EmptyBookmarksCard extends ConsumerWidget {
             style: TextStyle(
               fontSize: AppSpacing.size16,
               fontWeight: FontWeight.bold,
-              color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF0F172A),
+              color: isDark
+                  ? AppTheme.darkTextPrimary
+                  : const Color(0xFF0F172A),
             ),
           ),
           const SizedBox(height: 12),
@@ -96,8 +98,8 @@ class EmptyBookmarksCard extends ConsumerWidget {
               child: Text(
                 buttonText,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: AppSpacing.size12,
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppSpacing.size12,
                 ),
               ),
             ),

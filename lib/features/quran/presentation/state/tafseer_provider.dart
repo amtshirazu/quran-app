@@ -25,30 +25,32 @@ class SelectedTafseerNotifier extends StateNotifier<String> {
 
 final selectedTafseerProvider =
     StateNotifierProvider<SelectedTafseerNotifier, String>((ref) {
-  return SelectedTafseerNotifier();
-});
+      return SelectedTafseerNotifier();
+    });
 
 final tafseerServiceProvider = Provider<TafseerDatabaseService>((ref) {
   return TafseerDatabaseService();
 });
 
 /// Provider fetching Tafseer content for a specific surah and verse
-final verseTafseerProvider = FutureProvider.family<
-    ({TafseerModel model, String content}),
-    ({int surah, int verse})>((ref, arg) async {
-  final selectedDbName = ref.watch(selectedTafseerProvider);
-  final service = ref.watch(tafseerServiceProvider);
+final verseTafseerProvider =
+    FutureProvider.family<
+      ({TafseerModel model, String content}),
+      ({int surah, int verse})
+    >((ref, arg) async {
+      final selectedDbName = ref.watch(selectedTafseerProvider);
+      final service = ref.watch(tafseerServiceProvider);
 
-  final model = kAllTafseers.firstWhere(
-    (m) => m.dbFileName == selectedDbName,
-    orElse: () => kAllTafseers.first,
-  );
+      final model = kAllTafseers.firstWhere(
+        (m) => m.dbFileName == selectedDbName,
+        orElse: () => kAllTafseers.first,
+      );
 
-  final content = await service.getTafseerFromDb(
-    fileName: selectedDbName,
-    surah: arg.surah,
-    verse: arg.verse,
-  );
+      final content = await service.getTafseerFromDb(
+        fileName: selectedDbName,
+        surah: arg.surah,
+        verse: arg.verse,
+      );
 
-  return (model: model, content: content);
-});
+      return (model: model, content: content);
+    });

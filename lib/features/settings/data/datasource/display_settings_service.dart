@@ -20,7 +20,10 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 
   Future<void> toggleDarkMode(bool isDark) async {
     state = isDark ? ThemeMode.dark : ThemeMode.light;
-    await DatabaseHelper.instance.setSetting('dark_mode', isDark ? 'true' : 'false');
+    await DatabaseHelper.instance.setSetting(
+      'dark_mode',
+      isDark ? 'true' : 'false',
+    );
   }
 }
 
@@ -62,7 +65,10 @@ class StreamingModeNotifier extends StateNotifier<bool> {
 
   Future<void> toggleStreaming(bool value) async {
     state = value;
-    await DatabaseHelper.instance.setSetting('streaming_mode', value ? 'true' : 'false');
+    await DatabaseHelper.instance.setSetting(
+      'streaming_mode',
+      value ? 'true' : 'false',
+    );
   }
 }
 
@@ -108,7 +114,10 @@ class AyahTextSizeNotifier extends StateNotifier<double> {
   Future<void> updateSize(double size) async {
     final clamped = size.clamp(6.0, 36.0);
     state = clamped;
-    await DatabaseHelper.instance.setSetting('ayah_text_size', clamped.toString());
+    await DatabaseHelper.instance.setSetting(
+      'ayah_text_size',
+      clamped.toString(),
+    );
   }
 
   void increment() => updateSize(state + 1.0);
@@ -123,7 +132,9 @@ class TransliterationTextSizeNotifier extends StateNotifier<double> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('transliteration_text_size');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'transliteration_text_size',
+      );
       if (saved != null) {
         final parsed = double.tryParse(saved);
         if (parsed != null && parsed >= 6 && parsed <= 28) {
@@ -136,7 +147,10 @@ class TransliterationTextSizeNotifier extends StateNotifier<double> {
   Future<void> updateSize(double size) async {
     final clamped = size.clamp(6.0, 28.0);
     state = clamped;
-    await DatabaseHelper.instance.setSetting('transliteration_text_size', clamped.toString());
+    await DatabaseHelper.instance.setSetting(
+      'transliteration_text_size',
+      clamped.toString(),
+    );
   }
 
   void increment() => updateSize(state + 1.0);
@@ -151,7 +165,9 @@ class TranslationTextSizeNotifier extends StateNotifier<double> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('translation_text_size');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'translation_text_size',
+      );
       if (saved != null) {
         final parsed = double.tryParse(saved);
         if (parsed != null && parsed >= 6 && parsed <= 28) {
@@ -164,7 +180,10 @@ class TranslationTextSizeNotifier extends StateNotifier<double> {
   Future<void> updateSize(double size) async {
     final clamped = size.clamp(6.0, 28.0);
     state = clamped;
-    await DatabaseHelper.instance.setSetting('translation_text_size', clamped.toString());
+    await DatabaseHelper.instance.setSetting(
+      'translation_text_size',
+      clamped.toString(),
+    );
   }
 
   void increment() => updateSize(state + 1.0);
@@ -179,7 +198,9 @@ class ReferenceTextSizeNotifier extends StateNotifier<double> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('reference_text_size');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'reference_text_size',
+      );
       if (saved != null) {
         final parsed = double.tryParse(saved);
         if (parsed != null && parsed >= 6 && parsed <= 24) {
@@ -192,7 +213,10 @@ class ReferenceTextSizeNotifier extends StateNotifier<double> {
   Future<void> updateSize(double size) async {
     final clamped = size.clamp(6.0, 24.0);
     state = clamped;
-    await DatabaseHelper.instance.setSetting('reference_text_size', clamped.toString());
+    await DatabaseHelper.instance.setSetting(
+      'reference_text_size',
+      clamped.toString(),
+    );
   }
 
   void increment() => updateSize(state + 1.0);
@@ -207,7 +231,9 @@ class AyahBeforeTranslationNotifier extends StateNotifier<bool> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('show_ayah_before');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'show_ayah_before',
+      );
       if (saved != null) {
         state = saved == 'true';
       }
@@ -216,6 +242,59 @@ class AyahBeforeTranslationNotifier extends StateNotifier<bool> {
 
   Future<void> toggle(bool value) async {
     state = value;
-    await DatabaseHelper.instance.setSetting('show_ayah_before', value ? 'true' : 'false');
+    await DatabaseHelper.instance.setSetting(
+      'show_ayah_before',
+      value ? 'true' : 'false',
+    );
+  }
+}
+
+/// Highlight Active Verse Notifier (Default: true)
+class HighlightActiveVerseNotifier extends StateNotifier<bool> {
+  HighlightActiveVerseNotifier() : super(true) {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting(
+        'highlight_active_verse',
+      );
+      if (saved != null) {
+        state = saved == 'true';
+      }
+    } catch (_) {}
+  }
+
+  Future<void> toggle(bool value) async {
+    state = value;
+    await DatabaseHelper.instance.setSetting(
+      'highlight_active_verse',
+      value ? 'true' : 'false',
+    );
+  }
+}
+
+/// Tajweed Script Notifier (Default: false)
+class TajweedModeNotifier extends StateNotifier<bool> {
+  TajweedModeNotifier() : super(false) {
+    _loadSaved();
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final saved = await DatabaseHelper.instance.getSetting('tajweed_mode');
+      if (saved != null) {
+        state = saved == 'true';
+      }
+    } catch (_) {}
+  }
+
+  Future<void> toggleTajweed(bool value) async {
+    state = value;
+    await DatabaseHelper.instance.setSetting(
+      'tajweed_mode',
+      value ? 'true' : 'false',
+    );
   }
 }

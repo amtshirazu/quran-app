@@ -19,7 +19,8 @@ class ProgressService {
 
     for (final item in rawList) {
       final surahNum = (item['surah'] ?? item['surah_number']) as int?;
-      final start = (item['start'] ?? item['ayah'] ?? item['start_ayah']) as int?;
+      final start =
+          (item['start'] ?? item['ayah'] ?? item['start_ayah']) as int?;
       final end = (item['end'] ?? item['ayah'] ?? item['end_ayah']) as int?;
 
       if (surahNum != null && start != null && end != null) {
@@ -44,7 +45,10 @@ class ProgressService {
     final firstReading = await getFirstReadingDate();
     final installDate = firstReading ?? DateTime.now();
 
-    await dbHelper.setSetting('app_install_date', installDate.toIso8601String());
+    await dbHelper.setSetting(
+      'app_install_date',
+      installDate.toIso8601String(),
+    );
     return installDate;
   }
 
@@ -60,26 +64,20 @@ class ProgressService {
   }) async {
     final db = await dbHelper.database;
 
-    final resolvedSurahId = await resolveActiveSurah(
-      mode: mode,
-      surahId: surahId,
-      page: page,
-    ) ?? surahId;
+    final resolvedSurahId =
+        await resolveActiveSurah(mode: mode, surahId: surahId, page: page) ??
+        surahId;
 
     final now = DateTime.now().toIso8601String();
 
-    await db.insert(
-      'last_read',
-      {
-        'id': 1,
-        'surah_id': resolvedSurahId,
-        'ayah': ayah,
-        'page': page,
-        'mode': mode,
-        'updated_at': now,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('last_read', {
+      'id': 1,
+      'surah_id': resolvedSurahId,
+      'ayah': ayah,
+      'page': page,
+      'mode': mode,
+      'updated_at': now,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // ========================= VERIFIED PROGRESS TRACKING (DWELL TIMER) =========================
@@ -107,10 +105,7 @@ class ProgressService {
     final db = await dbHelper.database;
     final now = DateTime.now().toIso8601String();
 
-    final activeSurahId = await resolveActiveSurah(
-      mode: 'page',
-      page: page,
-    );
+    final activeSurahId = await resolveActiveSurah(mode: 'page', page: page);
 
     await db.insert('reading_sessions', {
       'mode': 'page',
@@ -120,7 +115,11 @@ class ProgressService {
       'timestamp': now,
     });
 
-    await setBookmarkImmediate(surahId: activeSurahId, page: page, mode: 'page');
+    await setBookmarkImmediate(
+      surahId: activeSurahId,
+      page: page,
+      mode: 'page',
+    );
   }
 
   // ========================= STREAK =========================
@@ -135,15 +134,11 @@ class ProgressService {
       final result = await db.query('streak', limit: 1);
 
       if (result.isEmpty) {
-        await db.insert(
-          'streak',
-          {
-            'id': 1,
-            'last_read_date': todayDate.toIso8601String(),
-            'current_streak': 1,
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        await db.insert('streak', {
+          'id': 1,
+          'last_read_date': todayDate.toIso8601String(),
+          'current_streak': 1,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
         return;
       }
 
@@ -152,15 +147,11 @@ class ProgressService {
       int currentStreak = (data['current_streak'] as int?) ?? 0;
 
       if (lastReadDateStr == null) {
-        await db.insert(
-          'streak',
-          {
-            'id': 1,
-            'last_read_date': todayDate.toIso8601String(),
-            'current_streak': 1,
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        await db.insert('streak', {
+          'id': 1,
+          'last_read_date': todayDate.toIso8601String(),
+          'current_streak': 1,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
         return;
       }
 
@@ -181,15 +172,11 @@ class ProgressService {
         return; // already recorded today
       }
 
-      await db.insert(
-        'streak',
-        {
-          'id': 1,
-          'last_read_date': todayDate.toIso8601String(),
-          'current_streak': currentStreak,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('streak', {
+        'id': 1,
+        'last_read_date': todayDate.toIso8601String(),
+        'current_streak': currentStreak,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (_) {}
   }
 
@@ -251,7 +238,9 @@ class ProgressService {
           }
         }
       }
-      return totalAyahs <= 0 ? 0.0 : (initialAyahs.length / totalAyahs).clamp(0.0, 1.0);
+      return totalAyahs <= 0
+          ? 0.0
+          : (initialAyahs.length / totalAyahs).clamp(0.0, 1.0);
     }
 
     final Set<int> uniqueAyahs = {};
@@ -298,7 +287,7 @@ class ProgressService {
     }
 
     final newSurah = verses.firstWhere(
-          (v) => v.ayah == 1,
+      (v) => v.ayah == 1,
       orElse: () => verses.first,
     );
 

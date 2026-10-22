@@ -10,7 +10,9 @@ class DailyVerseNotificationNotifier extends StateNotifier<bool> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('daily_verse_notif_enabled');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'daily_verse_notif_enabled',
+      );
       if (saved != null) {
         state = saved == 'true';
       }
@@ -19,7 +21,10 @@ class DailyVerseNotificationNotifier extends StateNotifier<bool> {
 
   Future<void> setEnabled(bool enabled) async {
     state = enabled;
-    await DatabaseHelper.instance.setSetting('daily_verse_notif_enabled', enabled ? 'true' : 'false');
+    await DatabaseHelper.instance.setSetting(
+      'daily_verse_notif_enabled',
+      enabled ? 'true' : 'false',
+    );
     if (!enabled) {
       await NotificationService.instance.cancelDailyVerseNotification();
     }
@@ -28,8 +33,8 @@ class DailyVerseNotificationNotifier extends StateNotifier<bool> {
 
 final dailyVerseNotifEnabledProvider =
     StateNotifierProvider<DailyVerseNotificationNotifier, bool>((ref) {
-  return DailyVerseNotificationNotifier();
-});
+      return DailyVerseNotificationNotifier();
+    });
 
 class DailyVerseTimeNotifier extends StateNotifier<TimeOfDay> {
   DailyVerseTimeNotifier() : super(const TimeOfDay(hour: 8, minute: 0)) {
@@ -38,7 +43,9 @@ class DailyVerseTimeNotifier extends StateNotifier<TimeOfDay> {
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('daily_verse_notif_time');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'daily_verse_notif_time',
+      );
       if (saved != null) {
         final parts = saved.split(':');
         if (parts.length == 2) {
@@ -54,11 +61,14 @@ class DailyVerseTimeNotifier extends StateNotifier<TimeOfDay> {
 
   Future<void> setTime(TimeOfDay time) async {
     state = time;
-    await DatabaseHelper.instance.setSetting('daily_verse_notif_time', '${time.hour}:${time.minute}');
+    await DatabaseHelper.instance.setSetting(
+      'daily_verse_notif_time',
+      '${time.hour}:${time.minute}',
+    );
   }
 }
 
 final dailyVerseNotifTimeProvider =
     StateNotifierProvider<DailyVerseTimeNotifier, TimeOfDay>((ref) {
-  return DailyVerseTimeNotifier();
-});
+      return DailyVerseTimeNotifier();
+    });

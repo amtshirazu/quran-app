@@ -46,7 +46,9 @@ class NotificationService {
       debugPrint("⚠️ NOTIFICATIONS: Could not detect local timezone: $e");
     }
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -85,7 +87,8 @@ class NotificationService {
 
       final androidImplementation = _notificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+            AndroidFlutterLocalNotificationsPlugin
+          >();
 
       if (androidImplementation != null) {
         await androidImplementation.createNotificationChannel(prayerChannel);
@@ -101,14 +104,19 @@ class NotificationService {
     await init();
     try {
       final isEnabled = ref.read(dailyVerseNotifEnabledProvider);
+      debugPrint("🔔 NOTIFICATIONS: autoScheduleOnLaunch enabled = $isEnabled");
       if (isEnabled) {
         final time = ref.read(dailyVerseNotifTimeProvider);
-        final verseData = ref.read(dailyVerseWithTranslationProvider).asData?.value;
-        final text = verseData?.translation ?? "Verily, with hardship comes ease.";
-        await scheduleDailyVerseNotification(
-          time: time,
-          verseText: text,
+        final verseData = ref
+            .read(dailyVerseWithTranslationProvider)
+            .asData
+            ?.value;
+        final text =
+            verseData?.translation ?? "Verily, with hardship comes ease.";
+        debugPrint(
+          "🔔 NOTIFICATIONS: scheduling daily verse at ${time.hour}:${time.minute} with text: $text",
         );
+        await scheduleDailyVerseNotification(time: time, verseText: text);
       }
     } catch (e) {
       debugPrint("⚠️ NOTIFICATIONS: Auto-schedule on launch error: $e");
@@ -121,7 +129,8 @@ class NotificationService {
     if (Platform.isAndroid) {
       final androidImplementation = _notificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       return await androidImplementation?.areNotificationsEnabled() ?? true;
     }
     return true;
@@ -164,7 +173,9 @@ class NotificationService {
               child: Text(
                 "Cancel",
                 style: TextStyle(
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray600,
                 ),
               ),
             ),
@@ -215,7 +226,9 @@ class NotificationService {
       );
       debugPrint("✅ NOTIFICATION [$id] scheduled for $scheduledDate (exact)");
     } catch (e) {
-      debugPrint("⚠️ NOTIFICATION [$id] exact schedule failed, falling back to inexact: $e");
+      debugPrint(
+        "⚠️ NOTIFICATION [$id] exact schedule failed, falling back to inexact: $e",
+      );
       try {
         await _notificationsPlugin.zonedSchedule(
           id,
@@ -229,7 +242,9 @@ class NotificationService {
           matchDateTimeComponents: matchDateTimeComponents,
           payload: payload,
         );
-        debugPrint("✅ NOTIFICATION [$id] scheduled for $scheduledDate (inexact fallback)");
+        debugPrint(
+          "✅ NOTIFICATION [$id] scheduled for $scheduledDate (inexact fallback)",
+        );
       } catch (err) {
         debugPrint("❌ NOTIFICATION [$id] scheduling failed completely: $err");
       }
@@ -243,10 +258,20 @@ class NotificationService {
   }) async {
     await init();
 
-    final List<String> prayerNames = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    final List<String> prayerNames = [
+      'Fajr',
+      'Dhuhr',
+      'Asr',
+      'Maghrib',
+      'Isha',
+    ];
 
     for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
-      for (int prayerIndex = 0; prayerIndex < prayerNames.length; prayerIndex++) {
+      for (
+        int prayerIndex = 0;
+        prayerIndex < prayerNames.length;
+        prayerIndex++
+      ) {
         final name = prayerNames[prayerIndex];
         final id = (dayIndex * 10) + prayerIndex;
 
@@ -292,7 +317,13 @@ class NotificationService {
 
   /// Cancel specific prayer across all 7 days
   Future<void> cancelPrayerNotification(String prayerName) async {
-    final List<String> prayerNames = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    final List<String> prayerNames = [
+      'Fajr',
+      'Dhuhr',
+      'Asr',
+      'Maghrib',
+      'Isha',
+    ];
     final prayerIndex = prayerNames.indexOf(prayerName);
     if (prayerIndex == -1) return;
 
@@ -340,10 +371,7 @@ class NotificationService {
           category: AndroidNotificationCategory.reminder,
           playSound: true,
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentSound: true,
-        ),
+        iOS: DarwinNotificationDetails(presentAlert: true, presentSound: true),
       ),
       matchDateTimeComponents: DateTimeComponents.time,
       payload: '/verseOfDay',

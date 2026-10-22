@@ -6,7 +6,8 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../state/search_provider.dart';
 
-class SearchHeader extends ConsumerStatefulWidget implements PreferredSizeWidget {
+class SearchHeader extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   final TextEditingController controller;
   final ValueChanged<String> onSearchSubmitted;
   final VoidCallback onClear;
@@ -38,10 +39,7 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
             : const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF0F382C),
-                  Color(0xFF1B5E48),
-                ],
+                colors: [Color(0xFF0F382C), Color(0xFF1B5E48)],
               ),
       ),
       child: SafeArea(
@@ -88,7 +86,9 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                   color: isDark ? AppTheme.darkSurface : Colors.white,
                   borderRadius: BorderRadius.circular(19),
                   border: Border.all(
-                    color: isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB),
+                    color: isDark
+                        ? AppTheme.darkBorder
+                        : const Color(0xFFE5E7EB),
                   ),
                   boxShadow: isDark
                       ? null
@@ -119,14 +119,19 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                   ),
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: 'Type surah, ayah, topic, or translation keyword...',
+                    hintText:
+                        'Type surah, ayah, topic, or translation keyword...',
                     hintStyle: TextStyle(
-                      color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF9CA3AF),
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : const Color(0xFF9CA3AF),
                       fontSize: 12,
                     ),
                     prefixIcon: Icon(
                       LucideIcons.search,
-                      color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF6B7280),
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : const Color(0xFF6B7280),
                       size: 16,
                     ),
                     suffixIcon: Row(
@@ -139,7 +144,9 @@ class _SearchHeaderState extends ConsumerState<SearchHeader> {
                             icon: Icon(
                               Icons.close,
                               size: 16,
-                              color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF6B7280),
+                              color: isDark
+                                  ? AppTheme.darkTextSecondary
+                                  : const Color(0xFF6B7280),
                             ),
                             onPressed: widget.onClear,
                           ),

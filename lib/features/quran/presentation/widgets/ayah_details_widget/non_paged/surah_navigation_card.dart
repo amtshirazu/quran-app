@@ -2,12 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
+import '../../../../domain/models/surah.dart';
 import '../../../state/quran_providers.dart';
 
 class SurahNavigationCard extends ConsumerWidget {
   const SurahNavigationCard({super.key});
+
+  void _navigateToSurah(WidgetRef ref, BuildContext context, Surah surah) {
+    final audio = ref.read(audioServiceProvider);
+    audio.stop();
+    audio.clearActiveState();
+
+    ref.read(currentPlayingAyahProvider.notifier).state = null;
+    ref.read(jumpToPageProvider.notifier).state = null;
+    ref.read(targetAyahProvider.notifier).state = null;
+    ref.read(shouldResumeLastReadProvider.notifier).state = false;
+
+    ref.read(selectedSurahProvider.notifier).state = surah;
+    ref.read(explicitSurahSelectionProvider.notifier).state = surah;
+    ref.read(currentPageSurahIdProvider.notifier).state = surah.number;
+
+    context.go("/readAyah");
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,11 +80,8 @@ class SurahNavigationCard extends ConsumerWidget {
                     if (hasPrevious)
                       Expanded(
                         child: TextButton(
-                          onPressed: () {
-                            ref.read(selectedSurahProvider.notifier).state =
-                                previousSurah;
-                            context.go("/readAyah");
-                          },
+                          onPressed: () =>
+                              _navigateToSurah(ref, context, previousSurah!),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -106,11 +122,8 @@ class SurahNavigationCard extends ConsumerWidget {
                     if (hasNext)
                       Expanded(
                         child: TextButton(
-                          onPressed: () {
-                            ref.read(selectedSurahProvider.notifier).state =
-                                nextSurah;
-                            context.go("/readAyah");
-                          },
+                          onPressed: () =>
+                              _navigateToSurah(ref, context, nextSurah!),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

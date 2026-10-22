@@ -2,44 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasource/display_settings_service.dart';
 
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
+  ref,
+) {
   return ThemeModeNotifier();
 });
 
-final appLanguageProvider = StateNotifierProvider<AppLanguageNotifier, String>((ref) {
+final appLanguageProvider = StateNotifierProvider<AppLanguageNotifier, String>((
+  ref,
+) {
   return AppLanguageNotifier();
 });
 
-final streamingModeProvider = StateNotifierProvider<StreamingModeNotifier, bool>((ref) {
-  return StreamingModeNotifier();
-});
+final streamingModeProvider =
+    StateNotifierProvider<StreamingModeNotifier, bool>((ref) {
+      return StreamingModeNotifier();
+    });
 
-final quranScriptProvider =
-    StateNotifierProvider<QuranScriptNotifier, String>((ref) {
+final quranScriptProvider = StateNotifierProvider<QuranScriptNotifier, String>((
+  ref,
+) {
   return QuranScriptNotifier();
 });
 
 final ayahTextSizeProvider =
     StateNotifierProvider<AyahTextSizeNotifier, double>((ref) {
-  return AyahTextSizeNotifier();
-});
+      return AyahTextSizeNotifier();
+    });
 
 final translationTextSizeProvider =
     StateNotifierProvider<TranslationTextSizeNotifier, double>((ref) {
-  return TranslationTextSizeNotifier();
-});
+      return TranslationTextSizeNotifier();
+    });
 
 final transliterationTextSizeProvider =
     StateNotifierProvider<TransliterationTextSizeNotifier, double>((ref) {
-  return TransliterationTextSizeNotifier();
-});
+      return TransliterationTextSizeNotifier();
+    });
 
 final referenceTextSizeProvider =
     StateNotifierProvider<ReferenceTextSizeNotifier, double>((ref) {
-  return ReferenceTextSizeNotifier();
-});
+      return ReferenceTextSizeNotifier();
+    });
 
 final showAyahBeforeTranslationProvider =
     StateNotifierProvider<AyahBeforeTranslationNotifier, bool>((ref) {
-  return AyahBeforeTranslationNotifier();
-});
+      return AyahBeforeTranslationNotifier();
+    });
+
+final highlightActiveVerseProvider =
+    StateNotifierProvider<HighlightActiveVerseNotifier, bool>((ref) {
+      return HighlightActiveVerseNotifier();
+    });
+
+final isTajweedEnabledProvider =
+    StateNotifierProvider<TajweedModeNotifier, bool>((ref) {
+      return TajweedModeNotifier();
+    });

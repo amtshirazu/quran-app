@@ -25,10 +25,7 @@ class AboutCreditsScreen extends StatelessWidget {
                 : const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
                   ),
           ),
           child: SafeArea(
@@ -101,7 +98,8 @@ class AboutCreditsScreen extends StatelessWidget {
             _buildSectionTitle('AZKAR & SUPPLICATIONS', isDark),
             _buildItemCard(
               title: 'Hisnul Muslim (Fortress of the Muslim)',
-              subtitle: 'Daily azkar content, via the muslim_data_flutter library',
+              subtitle:
+                  'Daily azkar content, via the muslim_data_flutter library',
               isDark: isDark,
             ),
             const SizedBox(height: 10),
@@ -190,10 +188,7 @@ class AboutCreditsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextCard({
-    required String text,
-    required bool isDark,
-  }) {
+  Widget _buildTextCard({required String text, required bool isDark}) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),

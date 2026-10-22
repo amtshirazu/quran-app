@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class GuidanceHeader extends StatelessWidget implements PreferredSizeWidget {
   const GuidanceHeader({super.key});
 
@@ -25,13 +27,17 @@ class GuidanceHeader extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: const EdgeInsets.fromLTRB(4, 12, 16, 16),
           child: Row(
             children: [
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -40,7 +46,7 @@ class GuidanceHeader extends StatelessWidget implements PreferredSizeWidget {
                   }
                 },
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +56,7 @@ class GuidanceHeader extends StatelessWidget implements PreferredSizeWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: AppSpacing.size16,
                     ),
                   ),
                   SizedBox(height: 2),
@@ -58,7 +64,7 @@ class GuidanceHeader extends StatelessWidget implements PreferredSizeWidget {
                     'Find verses that speak to your heart',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: AppSpacing.size11,
                     ),
                   ),
                 ],

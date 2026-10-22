@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
+import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/widgets/ayah_details_widget/non_paged/surah_header_section.dart';
@@ -28,6 +30,22 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
   int? _currentSurahNumber;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final mode = ref.read(readingModeProvider);
+      if (mode == ReadingMode.translation) {
+        ref.read(repeatModeProvider.notifier).state = RepeatStates.off;
+        ref.read(audioServiceProvider).updateRepeatMode(RepeatStates.off);
+      } else if (mode == ReadingMode.reading) {
+        ref.read(repeatModeProvider.notifier).state = RepeatStates.repeatAll;
+        ref.read(audioServiceProvider).updateRepeatMode(RepeatStates.repeatAll);
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     _pageController?.dispose();
@@ -51,13 +69,17 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
       if (jumpAyah != null) {
         _targetAyah = jumpAyah;
-        ref.read(targetAyahProvider.notifier).state = null;
       }
 
-      if (jumpPage != null) {
+      if (jumpPage != null &&
+          range != null &&
+          jumpPage >= range.start &&
+          jumpPage <= range.end) {
         initialPage = jumpPage;
         ref.read(jumpToPageProvider.notifier).state = null;
       } else {
+        ref.read(jumpToPageProvider.notifier).state = null;
+
         // 2. Check resume target
         final shouldResume = ref.read(shouldResumeLastReadProvider);
         if (shouldResume) {
@@ -67,7 +89,12 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
             if (mode == 'ayah' && lastRead['surah_id'] == surahNumber) {
               _targetAyah = lastRead['ayah'];
             } else if (mode == 'page' && lastRead['page'] is int) {
-              initialPage = lastRead['page'];
+              final savedPage = lastRead['page'] as int;
+              if (range != null &&
+                  savedPage >= range.start &&
+                  savedPage <= range.end) {
+                initialPage = savedPage;
+              }
             }
           }
         }
@@ -87,8 +114,17 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
     final key = _ayahKeys[ayah];
 
-    // 1. If target Ayah widget is in context, align it perfectly at top!
+    // 1. If target Ayah widget is in context, check if already visible on screen
     if (key?.currentContext != null) {
+      final box = key!.currentContext!.findRenderObject() as RenderBox?;
+      if (box != null && box.attached) {
+        final position = box.localToGlobal(Offset.zero);
+        // If verse is already visible in viewport, no extra scroll needed
+        if (position.dy >= 80.0 && position.dy <= 250.0) {
+          return;
+        }
+      }
+
       Scrollable.ensureVisible(
         key!.currentContext!,
         duration: const Duration(milliseconds: 250),
@@ -101,7 +137,8 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     // 2. If target Ayah is not yet in context, step scroll position downwards to expand layout
     if (_scrollController.hasClients) {
       final selectedSurah = ref.read(selectedSurahProvider);
-      final hasBasmallah = selectedSurah != null &&
+      final hasBasmallah =
+          selectedSurah != null &&
           selectedSurah.number != 1 &&
           selectedSurah.number != 9;
 
@@ -114,7 +151,10 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
         _scrollController.jumpTo(initialTarget);
       } else {
         // Step forward by 800px per frame until target Ayah widget is generated in context
-        final nextTarget = (_scrollController.offset + 800.0).clamp(0.0, maxScroll);
+        final nextTarget = (_scrollController.offset + 800.0).clamp(
+          0.0,
+          maxScroll,
+        );
         if ((_scrollController.offset - nextTarget).abs() > 1.0) {
           _scrollController.jumpTo(nextTarget);
         }
@@ -140,6 +180,21 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
     }
   }
 
+  void _cleanupStateOnExit() {
+    Future.microtask(() {
+      final audio = ref.read(audioServiceProvider);
+      audio.stop();
+      audio.clearActiveState();
+      ref.read(currentPlayingAyahProvider.notifier).state = null;
+      ref.read(selectedSurahProvider.notifier).state = null;
+      ref.read(explicitSurahSelectionProvider.notifier).state = null;
+      ref.read(currentPageSurahIdProvider.notifier).state = null;
+      ref.read(jumpToPageProvider.notifier).state = null;
+      ref.read(targetAyahProvider.notifier).state = null;
+      ref.read(shouldResumeLastReadProvider.notifier).state = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedSurah = ref.watch(selectedSurahProvider);
@@ -152,50 +207,82 @@ class _SurahDetailScreenState extends ConsumerState<SurahDetailScreen> {
 
     final readingMode = ref.watch(readingModeProvider);
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(85),
-        child: SurahHeaderSection(
-          controller: _pageController,
-          mode: readingMode,
+    // Mode-aware Repeat Mode synchronization
+    ref.listen(readingModeProvider, (previous, next) {
+      if (next == ReadingMode.translation) {
+        ref.read(repeatModeProvider.notifier).state = RepeatStates.off;
+        ref.read(audioServiceProvider).updateRepeatMode(RepeatStates.off);
+      } else if (next == ReadingMode.reading) {
+        ref.read(repeatModeProvider.notifier).state = RepeatStates.repeatAll;
+        ref.read(audioServiceProvider).updateRepeatMode(RepeatStates.repeatAll);
+      }
+    });
+
+    // Auto-scroll to active playing verse in Translation Mode
+    ref.listen(currentPlayingAyahProvider, (previous, next) {
+      if (next != null && readingMode == ReadingMode.translation) {
+        if (next.surah == selectedSurah.number) {
+          if (previous != null &&
+              previous.surah == next.surah &&
+              previous.ayah == next.ayah) {
+            return;
+          }
+          _scrollToAyah(next.ayah);
+        }
+      }
+    });
+
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          _cleanupStateOnExit();
+        }
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(85),
+          child: SurahHeaderSection(
+            controller: _pageController,
+            mode: readingMode,
+          ),
         ),
-      ),
-      body: readingMode == ReadingMode.translation
-          ? Column(
-        children: [
-          Expanded(
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                const SliverToBoxAdapter(child: SurahInfo()),
+        body: readingMode == ReadingMode.translation
+            ? Column(
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        const SliverToBoxAdapter(child: SurahInfo()),
 
-                if (selectedSurah.number != 1 &&
-                    selectedSurah.number != 9)
-                  const SliverToBoxAdapter(child: Basmallah()),
+                        if (selectedSurah.number != 1 &&
+                            selectedSurah.number != 9)
+                          const SliverToBoxAdapter(child: Basmallah()),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                        const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-                AyahList(
-                  ayahkeys: _ayahKeys,
-                  onListBuilt: _onAyahListBuilt,
-                ),
+                        AyahList(
+                          ayahkeys: _ayahKeys,
+                          onListBuilt: _onAyahListBuilt,
+                        ),
 
-                const SurahNavigationCard(),
-              ],
-            ),
-          ),
-        ],
-      )
-          : Column(
-        children: [
-          const SizedBox(height: 16),
-          Expanded(
-            child: _pageController == null
-                ? const Center(child: CircularProgressIndicator())
-                : QuranPagedReaderScreen(controller: _pageController!),
-          ),
-          const BottomPageIndicator(),
-        ],
+                        const SurahNavigationCard(),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: _pageController == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : QuranPagedReaderScreen(controller: _pageController!),
+                  ),
+                  const BottomPageIndicator(),
+                ],
+              ),
       ),
     );
   }

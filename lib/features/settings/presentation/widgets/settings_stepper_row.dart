@@ -40,12 +40,18 @@ class SettingsStepperRow extends StatelessWidget {
                     style: TextStyle(
                       fontSize: AppSpacing.size15,
                       fontWeight: FontWeight.w600,
-                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDark
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                     ),
                   ),
                   Row(
                     children: [
-                      _buildStepperBtn(context, icon: Icons.remove, onTap: onDecrement),
+                      _buildStepperBtn(
+                        context,
+                        icon: Icons.remove,
+                        onTap: onDecrement,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
@@ -53,11 +59,17 @@ class SettingsStepperRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: AppSpacing.size15,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                            color: isDark
+                                ? AppTheme.darkTextPrimary
+                                : AppColors.gray900,
                           ),
                         ),
                       ),
-                      _buildStepperBtn(context, icon: Icons.add, onTap: onIncrement),
+                      _buildStepperBtn(
+                        context,
+                        icon: Icons.add,
+                        onTap: onIncrement,
+                      ),
                     ],
                   ),
                 ],
@@ -65,9 +77,14 @@ class SettingsStepperRow extends StatelessWidget {
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF141A17) : const Color(0xFFF3F4F6),
+                  color: isDark
+                      ? const Color(0xFF141A17)
+                      : const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isDark ? AppTheme.darkBorder : AppColors.gray200,
@@ -90,7 +107,11 @@ class SettingsStepperRow extends StatelessWidget {
     );
   }
 
-  Widget _buildStepperBtn(BuildContext context, {required IconData icon, required VoidCallback onTap}) {
+  Widget _buildStepperBtn(
+    BuildContext context, {
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return InkWell(

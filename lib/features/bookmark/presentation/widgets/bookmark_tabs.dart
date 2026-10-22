@@ -73,7 +73,12 @@ class _TabButton extends ConsumerWidget {
                 : (isDark ? AppTheme.darkScaffold : Colors.transparent),
             borderRadius: BorderRadius.circular(8),
             boxShadow: isActive
-                ? [BoxShadow(color: AppColors.emerald600.withAlpha(51), blurRadius: 4)]
+                ? [
+                    BoxShadow(
+                      color: AppColors.emerald600.withAlpha(51),
+                      blurRadius: 4,
+                    ),
+                  ]
                 : [],
           ),
           child: Center(
@@ -84,8 +89,8 @@ class _TabButton extends ConsumerWidget {
                   tab == BookmarkTab.verses
                       ? LucideIcons.bookmark
                       : tab == BookmarkTab.pages
-                          ? LucideIcons.bookOpen
-                          : LucideIcons.layoutGrid,
+                      ? LucideIcons.bookOpen
+                      : LucideIcons.layoutGrid,
                   size: AppSpacing.size14,
                   color: isSelectedColor(isActive, isDark),
                 ),

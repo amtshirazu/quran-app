@@ -44,7 +44,9 @@ class SettingsRow extends StatelessWidget {
                 ] else if (icon != null) ...[
                   Icon(
                     icon,
-                    color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                    color: isDark
+                        ? AppTheme.darkTextSecondary
+                        : AppColors.gray600,
                     size: 20,
                   ),
                   const SizedBox(width: 12),
@@ -58,7 +60,9 @@ class SettingsRow extends StatelessWidget {
                         style: TextStyle(
                           fontSize: AppSpacing.size13,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                          color: isDark
+                              ? AppTheme.darkTextPrimary
+                              : AppColors.gray900,
                         ),
                       ),
                       if (subtitle != null && subtitle!.isNotEmpty) ...[
@@ -67,7 +71,9 @@ class SettingsRow extends StatelessWidget {
                           subtitle!,
                           style: TextStyle(
                             fontSize: AppSpacing.size11,
-                            color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                            color: isDark
+                                ? AppTheme.darkTextSecondary
+                                : AppColors.gray500,
                           ),
                         ),
                       ],
@@ -79,7 +85,7 @@ class SettingsRow extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 2,),
+        SizedBox(height: 2),
         if (showDivider)
           Divider(
             height: 1,

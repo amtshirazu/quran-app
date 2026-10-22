@@ -86,7 +86,9 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
                           child: Text(
                             "No matching supplications found.",
                             style: TextStyle(
-                              color: isDark ? AppTheme.darkTextSecondary : Colors.black45,
+                              color: isDark
+                                  ? AppTheme.darkTextSecondary
+                                  : Colors.black45,
                               fontSize: 14,
                             ),
                           ),
@@ -103,8 +105,10 @@ class _DuasScreenState extends ConsumerState<DuasScreen> {
                       itemCount: duas.length,
                       itemBuilder: (context, index) {
                         final dua = duas[index];
-                        final key =
-                            _duaKeys.putIfAbsent(dua.id, () => GlobalKey());
+                        final key = _duaKeys.putIfAbsent(
+                          dua.id,
+                          () => GlobalKey(),
+                        );
                         return Container(
                           key: key,
                           child: DuaCard(dua: dua),

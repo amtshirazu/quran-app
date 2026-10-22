@@ -23,10 +23,7 @@ final chaptersProvider = FutureProvider.family<List<AzkarChapter>, int>((
   final langCode = ref.watch(appLanguageProvider);
   final lang = _getMuslimDataLanguage(langCode);
 
-  return await repo.getAzkarChapters(
-    language: lang,
-    categoryId: categoryId,
-  );
+  return await repo.getAzkarChapters(language: lang, categoryId: categoryId);
 });
 
 // Items Provider

@@ -22,9 +22,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
-        child: CustomScrollView(
-          slivers: [_buildHeader(), _buildBody()],
-        ),
+        child: CustomScrollView(slivers: [_buildHeader(), _buildBody()]),
       ),
       bottomNavigationBar: BottomNavbar(
         currentIndex: selectedIndex,

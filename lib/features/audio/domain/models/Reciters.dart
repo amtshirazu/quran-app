@@ -7,6 +7,7 @@ class Reciter {
   final String riwayah;
   final String style;
   final int totalSurahs;
+  final int mp3QuranReadId;
 
   /// Full Surah local folder and CDN server URL (e.g. mp3quran)
   final String audioFolder;
@@ -25,6 +26,7 @@ class Reciter {
     required this.riwayah,
     required this.style,
     required this.totalSurahs,
+    required this.mp3QuranReadId,
     required this.audioFolder,
     required this.serverUrl,
     this.ayahServerUrl,

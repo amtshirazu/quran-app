@@ -34,9 +34,17 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: AppColors.gray900, fontSize: 16),
       bodySmall: TextStyle(color: AppColors.gray600, fontSize: 12),
-      titleLarge: TextStyle(color: AppColors.gray900, fontSize: 24, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(
+        color: AppColors.gray900,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
       titleMedium: TextStyle(color: AppColors.gray900, fontSize: 20),
-      headlineLarge: TextStyle(color: AppColors.gray900, fontSize: 22, fontWeight: FontWeight.bold),
+      headlineLarge: TextStyle(
+        color: AppColors.gray900,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
     ),
   );
 
@@ -61,9 +69,17 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: darkTextPrimary, fontSize: 16),
       bodySmall: TextStyle(color: darkTextSecondary, fontSize: 12),
-      titleLarge: TextStyle(color: darkTextPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(
+        color: darkTextPrimary,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
       titleMedium: TextStyle(color: darkTextPrimary, fontSize: 20),
-      headlineLarge: TextStyle(color: darkTextPrimary, fontSize: 22, fontWeight: FontWeight.bold),
+      headlineLarge: TextStyle(
+        color: darkTextPrimary,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
     ),
   );
 }

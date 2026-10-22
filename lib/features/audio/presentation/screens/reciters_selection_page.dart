@@ -9,12 +9,12 @@ import '../widgets/reciters_selection_widgets/header_section.dart';
 import '../widgets/reciters_selection_widgets/reciters_card_list.dart';
 import '../widgets/reciters_selection_widgets/search.dart';
 
-
 class RecitersSelectionPage extends ConsumerStatefulWidget {
   const RecitersSelectionPage({super.key});
 
   @override
-  ConsumerState<RecitersSelectionPage> createState() => RecitersSelectionPageState();
+  ConsumerState<RecitersSelectionPage> createState() =>
+      RecitersSelectionPageState();
 }
 
 class RecitersSelectionPageState extends ConsumerState<RecitersSelectionPage> {
@@ -22,46 +22,34 @@ class RecitersSelectionPageState extends ConsumerState<RecitersSelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final reciters = ref.watch(recitersListProvider);
 
     return Scaffold(
       body: Column(
-          children: [
-        
-           QuranAudioHeader(
-                recitersCount: reciters.length,
-           ),
-        
-            Expanded(
-              child: CustomScrollView(
-                cacheExtent: 1000,
-                slivers: [
-        
-                  SliverToBoxAdapter(
-                    child: FeaturedRecitersCard(),
+        children: [
+          QuranAudioHeader(recitersCount: reciters.length),
+
+          Expanded(
+            child: CustomScrollView(
+              cacheExtent: 1000,
+              slivers: [
+                SliverToBoxAdapter(child: FeaturedRecitersCard()),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                RecitersCardList(),
+
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: QuranAudioInfoCard(),
                   ),
-        
-        
-        
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 16),
-                  ),
-        
-        
-                  RecitersCardList(),
-        
-                  SliverToBoxAdapter(
-                    child:  Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: QuranAudioInfoCard(),
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
 
       bottomNavigationBar: BottomNavbar(
         currentIndex: selectedIndex,

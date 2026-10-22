@@ -50,7 +50,9 @@ class SelectionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.emerald600.withAlpha(38) : const Color(0xFFE0F2F1),
+                    color: isDark
+                        ? AppColors.emerald600.withAlpha(38)
+                        : const Color(0xFFE0F2F1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(icon, color: AppColors.emerald600, size: 20),
@@ -72,7 +74,9 @@ class SelectionCard extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          color: isDark ? AppTheme.darkTextSecondary : Colors.grey.shade600,
+                          color: isDark
+                              ? AppTheme.darkTextSecondary
+                              : Colors.grey.shade600,
                           fontSize: 11.5,
                         ),
                       ),
@@ -87,30 +91,36 @@ class SelectionCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Row(
-              children: tags
-                  .map(
-                    (tag) => Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isDark ? AppTheme.darkScaffold : const Color(0xFFF1F8F7),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        tag,
-                        style: const TextStyle(
-                          color: AppColors.emerald600,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                children: tags
+                    .map(
+                      (tag) => Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppTheme.darkScaffold
+                              : const Color(0xFFF1F8F7),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          tag,
+                          style: const TextStyle(
+                            color: AppColors.emerald600,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
           ],
         ),

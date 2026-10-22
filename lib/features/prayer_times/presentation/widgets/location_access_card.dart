@@ -48,7 +48,7 @@ class LocationAccessCard extends StatelessWidget {
           Text(
             "Location Access Required",
             style: TextStyle(
-              fontSize:  AppSpacing.size15,
+              fontSize: AppSpacing.size15,
               fontWeight: FontWeight.bold,
               color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
             ),
@@ -58,7 +58,7 @@ class LocationAccessCard extends StatelessWidget {
             "We need your location to show accurate prayer times for your area. Please enable location access to continue.",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize:  AppSpacing.size12,
+              fontSize: AppSpacing.size12,
               color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
               height: 1.5,
             ),
@@ -81,8 +81,8 @@ class LocationAccessCard extends StatelessWidget {
               label: const Text(
                 "Enable Location Access",
                 style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize:  AppSpacing.size12,
+                  fontWeight: FontWeight.w600,
+                  fontSize: AppSpacing.size12,
                 ),
               ),
             ),
@@ -92,7 +92,7 @@ class LocationAccessCard extends StatelessWidget {
             "Your location is only used to calculate prayer times and is not stored.",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize:  AppSpacing.size10,
+              fontSize: AppSpacing.size10,
               color: isDark ? AppTheme.darkTextSecondary : Colors.black45,
               fontStyle: FontStyle.italic,
             ),

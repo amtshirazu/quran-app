@@ -10,7 +10,12 @@ class QuickAccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.size16,0,AppSpacing.size16,AppSpacing.size16),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.size16,
+        0,
+        AppSpacing.size16,
+        AppSpacing.size16,
+      ),
       child: GridView.count(
         padding: EdgeInsets.only(top: 20),
         crossAxisCount: 2,

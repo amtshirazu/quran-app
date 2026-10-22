@@ -6,11 +6,7 @@ import '../../../../../core/constants/app_spacing.dart';
 import '../../../domain/models/Reciters.dart';
 
 class ReciterCard extends StatelessWidget {
-  const ReciterCard({
-    super.key,
-    required this.reciter,
-    required this.onTap,
-  });
+  const ReciterCard({super.key, required this.reciter, required this.onTap});
 
   final Reciter reciter;
   final Function() onTap;
@@ -26,7 +22,9 @@ class ReciterCard extends StatelessWidget {
         elevation: isDark ? 0 : 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+          side: isDark
+              ? const BorderSide(color: AppTheme.darkBorder)
+              : BorderSide.none,
         ),
         color: isDark ? AppTheme.darkSurface : Colors.white,
         clipBehavior: Clip.antiAlias,
@@ -60,7 +58,10 @@ class ReciterCard extends StatelessWidget {
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 7,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha(230),
                       borderRadius: BorderRadius.circular(10),
@@ -129,12 +130,14 @@ class ReciterCard extends StatelessWidget {
                           reciter.riwayah,
                           style: TextStyle(
                             fontSize: AppSpacing.size10,
-                            color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
+                            color: isDark
+                                ? AppTheme.darkTextSecondary
+                                : Colors.black54,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2,),
+                        const SizedBox(height: 2),
                         Text(
                           reciter.style,
                           style: const TextStyle(
@@ -145,12 +148,14 @@ class ReciterCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2,),
+                        const SizedBox(height: 2),
                         Text(
                           "${reciter.totalSurahs} Surahs",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
+                            color: isDark
+                                ? AppTheme.darkTextPrimary
+                                : Colors.black87,
                             fontSize: AppSpacing.size8,
                           ),
                           maxLines: 1,

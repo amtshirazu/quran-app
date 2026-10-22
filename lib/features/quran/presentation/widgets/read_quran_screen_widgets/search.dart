@@ -6,19 +6,14 @@ import 'package:quran_app/features/quran/presentation/state/quran_providers.dart
 
 import '../../../../../core/constants/app_spacing.dart';
 
-
-
-
-
 class SearchField extends ConsumerWidget {
   const SearchField({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return TextField(
       onChanged: (value) {
-        ref.read(searchQueryProvider.notifier).state  = value;
+        ref.read(searchQueryProvider.notifier).state = value;
       },
       cursorColor: AppColors.gray400,
 
@@ -30,17 +25,12 @@ class SearchField extends ConsumerWidget {
 
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: EdgeInsets.symmetric(
-          vertical: 10,
-        ),
-        prefixIconConstraints: BoxConstraints(
-          minHeight: 32,
-          minWidth: 48,
-        ),
+        contentPadding: EdgeInsets.symmetric(vertical: 10),
+        prefixIconConstraints: BoxConstraints(minHeight: 32, minWidth: 48),
         hintText: "Search surah...",
         hintStyle: TextStyle(
           color: AppColors.gray300,
-            fontSize: AppSpacing.size11,
+          fontSize: AppSpacing.size11,
         ),
         prefixIcon: Icon(
           LucideIcons.search,
@@ -48,16 +38,14 @@ class SearchField extends ConsumerWidget {
           color: AppColors.gray300,
         ),
         filled: true,
-         fillColor: Colors.white.withOpacity(0.1),
+        fillColor: Colors.white.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Colors.white.withOpacity(0.2),
-          ),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
         ),
       ),
     );

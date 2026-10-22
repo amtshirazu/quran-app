@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../../domain/model/guidance_category.dart';
 
 class GuidanceFeelingCard extends StatelessWidget {
@@ -22,7 +23,9 @@ class GuidanceFeelingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppColors.gray200),
+        border: Border.all(
+          color: isDark ? AppTheme.darkBorder : AppColors.gray200,
+        ),
         boxShadow: isDark
             ? null
             : [
@@ -44,8 +47,8 @@ class GuidanceFeelingCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 52,
-                  height: 52,
+                  width: 42,
+                  height: 42,
                   decoration: BoxDecoration(
                     color: isDark
                         ? category.iconColor.withAlpha(38)
@@ -55,7 +58,7 @@ class GuidanceFeelingCard extends StatelessWidget {
                   child: Icon(
                     category.icon,
                     color: category.iconColor,
-                    size: 26,
+                    size: 24,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -66,17 +69,21 @@ class GuidanceFeelingCard extends StatelessWidget {
                       Text(
                         category.emotion,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppSpacing.size13,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                          color: isDark
+                              ? AppTheme.darkTextPrimary
+                              : AppColors.gray900,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${category.verseCount} ${category.verseCount == 1 ? 'verse' : 'verses'}',
                         style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                          fontSize: AppSpacing.size11,
+                          color: isDark
+                              ? AppTheme.darkTextSecondary
+                              : AppColors.gray500,
                         ),
                       ),
                     ],
@@ -84,8 +91,10 @@ class GuidanceFeelingCard extends StatelessWidget {
                 ),
                 Icon(
                   Icons.chevron_right,
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray400,
-                  size: 24,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray400,
+                  size: 20,
                 ),
               ],
             ),

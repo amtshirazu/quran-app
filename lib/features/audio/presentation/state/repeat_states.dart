@@ -1,6 +1,1 @@
-
-enum RepeatStates {
-  off,
-  repeatAll,
-  repeatOne,
-}
+enum RepeatStates { off, repeatAll, repeatOne }

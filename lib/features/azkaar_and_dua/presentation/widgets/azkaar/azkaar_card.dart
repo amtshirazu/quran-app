@@ -49,7 +49,9 @@ class AzkarItemCard extends ConsumerWidget {
                 fontSize: ayahTextSize,
                 fontWeight: FontWeight.bold,
                 height: 1.8,
-                color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF2D3436),
+                color: isDark
+                    ? AppTheme.darkTextPrimary
+                    : const Color(0xFF2D3436),
                 fontFamily: fontName,
               ),
             ),
@@ -65,7 +67,9 @@ class AzkarItemCard extends ConsumerWidget {
               style: TextStyle(
                 fontSize: translationTextSize,
                 height: 1.5,
-                color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF636E72),
+                color: isDark
+                    ? AppTheme.darkTextSecondary
+                    : const Color(0xFF636E72),
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -78,7 +82,9 @@ class AzkarItemCard extends ConsumerWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: isDark ? AppTheme.darkScaffold : const Color(0xFFF1F8F7),
+                  color: isDark
+                      ? AppTheme.darkScaffold
+                      : const Color(0xFFF1F8F7),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

@@ -14,7 +14,9 @@ Future<String?> showReflectionDialog(
   final isDark = Theme.of(context).brightness == Brightness.dark;
 
   final textColor = isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827);
-  final subtextColor = isDark ? AppTheme.darkTextSecondary : const Color(0xFF71717A);
+  final subtextColor = isDark
+      ? AppTheme.darkTextSecondary
+      : const Color(0xFF71717A);
   final fieldBg = isDark ? AppTheme.darkScaffold : const Color(0xFFF9FAFB);
   final borderColor = isDark ? AppTheme.darkBorder : const Color(0xFFE5E7EB);
 
@@ -27,7 +29,9 @@ Future<String?> showReflectionDialog(
         surfaceTintColor: isDark ? AppTheme.darkSurface : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+          side: isDark
+              ? const BorderSide(color: AppTheme.darkBorder)
+              : BorderSide.none,
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -48,11 +52,7 @@ Future<String?> showReflectionDialog(
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      Icons.close,
-                      color: subtextColor,
-                      size: 20,
-                    ),
+                    icon: Icon(Icons.close, color: subtextColor, size: 20),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -144,8 +144,8 @@ Future<String?> showReflectionDialog(
                       child: const Text(
                         "Save Reflection",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppSpacing.size12,
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppSpacing.size12,
                         ),
                       ),
                     ),

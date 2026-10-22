@@ -27,7 +27,9 @@ class ReflectionCard extends ConsumerWidget {
         color: isDark ? AppTheme.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppTheme.darkBorder : const Color(0xFFD4D4D8).withAlpha(128),
+          color: isDark
+              ? AppTheme.darkBorder
+              : const Color(0xFFD4D4D8).withAlpha(128),
         ),
       ),
       child: Column(
@@ -47,7 +49,9 @@ class ReflectionCard extends ConsumerWidget {
               Text(
                 DateFormat('MMM dd, yyyy').format(data.date),
                 style: TextStyle(
-                  color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF4A4A4A),
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : const Color(0xFF4A4A4A),
                   fontSize: 12,
                 ),
               ),
@@ -59,7 +63,9 @@ class ReflectionCard extends ConsumerWidget {
                 icon: Icon(
                   LucideIcons.trash2,
                   size: 18,
-                  color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF4A4A4A),
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : const Color(0xFF4A4A4A),
                 ),
                 onPressed: () async {
                   await ref
@@ -74,7 +80,9 @@ class ReflectionCard extends ConsumerWidget {
           Text(
             data.content,
             style: TextStyle(
-              color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827),
+              color: isDark
+                  ? AppTheme.darkTextPrimary
+                  : const Color(0xFF111827),
               fontSize: 14,
               height: 1.6,
             ),
@@ -92,12 +100,16 @@ class ReflectionCard extends ConsumerWidget {
               icon: Icon(
                 LucideIcons.bookOpen,
                 size: 18,
-                color: isDark ? AppColors.emerald600 : const Color.fromARGB(255, 9, 13, 22),
+                color: isDark
+                    ? AppColors.emerald600
+                    : const Color.fromARGB(255, 9, 13, 22),
               ),
               label: Text(
                 "Read Full Surah",
                 style: TextStyle(
-                  color: isDark ? AppColors.emerald600 : const Color.fromARGB(255, 9, 13, 22),
+                  color: isDark
+                      ? AppColors.emerald600
+                      : const Color.fromARGB(255, 9, 13, 22),
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),

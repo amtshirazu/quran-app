@@ -40,10 +40,14 @@ class BenefitsCard extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.darkSurface : const Color(0xFFFFF9C4).withAlpha(76),
+        color: isDark
+            ? AppTheme.darkSurface
+            : const Color(0xFFFFF9C4).withAlpha(76),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppTheme.darkBorder : const Color(0xFFFFF176).withAlpha(128),
+          color: isDark
+              ? AppTheme.darkBorder
+              : const Color(0xFFFFF176).withAlpha(128),
         ),
       ),
       child: Column(
@@ -54,7 +58,9 @@ class BenefitsCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF5D4037),
+              color: isDark
+                  ? AppTheme.darkTextPrimary
+                  : const Color(0xFF5D4037),
             ),
           ),
           const SizedBox(height: 10),
@@ -76,7 +82,9 @@ class BenefitsCard extends StatelessWidget {
                       benefit,
                       style: TextStyle(
                         fontSize: 11.5,
-                        color: isDark ? AppTheme.darkTextSecondary : Colors.brown,
+                        color: isDark
+                            ? AppTheme.darkTextSecondary
+                            : Colors.brown,
                       ),
                     ),
                   ),

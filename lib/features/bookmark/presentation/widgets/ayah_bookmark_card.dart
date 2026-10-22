@@ -9,6 +9,8 @@ import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class VerseBookmarkCard extends ConsumerWidget {
   final VerseBookmarkUI data;
 
@@ -33,7 +35,9 @@ class VerseBookmarkCard extends ConsumerWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isDark ? AppTheme.darkBorder : colorLightGrayBorder.withAlpha(128),
+          color: isDark
+              ? AppTheme.darkBorder
+              : colorLightGrayBorder.withAlpha(128),
         ),
       ),
       child: Padding(
@@ -49,7 +53,9 @@ class VerseBookmarkCard extends ConsumerWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.emerald600.withAlpha(38) : colorAmberBG,
+                    color: isDark
+                        ? AppColors.emerald600.withAlpha(38)
+                        : colorAmberBG,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -139,7 +145,7 @@ class VerseBookmarkCard extends ConsumerWidget {
                   "Read Full Surah",
                   style: TextStyle(
                     color: isDark ? AppTheme.darkTextPrimary : colorDeepGray,
-                    fontSize: 13,
+                    fontSize: AppSpacing.size12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

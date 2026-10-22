@@ -30,7 +30,7 @@ class ProgressMetric extends StatelessWidget {
           value,
           style: TextStyle(
             color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
-            fontSize:  AppSpacing.size20,
+            fontSize: AppSpacing.size20,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -40,7 +40,7 @@ class ProgressMetric extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
-            fontSize:  AppSpacing.size11,
+            fontSize: AppSpacing.size11,
           ),
         ),
       ],

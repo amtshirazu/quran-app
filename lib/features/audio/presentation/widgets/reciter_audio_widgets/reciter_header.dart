@@ -6,14 +6,12 @@ import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/audio/domain/models/Reciters.dart';
 import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
+import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 
 import '../../../../../core/constants/app_spacing.dart';
 
 class ReciterHeader extends ConsumerWidget {
-  const ReciterHeader({
-    super.key,
-    required this.reciter,
-  });
+  const ReciterHeader({super.key, required this.reciter});
 
   final Reciter reciter;
 
@@ -50,6 +48,11 @@ class ReciterHeader extends ConsumerWidget {
                   final audioProvider = ref.read(audioServiceProvider);
                   await audioProvider.reset();
                   ref.read(selectedReciterProvider.notifier).state = null;
+                  ref.read(selectedSurahIndexProvider.notifier).state = 0;
+                  ref.read(currentPlayingAyahProvider.notifier).state = null;
+                  ref.read(jumpToPageProvider.notifier).state = null;
+                  ref.read(targetAyahProvider.notifier).state = null;
+                  ref.read(shouldResumeLastReadProvider.notifier).state = false;
 
                   if (context.canPop()) {
                     context.pop();

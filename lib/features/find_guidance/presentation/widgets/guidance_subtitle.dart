@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 
+import '../../../../core/constants/app_spacing.dart';
+
 class GuidanceSubtitle extends StatelessWidget {
   const GuidanceSubtitle({super.key});
 
@@ -17,7 +19,7 @@ class GuidanceSubtitle extends StatelessWidget {
             'The Quran has guidance for every situation in life.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: AppSpacing.size13,
               fontWeight: FontWeight.w500,
               color: isDark ? AppTheme.darkTextPrimary : AppColors.gray700,
             ),
@@ -27,7 +29,7 @@ class GuidanceSubtitle extends StatelessWidget {
             "Select how you're feeling to discover relevant verses.",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: AppSpacing.size12,
               color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
             ),
           ),

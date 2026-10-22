@@ -1,6 +1,3 @@
-
-
-
 class Surah {
   final int number;
   final String nameArabic;
@@ -8,7 +5,6 @@ class Surah {
   final int totalAyahs;
   final String translation;
   final String revelationType;
-
 
   Surah({
     required this.number,

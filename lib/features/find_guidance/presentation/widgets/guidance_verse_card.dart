@@ -8,16 +8,14 @@ import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
 import 'package:quran_app/features/settings/presentation/state/display_settings_provider.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../../domain/model/guidance_verse.dart';
 import 'guidance_bookmark_dialog.dart';
 
 class GuidanceVerseCard extends ConsumerWidget {
   final GuidanceVerse verse;
 
-  const GuidanceVerseCard({
-    super.key,
-    required this.verse,
-  });
+  const GuidanceVerseCard({super.key, required this.verse});
 
   void _navigateToSurah(BuildContext context, WidgetRef ref) {
     final surahs = ref.read(surahListProvider).value;
@@ -56,7 +54,9 @@ class GuidanceVerseCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? AppTheme.darkBorder : AppColors.gray200),
+        border: Border.all(
+          color: isDark ? AppTheme.darkBorder : AppColors.gray200,
+        ),
         boxShadow: isDark
             ? null
             : [
@@ -97,7 +97,9 @@ class GuidanceVerseCard extends ConsumerWidget {
                   fontSize: translationTextSize,
                   height: 1.5,
                   fontStyle: FontStyle.italic,
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray700,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray700,
                 ),
               ),
               const SizedBox(height: 8),
@@ -141,7 +143,9 @@ class GuidanceVerseCard extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 13,
                       height: 1.4,
-                      color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF064E3B),
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : const Color(0xFF064E3B),
                     ),
                   ),
                 ],
@@ -161,15 +165,17 @@ class GuidanceVerseCard extends ConsumerWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                     onPressed: () => _navigateToSurah(context, ref),
                     child: Text(
                       'Read Full Surah',
                       style: TextStyle(
-                        color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                        color: isDark
+                            ? AppTheme.darkTextPrimary
+                            : AppColors.gray900,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: AppSpacing.size12,
                       ),
                     ),
                   ),
@@ -180,7 +186,9 @@ class GuidanceVerseCard extends ConsumerWidget {
                   style: IconButton.styleFrom(
                     backgroundColor: isDark
                         ? AppTheme.darkScaffold
-                        : (isBookmarked ? const Color(0xFFFEF2F2) : Colors.white),
+                        : (isBookmarked
+                              ? const Color(0xFFFEF2F2)
+                              : Colors.white),
                     side: BorderSide(
                       color: isBookmarked
                           ? const Color(0xFFFCA5A5)
@@ -189,14 +197,15 @@ class GuidanceVerseCard extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(8),
                   ),
                   onPressed: () async {
                     final bookmarkService = ref.read(bookmarkServiceProvider);
 
                     if (isBookmarked) {
-                      final allBookmarks =
-                          await ref.read(bookmarksProvider.future);
+                      final allBookmarks = await ref.read(
+                        bookmarksProvider.future,
+                      );
                       final existing = allBookmarks.where(
                         (b) =>
                             b.type == BookmarkType.verse &&
@@ -204,8 +213,9 @@ class GuidanceVerseCard extends ConsumerWidget {
                             b.ayahNumber == verse.ayahNum,
                       );
                       if (existing.isNotEmpty) {
-                        await bookmarkService
-                            .deleteBookmark(existing.first.id!);
+                        await bookmarkService.deleteBookmark(
+                          existing.first.id!,
+                        );
                         ref.invalidate(bookmarksProvider);
                       }
                     } else {
@@ -260,14 +270,18 @@ class GuidanceVerseCard extends ConsumerWidget {
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 6),
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
                                       minimumSize: Size.zero,
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
                                     onPressed: () => context.push('/bookmarks'),
-                                    child: const Text('View',
-                                        style: TextStyle(fontSize: 12)),
+                                    child: const Text(
+                                      'View',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -288,7 +302,9 @@ class GuidanceVerseCard extends ConsumerWidget {
                     size: 18,
                     color: isBookmarked
                         ? const Color(0xFFEF4444)
-                        : (isDark ? AppTheme.darkTextSecondary : AppColors.gray700),
+                        : (isDark
+                              ? AppTheme.darkTextSecondary
+                              : AppColors.gray700),
                   ),
                 ),
               ],

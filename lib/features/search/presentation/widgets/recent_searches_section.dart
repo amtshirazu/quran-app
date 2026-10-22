@@ -7,10 +7,7 @@ import 'search_chip.dart';
 class RecentSearchesSection extends ConsumerWidget {
   final ValueChanged<String> onChipSelected;
 
-  const RecentSearchesSection({
-    super.key,
-    required this.onChipSelected,
-  });
+  const RecentSearchesSection({super.key, required this.onChipSelected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +38,9 @@ class RecentSearchesSection extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppTheme.darkCategoryTitle : const Color(0xFF1F2421),
+                    color: isDark
+                        ? AppTheme.darkCategoryTitle
+                        : const Color(0xFF1F2421),
                     letterSpacing: 0.5,
                   ),
                 ),

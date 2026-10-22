@@ -26,7 +26,8 @@ class FindGuidanceScreen extends ConsumerWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: selectedEmotion == null
             ? const GuidanceHeader()
-            : GuidanceVerseHeader(emotion: selectedEmotion) as PreferredSizeWidget,
+            : GuidanceVerseHeader(emotion: selectedEmotion)
+                  as PreferredSizeWidget,
         body: Container(
           width: double.infinity,
           height: double.infinity,

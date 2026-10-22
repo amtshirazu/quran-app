@@ -8,10 +8,7 @@ import 'search_chip.dart';
 class PopularSearchesSection extends ConsumerWidget {
   final ValueChanged<String> onChipSelected;
 
-  const PopularSearchesSection({
-    super.key,
-    required this.onChipSelected,
-  });
+  const PopularSearchesSection({super.key, required this.onChipSelected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +29,9 @@ class PopularSearchesSection extends ConsumerWidget {
               style: TextStyle(
                 fontSize: AppSpacing.size13,
                 fontWeight: FontWeight.bold,
-                color: isDark ? AppTheme.darkCategoryTitle : const Color(0xFF1F2421),
+                color: isDark
+                    ? AppTheme.darkCategoryTitle
+                    : const Color(0xFF1F2421),
                 letterSpacing: 0.5,
               ),
             ),
@@ -58,10 +57,7 @@ class PopularSearchesSection extends ConsumerWidget {
           spacing: 8,
           runSpacing: 8,
           children: displayList.map((query) {
-            return SearchChip(
-              label: query,
-              onTap: () => onChipSelected(query),
-            );
+            return SearchChip(label: query, onTap: () => onChipSelected(query));
           }).toList(),
         ),
         const SizedBox(height: 28),

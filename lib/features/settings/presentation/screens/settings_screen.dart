@@ -132,6 +132,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final transliterationTextSize = ref.watch(transliterationTextSizeProvider);
     final referenceTextSize = ref.watch(referenceTextSizeProvider);
     final showAyahBefore = ref.watch(showAyahBeforeTranslationProvider);
+    final isTajweed = ref.watch(isTajweedEnabledProvider);
 
     final isDailyVerseEnabled = ref.watch(dailyVerseNotifEnabledProvider);
     final dailyVerseTime = ref.watch(dailyVerseNotifTimeProvider);
@@ -257,6 +258,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () {
                     context.push('/selectReciter');
                   },
+                ),
+                SettingsRow(
+                  icon: LucideIcons.sparkles,
+                  title: 'Highlight active verse',
+                  subtitle: 'Highlight verse text as audio plays',
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: ref.watch(highlightActiveVerseProvider),
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) {
+                        ref
+                            .read(highlightActiveVerseProvider.notifier)
+                            .toggle(val);
+                      },
+                    ),
+                  ),
                 ),
                 SettingsRow(
                   icon: LucideIcons.wifi,
@@ -478,7 +496,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 SettingsRow(
                   title: 'Uthmanic',
-                  showDivider: false,
                   trailing: quranScript == 'Uthmanic'
                       ? const Icon(
                           Icons.check_circle,
@@ -491,6 +508,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         .read(quranScriptProvider.notifier)
                         .setScript('Uthmanic');
                   },
+                ),
+                SettingsRow(
+                  title: 'Tajweed Rules',
+                  subtitle: 'Display color-coded Tajweed rules on Mushaf pages',
+                  showDivider: false,
+                  trailing: Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: isTajweed,
+                      activeTrackColor: AppColors.emerald600,
+                      onChanged: (val) {
+                        ref
+                            .read(isTajweedEnabledProvider.notifier)
+                            .toggleTajweed(val);
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),

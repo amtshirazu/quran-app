@@ -19,9 +19,7 @@ import 'audio_service.dart';
 final audioServiceProvider = Provider<QuranAudioService>((ref) {
   final service = QuranAudioService();
 
-  unawaited(
-    service.init(ref),
-  );
+  unawaited(service.init(ref));
 
   ref.onDispose(() {
     service.dispose();
@@ -108,16 +106,14 @@ final selectedAudioSurahProvider = Provider<Surah?>((ref) {
 // =============================================================================
 
 final repeatModeProvider = StateProvider<RepeatStates>(
-      (ref) => RepeatStates.repeatAll,
+  (ref) => RepeatStates.off,
 );
 
 // =============================================================================
 // VOLUME
 // =============================================================================
 
-final volumeProvider = StateProvider<double>(
-      (ref) => 0.7,
-);
+final volumeProvider = StateProvider<double>((ref) => 0.7);
 
 // =============================================================================
 // DEFAULT RECITER
@@ -129,7 +125,7 @@ class DefaultReciterNotifier extends StateNotifier<Reciter?> {
   }
 
   static final Reciter _initialReciter = reciters.firstWhere(
-        (r) => r.id == 'abu_bakr_shaatree',
+    (r) => r.id == 'abu_bakr_shaatree',
     orElse: () => reciters.first,
   );
 
@@ -141,7 +137,7 @@ class DefaultReciterNotifier extends StateNotifier<Reciter?> {
 
       if (savedId != null && savedId.isNotEmpty) {
         final found = reciters.firstWhere(
-              (r) => r.id == savedId,
+          (r) => r.id == savedId,
           orElse: () => _initialReciter,
         );
         state = found;
@@ -153,14 +149,11 @@ class DefaultReciterNotifier extends StateNotifier<Reciter?> {
 
   Future<void> setReciter(Reciter reciter) async {
     state = reciter;
-    await DatabaseHelper.instance.setSetting(
-      'default_reciter_id',
-      reciter.id,
-    );
+    await DatabaseHelper.instance.setSetting('default_reciter_id', reciter.id);
   }
 }
 
 final defaultReciterProvider =
-StateNotifierProvider<DefaultReciterNotifier, Reciter?>(
+    StateNotifierProvider<DefaultReciterNotifier, Reciter?>(
       (ref) => DefaultReciterNotifier(),
-);
+    );

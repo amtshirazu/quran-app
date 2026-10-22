@@ -3,15 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../state/guidance_provider.dart';
 
-class GuidanceVerseHeader extends ConsumerWidget implements PreferredSizeWidget {
+class GuidanceVerseHeader extends ConsumerWidget
+    implements PreferredSizeWidget {
   final String emotion;
 
-  const GuidanceVerseHeader({
-    super.key,
-    required this.emotion,
-  });
+  const GuidanceVerseHeader({super.key, required this.emotion});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,18 +30,22 @@ class GuidanceVerseHeader extends ConsumerWidget implements PreferredSizeWidget 
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: const EdgeInsets.fromLTRB(4, 12, 16, 16),
           child: Row(
             children: [
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () {
                   ref.read(selectedEmotionProvider.notifier).state = null;
                 },
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +55,7 @@ class GuidanceVerseHeader extends ConsumerWidget implements PreferredSizeWidget 
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: AppSpacing.size16,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -60,7 +63,7 @@ class GuidanceVerseHeader extends ConsumerWidget implements PreferredSizeWidget 
                     "For when you're ${emotion.toLowerCase()}",
                     style: const TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: AppSpacing.size11,
                     ),
                   ),
                 ],

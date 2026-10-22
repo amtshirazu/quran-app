@@ -24,7 +24,9 @@ class ProgressSection extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827),
+                color: isDark
+                    ? AppTheme.darkTextPrimary
+                    : const Color(0xFF111827),
               ),
             ),
           ),
@@ -103,7 +105,9 @@ class _StatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isDark ? AppTheme.darkTextPrimary : const Color(0xFF111827),
+              color: isDark
+                  ? AppTheme.darkTextPrimary
+                  : const Color(0xFF111827),
             ),
           ),
           const SizedBox(height: 2),

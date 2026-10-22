@@ -30,7 +30,9 @@ class QuickAccessCard extends StatelessWidget {
       elevation: isDark ? 0 : 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(

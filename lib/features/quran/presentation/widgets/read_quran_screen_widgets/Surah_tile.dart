@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:quran_app/core/constants/app_colors.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
 import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/quran_providers.dart';
@@ -27,15 +28,26 @@ class SurahTile extends ConsumerWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
+          final audio = ref.read(audioServiceProvider);
+          audio.stop();
+          audio.clearActiveState();
+
           final progressService = ref.read(progressServiceProvider);
           await progressService.clearLastRead();
           ref.invalidate(lastReadProvider);
           ref.invalidate(lastReadResolvedSurahProvider);
           ref.invalidate(profileProgressProvider);
           ref.invalidate(continueReadingProvider);
+
+          ref.read(jumpToPageProvider.notifier).state = null;
+          ref.read(targetAyahProvider.notifier).state = null;
+          ref.read(currentPlayingAyahProvider.notifier).state = null;
           ref.read(searchQueryProvider.notifier).state = "";
           ref.read(selectedSurahProvider.notifier).state = surah;
+          ref.read(explicitSurahSelectionProvider.notifier).state = surah;
+          ref.read(currentPageSurahIdProvider.notifier).state = surah.number;
           ref.read(shouldResumeLastReadProvider.notifier).state = false;
+
           context.push("/readAyah");
         },
         child: Container(
@@ -62,7 +74,9 @@ class SurahTile extends ConsumerWidget {
                     Text(
                       surah.nameEnglish,
                       style: textTheme.titleMedium?.copyWith(
-                        color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                        color: isDark
+                            ? AppTheme.darkTextPrimary
+                            : AppColors.gray900,
                         fontSize: AppSpacing.size13,
                         fontWeight: FontWeight.bold,
                       ),
@@ -70,7 +84,9 @@ class SurahTile extends ConsumerWidget {
                     Text(
                       surah.translation,
                       style: textTheme.bodyLarge?.copyWith(
-                        color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                        color: isDark
+                            ? AppTheme.darkTextSecondary
+                            : AppColors.gray600,
                         fontSize: AppSpacing.size10,
                       ),
                     ),
@@ -83,7 +99,9 @@ class SurahTile extends ConsumerWidget {
                   Text(
                     surah.nameArabic,
                     style: textTheme.titleMedium?.copyWith(
-                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDark
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                       fontSize: AppSpacing.size14,
                     ),
                   ),
@@ -94,7 +112,9 @@ class SurahTile extends ConsumerWidget {
                       const SizedBox(width: 4),
                       Icon(
                         LucideIcons.chevronRight,
-                        color: isDark ? AppTheme.darkTextSecondary : AppColors.gray400,
+                        color: isDark
+                            ? AppTheme.darkTextSecondary
+                            : AppColors.gray400,
                         size: AppSpacing.size16,
                       ),
                     ],

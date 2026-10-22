@@ -25,10 +25,7 @@ class AboutPrivacyScreen extends StatelessWidget {
                 : const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
                   ),
           ),
           child: SafeArea(
@@ -86,7 +83,9 @@ class AboutPrivacyScreen extends StatelessWidget {
                 'Last updated September 2026',
                 style: TextStyle(
                   fontSize: 12,
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray500,
                 ),
               ),
               const SizedBox(height: 16),

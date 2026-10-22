@@ -1,5 +1,3 @@
-
-
 class Ayah {
   final int surahNumber;
   final int ayahNumber;

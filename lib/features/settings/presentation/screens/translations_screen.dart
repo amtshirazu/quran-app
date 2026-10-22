@@ -43,10 +43,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                 : const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
                   ),
           ),
           child: SafeArea(
@@ -93,7 +90,9 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                     decoration: BoxDecoration(
                       color: isDark ? AppTheme.darkSurface : Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: isDark ? Border.all(color: AppTheme.darkBorder) : null,
+                      border: isDark
+                          ? Border.all(color: AppTheme.darkBorder)
+                          : null,
                     ),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
@@ -126,7 +125,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -138,9 +137,7 @@ class _TranslationsScreenState extends ConsumerState<TranslationsScreen> {
           /// Active Count Status Bar
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            color: isDark
-                ? AppTheme.darkSurface
-                : const Color(0xFFE8F5E9),
+            color: isDark ? AppTheme.darkSurface : const Color(0xFFE8F5E9),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

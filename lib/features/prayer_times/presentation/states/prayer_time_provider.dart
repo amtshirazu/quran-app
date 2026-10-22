@@ -12,15 +12,21 @@ import 'package:geocoding/geocoding.dart';
 final prayerTimesServiceProvider = Provider((ref) => PrayerTimesService());
 
 class EnabledPrayersNotifier extends StateNotifier<List<String>> {
-  EnabledPrayersNotifier() : super(['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+  EnabledPrayersNotifier()
+    : super(['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
     _loadSaved();
   }
 
   Future<void> _loadSaved() async {
     try {
-      final saved = await DatabaseHelper.instance.getSetting('enabled_prayers_list');
+      final saved = await DatabaseHelper.instance.getSetting(
+        'enabled_prayers_list',
+      );
       if (saved != null && saved.isNotEmpty) {
-        final list = saved.split(',').where((s) => s.trim().isNotEmpty).toList();
+        final list = saved
+            .split(',')
+            .where((s) => s.trim().isNotEmpty)
+            .toList();
         if (list.isNotEmpty) {
           state = list;
         }
@@ -36,14 +42,17 @@ class EnabledPrayersNotifier extends StateNotifier<List<String>> {
       copy.remove(prayerName);
     }
     state = copy;
-    await DatabaseHelper.instance.setSetting('enabled_prayers_list', copy.join(','));
+    await DatabaseHelper.instance.setSetting(
+      'enabled_prayers_list',
+      copy.join(','),
+    );
   }
 }
 
 final enabledPrayersProvider =
     StateNotifierProvider<EnabledPrayersNotifier, List<String>>((ref) {
-  return EnabledPrayersNotifier();
-});
+      return EnabledPrayersNotifier();
+    });
 
 String _firstNonEmpty(List<String?> candidates, String fallback) {
   for (final candidate in candidates) {
@@ -65,7 +74,8 @@ Future<Position> _fetchLocationInverted() async {
   }
 
   LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
+  if (permission == LocationPermission.deniedForever ||
+      permission == LocationPermission.denied) {
     final lastKnown = await Geolocator.getLastKnownPosition();
     if (lastKnown != null) return lastKnown;
     throw 'Location permission not granted. Please enable location permissions.';
@@ -74,7 +84,9 @@ Future<Position> _fetchLocationInverted() async {
   // Strategy Step 1: Immediately fetch last known position for 0-delay display
   final lastKnown = await Geolocator.getLastKnownPosition();
   if (lastKnown != null) {
-    debugPrint("⚡ LOCATION: Instant last known position retrieved (${lastKnown.latitude}, ${lastKnown.longitude})");
+    debugPrint(
+      "⚡ LOCATION: Instant last known position retrieved (${lastKnown.latitude}, ${lastKnown.longitude})",
+    );
   }
 
   // Strategy Step 2: Fetch current position with strict 7-second timeout
@@ -82,15 +94,19 @@ Future<Position> _fetchLocationInverted() async {
     const locationSettings = LocationSettings(
       accuracy: LocationAccuracy.low,
       distanceFilter: 100,
-      timeLimit: Duration(seconds: 60),
+      timeLimit: Duration(seconds: 180),
     );
     final currentPosition = await Geolocator.getCurrentPosition(
       locationSettings: locationSettings,
     );
-    debugPrint("✅ LOCATION: Fresh position received (${currentPosition.latitude}, ${currentPosition.longitude})");
+    debugPrint(
+      "✅ LOCATION: Fresh position received (${currentPosition.latitude}, ${currentPosition.longitude})",
+    );
     return currentPosition;
   } catch (e) {
-    debugPrint("⚠️ LOCATION: Fresh position timed out (60s). Using last known position: $e");
+    debugPrint(
+      "⚠️ LOCATION: Fresh position timed out (60s). Using last known position: $e",
+    );
     if (lastKnown != null) return lastKnown;
     rethrow;
   }
@@ -133,15 +149,10 @@ final countryAndCityNameProvider = FutureProvider<Map<String, String>>((
           place.name,
         ], "");
 
-        final country = _firstNonEmpty([
-          place.country,
-        ], "Unknown Country");
+        final country = _firstNonEmpty([place.country], "Unknown Country");
 
         if (city.isNotEmpty) {
-          return {
-            "city": city,
-            "country": country,
-          };
+          return {"city": city, "country": country};
         }
       }
 
@@ -177,10 +188,13 @@ final prayerTimesProvider = FutureProvider<Map<String, DateTime>>((ref) async {
   );
 
   // Execution Guard: Deduping notification scheduling sessions
-  final signature = "${position.latitude.toStringAsFixed(3)}_${position.longitude.toStringAsFixed(3)}_${enabledPrayers.join('-')}";
+  final signature =
+      "${position.latitude.toStringAsFixed(3)}_${position.longitude.toStringAsFixed(3)}_${enabledPrayers.join('-')}";
   if (_lastScheduledNotificationSignature != signature) {
     _lastScheduledNotificationSignature = signature;
-    debugPrint("🕌 NOTIFICATIONS: Scheduling fresh 7-day batch for signature [$signature]");
+    debugPrint(
+      "🕌 NOTIFICATIONS: Scheduling fresh 7-day batch for signature [$signature]",
+    );
     unawaited(
       NotificationService.instance.schedule7DayPrayerNotifications(
         todayTimes: times,
@@ -200,7 +214,9 @@ final nextPrayerProvider = Provider<MapEntry<String, DateTime>?>((ref) {
     data: (times) {
       final now = DateTime.now();
       try {
-        final obligatoryPrayers = times.entries.where((e) => e.key != "Sunrise");
+        final obligatoryPrayers = times.entries.where(
+          (e) => e.key != "Sunrise",
+        );
         return obligatoryPrayers.firstWhere((e) => e.value.isAfter(now));
       } catch (_) {
         final location = locationAsync.asData?.value;

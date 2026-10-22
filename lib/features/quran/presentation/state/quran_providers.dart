@@ -24,7 +24,9 @@ final surahListProvider = FutureProvider<List<Surah>>((ref) async {
   try {
     final data = await repo.getSurahMetadata();
     stopwatch.stop();
-    debugPrint("⚡ SURAH METADATA LOADED: ${data.length} surahs in ${stopwatch.elapsedMilliseconds}ms");
+    debugPrint(
+      "⚡ SURAH METADATA LOADED: ${data.length} surahs in ${stopwatch.elapsedMilliseconds}ms",
+    );
     return data;
   } catch (e, st) {
     debugPrint("❌ ERROR loading surahs: $e\n$st");
@@ -38,6 +40,10 @@ final readingModeProvider = StateProvider<ReadingMode>((ref) {
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
 final selectedSurahProvider = StateProvider<Surah?>((ref) => null);
+
+/// Tracks explicit user selection of a Surah (e.g. tapping a Surah in the list),
+/// distinguishing it from ordinary page swipes across multi-Surah pages.
+final explicitSurahSelectionProvider = StateProvider<Surah?>((ref) => null);
 
 final currentPlayingAyahProvider = StateProvider<AyahIdentifier?>(
   (ref) => null,

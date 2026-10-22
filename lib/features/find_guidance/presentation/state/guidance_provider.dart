@@ -8,7 +8,9 @@ import '../../data/guidance_database_service.dart';
 import '../../domain/model/guidance_category.dart';
 import '../../domain/model/guidance_verse.dart';
 
-final guidanceDatabaseServiceProvider = Provider<GuidanceDatabaseService>((ref) {
+final guidanceDatabaseServiceProvider = Provider<GuidanceDatabaseService>((
+  ref,
+) {
   return GuidanceDatabaseService();
 });
 
@@ -70,7 +72,9 @@ final List<String> _orderedEmotions = [
   'Seeking Wisdom',
 ];
 
-final guidanceCategoriesProvider = FutureProvider<List<GuidanceCategory>>((ref) async {
+final guidanceCategoriesProvider = FutureProvider<List<GuidanceCategory>>((
+  ref,
+) async {
   ref.keepAlive();
   final service = ref.watch(guidanceDatabaseServiceProvider);
   final counts = await service.getEmotionVerseCounts();
@@ -79,11 +83,13 @@ final guidanceCategoriesProvider = FutureProvider<List<GuidanceCategory>>((ref) 
 
   for (final emotion in _orderedEmotions) {
     if (counts.containsKey(emotion)) {
-      final visual = _categoryVisuals[emotion] ?? {
-        'icon': LucideIcons.helpCircle,
-        'iconColor': AppColors.purple600,
-        'backgroundColor': AppColors.purple100,
-      };
+      final visual =
+          _categoryVisuals[emotion] ??
+          {
+            'icon': LucideIcons.helpCircle,
+            'iconColor': AppColors.purple600,
+            'backgroundColor': AppColors.purple100,
+          };
 
       categories.add(
         GuidanceCategory(
@@ -115,7 +121,8 @@ List<GuidanceVerse> _enrichVersesWorker(List<GuidanceVerse> rawVerses) {
     enriched.add(
       verse.copyWith(
         arabicText: arabicText,
-        translation: (verse.translation != null && verse.translation!.isNotEmpty)
+        translation:
+            (verse.translation != null && verse.translation!.isNotEmpty)
             ? verse.translation!
             : quran.getVerseTranslation(verse.surahNum, verse.ayahNum),
         surahName: surahName,
@@ -127,15 +134,16 @@ List<GuidanceVerse> _enrichVersesWorker(List<GuidanceVerse> rawVerses) {
 }
 
 /// Fetches verses for a specific emotion and enriches them in a background isolate
-final guidanceVersesProvider = FutureProvider.family<List<GuidanceVerse>, String>((ref, emotion) async {
-  ref.keepAlive();
-  final dbService = ref.watch(guidanceDatabaseServiceProvider);
+final guidanceVersesProvider =
+    FutureProvider.family<List<GuidanceVerse>, String>((ref, emotion) async {
+      ref.keepAlive();
+      final dbService = ref.watch(guidanceDatabaseServiceProvider);
 
-  final rawVerses = await dbService.getVersesByEmotion(emotion);
+      final rawVerses = await dbService.getVersesByEmotion(emotion);
 
-  if (rawVerses.length < 50) {
-    return _enrichVersesWorker(rawVerses);
-  }
+      if (rawVerses.length < 50) {
+        return _enrichVersesWorker(rawVerses);
+      }
 
-  return await Isolate.run(() => _enrichVersesWorker(rawVerses));
-});
+      return await Isolate.run(() => _enrichVersesWorker(rawVerses));
+    });

@@ -10,8 +10,8 @@ final progressServiceProvider = Provider<ProgressService>((ref) {
 });
 
 final profileProgressProvider = FutureProvider<ProfileProgressState>((
-    ref,
-    ) async {
+  ref,
+) async {
   try {
     final service = ref.watch(progressServiceProvider);
     final surahs = await ref.watch(surahListProvider.future);
@@ -39,8 +39,18 @@ final profileSinceProvider = FutureProvider<String>((ref) async {
   final installDate = await service.getOrInitAppInstallDate();
 
   const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   return 'Started on ${months[installDate.month - 1]} ${installDate.day}, ${installDate.year}';
@@ -49,12 +59,12 @@ final profileSinceProvider = FutureProvider<String>((ref) async {
 final motivationTitleProvider = Provider<String>((ref) => 'Keep Going!');
 
 final motivationSubtitleProvider = Provider<String>(
-      (ref) => "You're doing amazing. Continue your journey with the Quran.",
+  (ref) => "You're doing amazing. Continue your journey with the Quran.",
 );
 
 final continueReadingProvider = FutureProvider<ContinueReadingData?>((
-    ref,
-    ) async {
+  ref,
+) async {
   final lastRead = await ref.watch(lastReadProvider.future);
   if (lastRead == null) return null;
 
@@ -65,10 +75,12 @@ final continueReadingProvider = FutureProvider<ContinueReadingData?>((
   final mode = (lastRead['mode'] as String?) ?? 'ayah';
 
   // Calculate live progress directly without stale family provider caches
-  final progress = await service.getSurahProgress(
-    surahId: resolvedSurah.number,
-    totalAyahs: resolvedSurah.totalAyahs,
-  ) ?? 0.0;
+  final progress =
+      await service.getSurahProgress(
+        surahId: resolvedSurah.number,
+        totalAyahs: resolvedSurah.totalAyahs,
+      ) ??
+      0.0;
 
   final displayText = mode == 'ayah'
       ? "Verse ${lastRead['ayah']}"

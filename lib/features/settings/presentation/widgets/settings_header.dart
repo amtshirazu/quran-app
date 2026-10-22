@@ -21,10 +21,7 @@ class SettingsHeader extends StatelessWidget implements PreferredSizeWidget {
             : const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.deepGreen,
-                  AppColors.emerald600,
-                ],
+                colors: [AppColors.deepGreen, AppColors.emerald600],
               ),
       ),
       child: SafeArea(

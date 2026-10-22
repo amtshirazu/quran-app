@@ -35,14 +35,18 @@ class SettingsSliderRow extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDark
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                     ),
                   ),
                   Text(
                     '${value.round()}',
                     style: TextStyle(
                       fontSize: 14,
-                      color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : AppColors.gray500,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -52,7 +56,9 @@ class SettingsSliderRow extends StatelessWidget {
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: AppColors.emerald600,
-                  inactiveTrackColor: isDark ? AppTheme.darkBorder : AppColors.gray200,
+                  inactiveTrackColor: isDark
+                      ? AppTheme.darkBorder
+                      : AppColors.gray200,
                   thumbColor: AppColors.emerald600,
                   overlayColor: AppColors.emerald600.withAlpha(38),
                   trackHeight: 4,
@@ -69,7 +75,9 @@ class SettingsSliderRow extends StatelessWidget {
                   'Preview',
                   style: TextStyle(
                     fontSize: 12,
-                    color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                    color: isDark
+                        ? AppTheme.darkTextSecondary
+                        : AppColors.gray500,
                   ),
                 ),
               ),

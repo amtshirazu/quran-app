@@ -35,13 +35,17 @@ class AzkarChaptersScreen extends ConsumerWidget {
           child: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+              padding: const EdgeInsets.fromLTRB(4, 12, 16, 16),
               child: Row(
                 children: [
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                    icon: const Icon(
+                      LucideIcons.arrowLeft,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     onPressed: () {
                       if (context.canPop()) {
                         context.pop();

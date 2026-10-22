@@ -44,6 +44,8 @@ dependencies:
   in_app_review: ^2.0.9
   google_fonts: ^9.0.0
   permission_handler: ^11.3.1
+  http: ^1.2.0
+  sqflite_common_ffi: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +67,7 @@ flutter:
     - assets/logo/
     - assets/metadata/
     - assets/reciters/
+    - assets/database/
     - assets/database/translations/
     - assets/database/tafseer/
     - assets/database/azkaar_and_dua/

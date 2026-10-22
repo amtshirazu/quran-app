@@ -25,14 +25,31 @@ class ContinueReadingCard extends ConsumerWidget {
         return InkWell(
           onTap: () async {
             ref.read(selectedSurahProvider.notifier).state = data.surah;
+            ref.read(explicitSurahSelectionProvider.notifier).state =
+                data.surah;
             ref.read(shouldResumeLastReadProvider.notifier).state = true;
 
-            final lastRead = ref.read(lastReadProvider).asData?.value;
-            final mode = lastRead?['mode'];
+            try {
+              final lastRead = await ref.read(lastReadProvider.future);
+              final mode = lastRead?['mode'];
+              final savedPage = lastRead?['page'];
+              final savedAyah = lastRead?['ayah'];
 
-            ref.read(readingModeProvider.notifier).state = mode == 'page'
-                ? ReadingMode.reading
-                : ReadingMode.translation;
+              if (mode == 'page' && savedPage is int) {
+                ref.read(jumpToPageProvider.notifier).state = savedPage;
+                ref.read(targetAyahProvider.notifier).state = null;
+              } else if (mode == 'ayah' && savedAyah is int) {
+                ref.read(targetAyahProvider.notifier).state = savedAyah;
+                ref.read(jumpToPageProvider.notifier).state = null;
+              }
+
+              ref.read(readingModeProvider.notifier).state = mode == 'page'
+                  ? ReadingMode.reading
+                  : ReadingMode.translation;
+            } catch (_) {
+              ref.read(readingModeProvider.notifier).state =
+                  ReadingMode.reading;
+            }
 
             context.go('/readAyah');
           },
@@ -49,10 +66,10 @@ class ContinueReadingCard extends ConsumerWidget {
   }
 
   Widget _buildCard(
-      BuildContext context, {
-        required String subtitle,
-        required double progress,
-      }) {
+    BuildContext context, {
+    required String subtitle,
+    required double progress,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
@@ -61,7 +78,9 @@ class ContinueReadingCard extends ConsumerWidget {
       elevation: isDark ? 0 : 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -79,7 +98,9 @@ class ContinueReadingCard extends ConsumerWidget {
                 Text(
                   "Continue Reading",
                   style: TextStyle(
-                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                    color: isDark
+                        ? AppTheme.darkTextPrimary
+                        : AppColors.gray900,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
@@ -87,7 +108,9 @@ class ContinueReadingCard extends ConsumerWidget {
                 const Spacer(),
                 Icon(
                   LucideIcons.chevronRight,
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray600,
                   size: 18,
                 ),
               ],

@@ -33,7 +33,11 @@ class ReadQuranHeaderSection extends StatelessWidget {
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -68,8 +72,8 @@ class ReadQuranHeaderSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Container(
-              margin: const EdgeInsets.only(left: 24, right: 16),
-              child: const SearchField(),
+            margin: const EdgeInsets.only(left: 24, right: 16),
+            child: const SearchField(),
           ),
         ],
       ),

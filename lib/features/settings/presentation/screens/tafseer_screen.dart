@@ -34,10 +34,7 @@ class TafseerScreen extends ConsumerWidget {
                 : const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.deepGreen,
-                      AppColors.emerald600,
-                    ],
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
                   ),
           ),
           child: SafeArea(
@@ -95,7 +92,9 @@ class TafseerScreen extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: AppSpacing.size12,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AppTheme.darkCategoryTitle : AppColors.emerald600,
+                      color: isDark
+                          ? AppTheme.darkCategoryTitle
+                          : AppColors.emerald600,
                       letterSpacing: 0.8,
                     ),
                   ),
@@ -116,7 +115,9 @@ class TafseerScreen extends ConsumerWidget {
                     separatorBuilder: (_, __) => Divider(
                       height: 1,
                       thickness: 1,
-                      color: isDark ? AppTheme.darkBorder : const Color(0xFFF3F4F6),
+                      color: isDark
+                          ? AppTheme.darkBorder
+                          : const Color(0xFFF3F4F6),
                     ),
                     itemBuilder: (context, index) {
                       final item = items[index];
@@ -126,9 +127,13 @@ class TafseerScreen extends ConsumerWidget {
                       if (items.length == 1) {
                         itemRadius = BorderRadius.circular(16);
                       } else if (index == 0) {
-                        itemRadius = const BorderRadius.vertical(top: Radius.circular(16));
+                        itemRadius = const BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        );
                       } else if (index == items.length - 1) {
-                        itemRadius = const BorderRadius.vertical(bottom: Radius.circular(16));
+                        itemRadius = const BorderRadius.vertical(
+                          bottom: Radius.circular(16),
+                        );
                       } else {
                         itemRadius = BorderRadius.zero;
                       }
@@ -149,7 +154,8 @@ class TafseerScreen extends ConsumerWidget {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         item.name,

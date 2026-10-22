@@ -146,9 +146,13 @@ class _TafseerBottomSheetContent extends ConsumerWidget {
                   child: SelectableText(
                     data.content,
                     textAlign: isArabic ? TextAlign.right : TextAlign.left,
-                    textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
+                    textDirection: isArabic
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     style: TextStyle(
-                      fontSize: isArabic ? AppSpacing.size18 : AppSpacing.size13,
+                      fontSize: isArabic
+                          ? AppSpacing.size18
+                          : AppSpacing.size13,
                       height: 1.7,
                       fontFamily: isArabic ? 'Uthmanic' : null,
                       color: isDark

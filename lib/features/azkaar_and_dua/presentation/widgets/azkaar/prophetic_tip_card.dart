@@ -14,10 +14,14 @@ class PropheticTipCard extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.darkSurface : const Color(0xFFFFF9C4).withAlpha(102),
+        color: isDark
+            ? AppTheme.darkSurface
+            : const Color(0xFFFFF9C4).withAlpha(102),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppTheme.darkBorder : const Color(0xFFFFF176).withAlpha(128),
+          color: isDark
+              ? AppTheme.darkBorder
+              : const Color(0xFFFFF176).withAlpha(128),
         ),
       ),
       child: Column(
@@ -25,7 +29,11 @@ class PropheticTipCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.lightbulb_outline, color: AppColors.emerald600, size: 20),
+              const Icon(
+                Icons.lightbulb_outline,
+                color: AppColors.emerald600,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Tip',
@@ -43,7 +51,9 @@ class PropheticTipCard extends StatelessWidget {
             style: TextStyle(
               fontSize: AppSpacing.size12,
               height: 1.5,
-              color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF5D4037),
+              color: isDark
+                  ? AppTheme.darkTextSecondary
+                  : const Color(0xFF5D4037),
             ),
           ),
           const SizedBox(height: 8),

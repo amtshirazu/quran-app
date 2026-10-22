@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_app/core/constants/app_spacing.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
+import 'package:quran_app/features/audio/presentation/state/audio_providers.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../domain/models/surah.dart';
 import '../../state/quran_providers.dart';
@@ -31,8 +32,19 @@ class QuickAccessCard extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
+        final audio = ref.read(audioServiceProvider);
+        audio.stop();
+        audio.clearActiveState();
+
+        ref.read(jumpToPageProvider.notifier).state = null;
+        ref.read(targetAyahProvider.notifier).state = null;
+        ref.read(currentPlayingAyahProvider.notifier).state = null;
+        ref.read(shouldResumeLastReadProvider.notifier).state = false;
+
         ref.read(selectedSurahProvider.notifier).state = surah;
+        ref.read(explicitSurahSelectionProvider.notifier).state = surah;
         ref.read(currentPageSurahIdProvider.notifier).state = surah.number;
+
         context.push("/readAyah");
       },
       child: Card(
@@ -40,7 +52,9 @@ class QuickAccessCard extends ConsumerWidget {
         elevation: isDark ? 0 : 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.size16),
-          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+          side: isDark
+              ? const BorderSide(color: AppTheme.darkBorder)
+              : BorderSide.none,
         ),
         clipBehavior: Clip.antiAlias,
         child: Padding(
@@ -64,7 +78,9 @@ class QuickAccessCard extends ConsumerWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      color: isDark ? AppTheme.darkTextSecondary : AppColors.gray500,
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : AppColors.gray500,
                       fontSize: AppSpacing.size13,
                     ),
                   ),
@@ -72,7 +88,9 @@ class QuickAccessCard extends ConsumerWidget {
                   Text(
                     sublabel,
                     style: TextStyle(
-                      color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                      color: isDark
+                          ? AppTheme.darkTextPrimary
+                          : AppColors.gray900,
                       fontSize: AppSpacing.size11,
                       fontWeight: FontWeight.bold,
                     ),

@@ -6,36 +6,21 @@ import '../state/search_provider.dart';
 class SearchTabsBar extends ConsumerWidget {
   final UnifiedSearchResults results;
 
-  const SearchTabsBar({
-    super.key,
-    required this.results,
-  });
+  const SearchTabsBar({super.key, required this.results});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeTab = ref.watch(searchTabFilterProvider);
 
     final tabs = [
-      _TabItem(
-        tab: SearchTab.all,
-        label: 'ALL (${results.totalCount})',
-      ),
-      _TabItem(
-        tab: SearchTab.ayah,
-        label: 'AYAH (${results.ayahs.length})',
-      ),
-      _TabItem(
-        tab: SearchTab.surah,
-        label: 'SURAH (${results.surahs.length})',
-      ),
+      _TabItem(tab: SearchTab.all, label: 'ALL (${results.totalCount})'),
+      _TabItem(tab: SearchTab.ayah, label: 'AYAH (${results.ayahs.length})'),
+      _TabItem(tab: SearchTab.surah, label: 'SURAH (${results.surahs.length})'),
       _TabItem(
         tab: SearchTab.azkaar,
         label: 'AZKAAR (${results.azkaar.length})',
       ),
-      _TabItem(
-        tab: SearchTab.dua,
-        label: 'DUA (${results.duas.length})',
-      ),
+      _TabItem(tab: SearchTab.dua, label: 'DUA (${results.duas.length})'),
     ];
 
     return Container(
@@ -87,8 +72,5 @@ class _TabItem {
   final SearchTab tab;
   final String label;
 
-  const _TabItem({
-    required this.tab,
-    required this.label,
-  });
+  const _TabItem({required this.tab, required this.label});
 }

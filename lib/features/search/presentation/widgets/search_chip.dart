@@ -6,11 +6,7 @@ class SearchChip extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const SearchChip({
-    super.key,
-    required this.label,
-    required this.onTap,
-  });
+  const SearchChip({super.key, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

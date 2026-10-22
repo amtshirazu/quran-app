@@ -1,6 +1,3 @@
-
-
-
 class Translation {
   final int surahNumber;
   final int ayahNumber;

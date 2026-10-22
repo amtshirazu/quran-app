@@ -20,7 +20,9 @@ class ReflectionJournalCard extends ConsumerWidget {
       margin: const EdgeInsets.only(left: 15, right: 15, bottom: 25, top: 15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.size16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
       elevation: isDark ? 0 : 6,
@@ -85,7 +87,9 @@ class ReflectionJournalCard extends ConsumerWidget {
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: isDark ? AppColors.emerald600 : Colors.white.withAlpha(26),
+                backgroundColor: isDark
+                    ? AppColors.emerald600
+                    : Colors.white.withAlpha(26),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 8,

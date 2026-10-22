@@ -84,12 +84,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RecentSearchesSection(
-            onChipSelected: _executeSearch,
-          ),
-          PopularSearchesSection(
-            onChipSelected: _executeSearch,
-          ),
+          RecentSearchesSection(onChipSelected: _executeSearch),
+          PopularSearchesSection(onChipSelected: _executeSearch),
           const SizedBox(height: 24),
         ],
       ),
@@ -104,18 +100,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         return Column(
           children: [
             SearchTabsBar(results: results),
-            Expanded(
-              child: SearchResultsView(results: results),
-            ),
+            Expanded(child: SearchResultsView(results: results)),
           ],
         );
       },
       loading: () => const Center(
         child: Padding(
           padding: EdgeInsets.all(48.0),
-          child: CircularProgressIndicator(
-            color: AppColors.emerald600,
-          ),
+          child: CircularProgressIndicator(color: AppColors.emerald600),
         ),
       ),
       error: (err, stack) => Center(

@@ -23,13 +23,10 @@ class AboutScreen extends StatelessWidget {
             gradient: isDark
                 ? null
                 : const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.deepGreen,
-                AppColors.emerald600,
-              ],
-            ),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
+                  ),
           ),
           child: SafeArea(
             child: Padding(
@@ -131,7 +128,9 @@ class AboutScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AppSpacing.size13,
                   height: 1.4,
-                  color: isDark ? AppTheme.darkTextSecondary : AppColors.gray600,
+                  color: isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppColors.gray600,
                 ),
               ),
             ),
@@ -161,7 +160,9 @@ class AboutScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: AppSpacing.size12,
                         fontWeight: FontWeight.w600,
-                        color: isDark ? AppColors.emerald600 : const Color(0xFF00695C),
+                        color: isDark
+                            ? AppColors.emerald600
+                            : const Color(0xFF00695C),
                         height: 1.3,
                       ),
                     ),
@@ -245,8 +246,9 @@ class AboutScreen extends StatelessWidget {
                       child: Icon(
                         LucideIcons.code,
                         size: 14,
-                        color:
-                        isDark ? AppColors.emerald600 : AppColors.gray600,
+                        color: isDark
+                            ? AppColors.emerald600
+                            : AppColors.gray600,
                       ),
                     ),
                   ),
@@ -258,7 +260,9 @@ class AboutScreen extends StatelessWidget {
                     fontSize: AppSpacing.size14,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.5,
-                    color: isDark ? AppTheme.darkTextPrimary : AppColors.gray900,
+                    color: isDark
+                        ? AppTheme.darkTextPrimary
+                        : AppColors.gray900,
                   ),
                 ),
               ],
@@ -271,11 +275,11 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _buildNavTile(
-      BuildContext context, {
-        required String title,
-        required String route,
-        required bool isDark,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String route,
+    required bool isDark,
+  }) {
     return ListTile(
       title: Text(
         title,

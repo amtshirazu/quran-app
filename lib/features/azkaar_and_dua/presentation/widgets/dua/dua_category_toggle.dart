@@ -6,7 +6,6 @@ import 'package:quran_app/core/theme/app_theme.dart';
 import '../../../../../core/constants/app_spacing.dart';
 import '../../states/dua_provider.dart';
 
-
 class DuaCategoryToggle extends ConsumerWidget {
   const DuaCategoryToggle({super.key});
 
@@ -87,22 +86,18 @@ class _DuaTabButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: isSelected
               ? [
-            BoxShadow(
-              color: AppColors.emerald600.withAlpha(51),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ]
+                  BoxShadow(
+                    color: AppColors.emerald600.withAlpha(51),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
               : [],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: targetContentColor,
-            ),
+            Icon(icon, size: 16, color: targetContentColor),
             const SizedBox(width: 6),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),

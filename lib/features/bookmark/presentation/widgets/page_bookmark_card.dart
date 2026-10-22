@@ -33,7 +33,9 @@ class PageBookmarkCard extends ConsumerWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isDark ? AppTheme.darkBorder : colorLightGrayBorder.withAlpha(128),
+          color: isDark
+              ? AppTheme.darkBorder
+              : colorLightGrayBorder.withAlpha(128),
         ),
       ),
       child: Padding(
@@ -156,14 +158,22 @@ class PageBookmarkCard extends ConsumerWidget {
     );
   }
 
-  Widget _badge(String text, Color bg, Color color, {bool border = false, bool isDark = false}) {
+  Widget _badge(
+    String text,
+    Color bg,
+    Color color, {
+    bool border = false,
+    bool isDark = false,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(8),
         border: border
-            ? Border.all(color: isDark ? AppTheme.darkBorder : const Color(0xFFD4D4D8))
+            ? Border.all(
+                color: isDark ? AppTheme.darkBorder : const Color(0xFFD4D4D8),
+              )
             : null,
       ),
       child: Text(

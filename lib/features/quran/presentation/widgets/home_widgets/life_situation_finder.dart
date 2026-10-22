@@ -18,7 +18,9 @@ class LifeSituationCard extends StatelessWidget {
       elevation: isDark ? 0 : 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
       color: isDark ? AppTheme.darkSurface : null,
@@ -31,10 +33,7 @@ class LifeSituationCard extends StatelessWidget {
               : const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.deepGreen,
-                    AppColors.emerald600,
-                  ],
+                  colors: [AppColors.deepGreen, AppColors.emerald600],
                 ),
         ),
         child: Column(

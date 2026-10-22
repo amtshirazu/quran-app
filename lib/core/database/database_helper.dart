@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
@@ -94,16 +94,35 @@ class DatabaseHelper {
       value TEXT
     )
     ''');
+
+    await db.execute('''
+    CREATE TABLE audio_timings (
+      reciter_id TEXT,
+      surah_number INTEGER,
+      ayah_number INTEGER,
+      timestamp_from INTEGER,
+      timestamp_to INTEGER,
+      PRIMARY KEY (reciter_id, surah_number, ayah_number)
+    )
+    ''');
   }
 
   // Runs sequentially whenever _databaseVersion is incremented
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
     for (var version = oldVersion + 1; version <= newVersion; version++) {
       switch (version) {
-        // Example future update:
-        // case 2:
-        //   await db.execute('ALTER TABLE bookmarks ADD COLUMN category_id INTEGER DEFAULT 0;');
-        //   break;
+        case 2:
+          await db.execute('''
+          CREATE TABLE IF NOT EXISTS audio_timings (
+            reciter_id TEXT,
+            surah_number INTEGER,
+            ayah_number INTEGER,
+            timestamp_from INTEGER,
+            timestamp_to INTEGER,
+            PRIMARY KEY (reciter_id, surah_number, ayah_number)
+          )
+          ''');
+          break;
         default:
           throw StateError(
             'Missing database migration for version $version. '

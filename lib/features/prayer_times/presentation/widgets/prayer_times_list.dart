@@ -43,14 +43,20 @@ class _PrayerTimesListState extends ConsumerState<PrayerTimesList> {
                       .checkAndRequestPermission(context);
                   if (!hasPermission) return;
                 }
-                await ref.read(enabledPrayersProvider.notifier).togglePrayer(name, val);
-                final currentTimes = ref.read(prayerTimesProvider).asData?.value;
+                await ref
+                    .read(enabledPrayersProvider.notifier)
+                    .togglePrayer(name, val);
+                final currentTimes = ref
+                    .read(prayerTimesProvider)
+                    .asData
+                    ?.value;
                 if (currentTimes != null) {
                   final activePrayers = ref.read(enabledPrayersProvider);
-                  await NotificationService.instance.schedule7DayPrayerNotifications(
-                    todayTimes: currentTimes,
-                    enabledPrayers: activePrayers,
-                  );
+                  await NotificationService.instance
+                      .schedule7DayPrayerNotifications(
+                        todayTimes: currentTimes,
+                        enabledPrayers: activePrayers,
+                      );
                 }
               },
             );

@@ -89,13 +89,14 @@ class PrayerTimeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Transform.scale(
-                    scale: 0.8, // Adjust between 0.7 and 0.9 depending on desired size
+                    scale:
+                        0.8, // Adjust between 0.7 and 0.9 depending on desired size
                     child: Switch.adaptive(
                       value: isEnabled,
                       activeTrackColor: AppColors.emerald600,
                       onChanged: onToggle,
                     ),
-                  )
+                  ),
                 ],
               ),
             ],

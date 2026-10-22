@@ -37,7 +37,9 @@ class EmptyReflectionsCard extends StatelessWidget {
             "No reflections yet",
             style: TextStyle(
               fontSize: AppSpacing.size14,
-              color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF4A4A4A),
+              color: isDark
+                  ? AppTheme.darkTextSecondary
+                  : const Color(0xFF4A4A4A),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -57,7 +59,10 @@ class EmptyReflectionsCard extends StatelessWidget {
             ),
             child: const Text(
               "Start Reading & Reflecting",
-              style: TextStyle(fontSize: AppSpacing.size12, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: AppSpacing.size12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

@@ -49,7 +49,11 @@ class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -67,7 +71,7 @@ class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {
                     'Prayer Times',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize:  AppSpacing.size16,
+                      fontSize: AppSpacing.size16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -84,7 +88,7 @@ class PrayerTimesHeader extends ConsumerWidget implements PreferredSizeWidget {
                         locationText,
                         style: const TextStyle(
                           color: AppColors.emerald100,
-                          fontSize:  AppSpacing.size12,
+                          fontSize: AppSpacing.size12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

@@ -13,7 +13,9 @@ String formatBytesHelper(double bytes) {
   final mb = bytes / (1024 * 1024);
   if (mb >= 1000) {
     final gb = mb / 1024.0;
-    final formatted = gb.toStringAsFixed(gb >= 10 ? 1 : 2).replaceAll(RegExp(r'\.?0+$'), '');
+    final formatted = gb
+        .toStringAsFixed(gb >= 10 ? 1 : 2)
+        .replaceAll(RegExp(r'\.?0+$'), '');
     return '$formatted GB';
   }
   return '${mb.toStringAsFixed(1)} MB';
@@ -82,43 +84,46 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
   }) async {
     final key = '${reciter.id}_${surah.number}';
     final directory = await getApplicationDocumentsDirectory();
-    final surahStr = surah.number.toString().padLeft(3, '0');
-    final fileName = "$surahStr.mp3";
-    final localPath = "${directory.path}/${reciter.audioFolder}/$fileName";
-    final url = "${reciter.serverUrl}/$fileName";
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final folderPath = "${directory.path}/$targetFolder";
 
-    final file = File(localPath);
-    if (await file.exists()) {
-      onCompleted();
-      return;
-    }
+    final baseUrl =
+        reciter.ayahServerUrl ??
+        'https://everyayah.com/data/${reciter.audioFolder}';
+    final cleanBaseUrl = baseUrl.endsWith('/')
+        ? baseUrl.substring(0, baseUrl.length - 1)
+        : baseUrl;
 
     try {
       updateProgress(key, 0.0);
-      await file.parent.create(recursive: true);
-      final tempPath = "$localPath.temp";
+      final totalAyahs = surah.totalAyahs;
+      final surahStr = surah.number.toString().padLeft(3, '0');
 
-      await _dio.download(
-        url,
-        tempPath,
-        deleteOnError: true,
-        onReceiveProgress: (received, total) {
-          if (total > 0) {
-            final p = (received / total).clamp(0.0, 1.0);
-            updateProgress(key, p);
-          }
-        },
-      );
+      for (int i = 1; i <= totalAyahs; i++) {
+        final ayahStr = i.toString().padLeft(3, '0');
+        final fileName = "$surahStr$ayahStr.mp3";
+        final localPath = "$folderPath/$fileName";
+        final url = "$cleanBaseUrl/$fileName";
 
-      final tempFile = File(tempPath);
-      if (await tempFile.exists()) {
-        await tempFile.rename(localPath);
+        final file = File(localPath);
+        if (!await file.exists()) {
+          await file.parent.create(recursive: true);
+          final tempPath = "$localPath.temp";
+
+          try {
+            await _dio.download(url, tempPath, deleteOnError: true);
+            final tempFile = File(tempPath);
+            if (await tempFile.exists()) {
+              await tempFile.rename(localPath);
+            }
+          } catch (_) {}
+        }
+
+        final progress = (i / totalAyahs).clamp(0.0, 1.0);
+        updateProgress(key, progress);
       }
-    } catch (e) {
-      final tempFile = File("$localPath.temp");
-      if (await tempFile.exists()) {
-        await tempFile.delete();
-      }
+    } catch (_) {
     } finally {
       clearProgress(key);
       onCompleted();
@@ -131,13 +136,20 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
     required Function() onCompleted,
   }) async {
     final directory = await getApplicationDocumentsDirectory();
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final folderPath = "${directory.path}/$targetFolder";
     final surahStr = surahNum.toString().padLeft(3, '0');
-    final fileName = "$surahStr.mp3";
-    final localPath = "${directory.path}/${reciter.audioFolder}/$fileName";
 
-    final file = File(localPath);
-    if (await file.exists()) {
-      await file.delete();
+    final dir = Directory(folderPath);
+    if (await dir.exists()) {
+      final files = dir.listSync();
+      for (final f in files) {
+        if (f is File &&
+            f.path.split(Platform.pathSeparator).last.startsWith(surahStr)) {
+          await f.delete();
+        }
+      }
     }
     onCompleted();
   }
@@ -147,7 +159,9 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
     required Function() onCompleted,
   }) async {
     final directory = await getApplicationDocumentsDirectory();
-    final reciterDir = Directory("${directory.path}/${reciter.audioFolder}");
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final reciterDir = Directory("${directory.path}/$targetFolder");
     if (await reciterDir.exists()) {
       await reciterDir.delete(recursive: true);
     }
@@ -156,31 +170,43 @@ class DownloadManagerNotifier extends StateNotifier<Map<String, double>> {
 }
 
 final downloadManagerProvider =
-StateNotifierProvider<DownloadManagerNotifier, Map<String, double>>((ref) {
-  return DownloadManagerNotifier();
-});
+    StateNotifierProvider<DownloadManagerNotifier, Map<String, double>>((ref) {
+      return DownloadManagerNotifier();
+    });
 
 /// Refreshes download stats trigger
 final downloadRefreshTriggerProvider = StateProvider<int>((ref) => 0);
 
 /// Provider fetching ALL reciters download info summaries
-final downloadedRecitersProvider =
-FutureProvider<List<ReciterDownloadInfo>>((ref) async {
+final downloadedRecitersProvider = FutureProvider<List<ReciterDownloadInfo>>((
+  ref,
+) async {
   ref.watch(downloadRefreshTriggerProvider);
   final directory = await getApplicationDocumentsDirectory();
 
   List<ReciterDownloadInfo> result = [];
 
   for (final reciter in reciters) {
-    final reciterDir = Directory("${directory.path}/${reciter.audioFolder}");
-    int count = 0;
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final reciterDir = Directory("${directory.path}/$targetFolder");
+    final Set<int> downloadedSurahs = {};
     double size = 0;
 
     if (await reciterDir.exists()) {
       final files = reciterDir.listSync();
       for (final f in files) {
         if (f is File && f.path.endsWith('.mp3')) {
-          count++;
+          final fileName = f.path
+              .split(Platform.pathSeparator)
+              .last
+              .replaceAll('.mp3', '');
+          if (fileName.length >= 6) {
+            final surahNum = int.tryParse(fileName.substring(0, 3));
+            if (surahNum != null) {
+              downloadedSurahs.add(surahNum);
+            }
+          }
           size += f.lengthSync();
         }
       }
@@ -189,7 +215,7 @@ FutureProvider<List<ReciterDownloadInfo>>((ref) async {
     result.add(
       ReciterDownloadInfo(
         reciter: reciter,
-        downloadedCount: count,
+        downloadedCount: downloadedSurahs.length,
         totalSizeBytes: size,
       ),
     );
@@ -204,36 +230,47 @@ class ReciterSurahFileDetails {
 
   int get downloadedCount => downloadedSurahSizeMap.length;
 
-  double get totalSizeBytes => downloadedSurahSizeMap.values
-      .fold(0.0, (sum, size) => sum + size);
+  double get totalSizeBytes =>
+      downloadedSurahSizeMap.values.fold(0.0, (sum, size) => sum + size);
 
   String get formattedTotalSize => formatBytesHelper(totalSizeBytes);
 }
 
 /// Provider fetching Map of downloaded surah files for a specific reciter
-final reciterFileDetailsProvider = FutureProvider.family<
-    ReciterSurahFileDetails, Reciter>((ref, reciter) async {
-  ref.watch(downloadRefreshTriggerProvider);
-  final directory = await getApplicationDocumentsDirectory();
-  final reciterDir = Directory("${directory.path}/${reciter.audioFolder}");
+final reciterFileDetailsProvider =
+    FutureProvider.family<ReciterSurahFileDetails, Reciter>((
+      ref,
+      reciter,
+    ) async {
+      ref.watch(downloadRefreshTriggerProvider);
+      final directory = await getApplicationDocumentsDirectory();
+      final targetFolder =
+          reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+      final reciterDir = Directory("${directory.path}/$targetFolder");
 
-  Map<int, double> map = {};
+      Map<int, double> map = {};
 
-  if (await reciterDir.exists()) {
-    final files = reciterDir.listSync();
-    for (final f in files) {
-      if (f is File && f.path.endsWith('.mp3')) {
-        final name = f.path.split(Platform.pathSeparator).last.replaceAll('.mp3', '');
-        final num = int.tryParse(name);
-        if (num != null) {
-          map[num] = f.lengthSync().toDouble();
+      if (await reciterDir.exists()) {
+        final files = reciterDir.listSync();
+        for (final f in files) {
+          if (f is File && f.path.endsWith('.mp3')) {
+            final fileName = f.path
+                .split(Platform.pathSeparator)
+                .last
+                .replaceAll('.mp3', '');
+            if (fileName.length >= 6) {
+              final surahNum = int.tryParse(fileName.substring(0, 3));
+              if (surahNum != null) {
+                map[surahNum] =
+                    (map[surahNum] ?? 0.0) + f.lengthSync().toDouble();
+              }
+            }
+          }
         }
       }
-    }
-  }
 
-  return ReciterSurahFileDetails(map);
-});
+      return ReciterSurahFileDetails(map);
+    });
 
 /// Provider fetching real calculated storage summary
 final storageSummaryProvider = FutureProvider<StorageSummary>((ref) async {
@@ -243,7 +280,9 @@ final storageSummaryProvider = FutureProvider<StorageSummary>((ref) async {
 
   double audioBytes = 0.0;
   for (final reciter in reciters) {
-    final reciterDir = Directory("${directory.path}/${reciter.audioFolder}");
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final reciterDir = Directory("${directory.path}/$targetFolder");
     if (await reciterDir.exists()) {
       final files = reciterDir.listSync();
       for (final f in files) {

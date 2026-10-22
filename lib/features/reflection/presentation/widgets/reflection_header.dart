@@ -44,7 +44,11 @@ class ReflectionHeader extends ConsumerWidget {
                     context.go('/');
                   }
                 },
-                icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20,),
+                icon: const Icon(
+                  LucideIcons.arrowLeft,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 4),
               Expanded(
@@ -72,7 +76,10 @@ class ReflectionHeader extends ConsumerWidget {
               ElevatedButton(
                 onPressed: () => context.go('/surahs'),
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   backgroundColor: Colors.white,
                   foregroundColor: AppColors.emerald600,
                   elevation: 0,
@@ -86,12 +93,7 @@ class ReflectionHeader extends ConsumerWidget {
                   children: [
                     Icon(Icons.add, size: 14),
                     SizedBox(width: 4), // Adjust gap here (e.g. 4 or 6)
-                    Text(
-                      "New",
-                      style: TextStyle(
-                        fontSize: AppSpacing.size10,
-                      ),
-                    ),
+                    Text("New", style: TextStyle(fontSize: AppSpacing.size10)),
                   ],
                 ),
               ),

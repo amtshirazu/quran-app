@@ -3,22 +3,13 @@ import 'package:quran_app/core/constants/app_colors.dart';
 
 import '../../../../../core/constants/app_spacing.dart';
 
-
-
-
-
-
 class SurahVersesBadge extends StatelessWidget {
-  const SurahVersesBadge({
-    super.key,
-    required this.totalAyahs,
-  });
+  const SurahVersesBadge({super.key, required this.totalAyahs});
 
   final int totalAyahs;
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
@@ -39,7 +30,6 @@ class SurahVersesBadge extends StatelessWidget {
           ),
         ),
       ),
-
     );
   }
 }

@@ -17,7 +17,9 @@ class QuranAudioInfoCard extends StatelessWidget {
       color: isDark ? AppTheme.darkSurface : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -57,7 +59,9 @@ class QuranAudioInfoCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       height: 1.4,
-                      color: isDark ? AppTheme.darkTextSecondary : Colors.black54,
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : Colors.black54,
                     ),
                   ),
                 ],

@@ -22,11 +22,17 @@ class AzkarItemsScreen extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
-          backgroundColor: isDark ? AppTheme.darkScaffold : AppColors.emerald600,
+          backgroundColor: isDark
+              ? AppTheme.darkScaffold
+              : AppColors.emerald600,
           elevation: 0,
           titleSpacing: 0,
           leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+            icon: const Icon(
+              LucideIcons.arrowLeft,
+              color: Colors.white,
+              size: 20,
+            ),
             onPressed: () {
               if (context.canPop()) {
                 context.pop();

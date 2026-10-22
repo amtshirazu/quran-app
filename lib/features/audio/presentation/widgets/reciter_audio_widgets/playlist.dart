@@ -19,7 +19,9 @@ class Playlist extends ConsumerWidget {
         margin: const EdgeInsets.only(right: 16, left: 16, bottom: 30),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+          side: isDark
+              ? const BorderSide(color: AppTheme.darkBorder)
+              : BorderSide.none,
         ),
         clipBehavior: Clip.antiAlias,
         elevation: isDark ? 0 : 1,
@@ -50,9 +52,7 @@ class Playlist extends ConsumerWidget {
                 child: Center(child: Text("Error loading playlist: $e")),
               ),
               data: (surahs) => Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 450,
-                ),
+                constraints: const BoxConstraints(maxHeight: 450),
                 child: PlaylistCard(surahs: surahs),
               ),
             ),

@@ -24,9 +24,7 @@ class SettingsCard extends StatelessWidget {
         elevation: isDark ? 0 : 1,
         shadowColor: Colors.black.withAlpha(15),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: children,
-        ),
+        child: Column(children: children),
       ),
     );
   }

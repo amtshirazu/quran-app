@@ -17,7 +17,9 @@ class EmptyCard extends StatelessWidget {
       elevation: isDark ? 0 : 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isDark ? const BorderSide(color: AppTheme.darkBorder) : BorderSide.none,
+        side: isDark
+            ? const BorderSide(color: AppTheme.darkBorder)
+            : BorderSide.none,
       ),
       color: isDark ? AppTheme.darkSurface : Colors.white,
       child: Padding(
@@ -48,7 +50,9 @@ class EmptyCard extends StatelessWidget {
                     'Start reading to continue',
                     style: TextStyle(
                       fontSize: AppSpacing.size12,
-                      color: isDark ? AppTheme.darkTextSecondary : Colors.blueGrey,
+                      color: isDark
+                          ? AppTheme.darkTextSecondary
+                          : Colors.blueGrey,
                     ),
                   ),
                   const SizedBox(height: 16),

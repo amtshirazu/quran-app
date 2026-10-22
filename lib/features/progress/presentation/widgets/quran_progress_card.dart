@@ -46,7 +46,7 @@ class QuranProgressCard extends StatelessWidget {
           Text(
             'Quran Progress',
             style: TextStyle(
-              fontSize:  AppSpacing.size15,
+              fontSize: AppSpacing.size15,
               fontWeight: FontWeight.w700,
               color: isDark ? AppTheme.darkTextPrimary : Colors.black87,
             ),
@@ -58,7 +58,7 @@ class QuranProgressCard extends StatelessWidget {
               Text(
                 'Overall completion',
                 style: TextStyle(
-                  fontSize:  AppSpacing.size11,
+                  fontSize: AppSpacing.size11,
                   color: isDark ? AppTheme.darkTextSecondary : Colors.grey,
                 ),
               ),
@@ -76,7 +76,9 @@ class QuranProgressCard extends StatelessWidget {
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress / 100,
-            backgroundColor: isDark ? AppTheme.darkBorder : AppColors.emerald200,
+            backgroundColor: isDark
+                ? AppTheme.darkBorder
+                : AppColors.emerald200,
             valueColor: const AlwaysStoppedAnimation(AppColors.emerald600),
           ),
           const SizedBox(height: 22),

@@ -7,7 +7,7 @@ import 'package:quran_app/features/azkaar_and_dua/domain/model/quranic_dua.dart'
 
 enum DuaCategory {
   quranic, // Quranic Duas
-  witr,    // Witr & Qunoot Duas
+  witr, // Witr & Qunoot Duas
 }
 
 class DuaDatabaseService {
@@ -64,16 +64,23 @@ class DuaDatabaseService {
     final categoryType = category == DuaCategory.quranic ? 'quranic' : 'witr';
 
     if (maps.length < 50) {
-      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+      return maps
+          .map((map) => QuranicDua.fromMap(map, categoryType: categoryType))
+          .toList();
     }
 
     return await Isolate.run(() {
-      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+      return maps
+          .map((map) => QuranicDua.fromMap(map, categoryType: categoryType))
+          .toList();
     });
   }
 
   /// Search duas within selected category offloading mapping to background isolate
-  Future<List<QuranicDua>> searchDuasByCategory(DuaCategory category, String query) async {
+  Future<List<QuranicDua>> searchDuasByCategory(
+    DuaCategory category,
+    String query,
+  ) async {
     final db = await _getDatabase(category);
     final wildCardQuery = "%$query%";
     final categoryType = category == DuaCategory.quranic ? 'quranic' : 'witr';
@@ -83,23 +90,29 @@ class DuaDatabaseService {
     if (category == DuaCategory.quranic) {
       maps = await db.query(
         'duas',
-        where: 'subject LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
+        where:
+            'subject LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
         whereArgs: [wildCardQuery, wildCardQuery, wildCardQuery, wildCardQuery],
       );
     } else {
       maps = await db.query(
         'duas',
-        where: 'source LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
+        where:
+            'source LIKE ? OR translation LIKE ? OR transliteration LIKE ? OR arabic LIKE ?',
         whereArgs: [wildCardQuery, wildCardQuery, wildCardQuery, wildCardQuery],
       );
     }
 
     if (maps.length < 50) {
-      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+      return maps
+          .map((map) => QuranicDua.fromMap(map, categoryType: categoryType))
+          .toList();
     }
 
     return await Isolate.run(() {
-      return maps.map((map) => QuranicDua.fromMap(map, categoryType: categoryType)).toList();
+      return maps
+          .map((map) => QuranicDua.fromMap(map, categoryType: categoryType))
+          .toList();
     });
   }
 }

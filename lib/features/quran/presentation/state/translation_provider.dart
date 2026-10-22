@@ -27,7 +27,9 @@ class SelectedTranslationsNotifier extends StateNotifier<List<String>> {
 
   Future<void> _loadSavedSettings() async {
     try {
-      final raw = await DatabaseHelper.instance.getSetting('selected_translations');
+      final raw = await DatabaseHelper.instance.getSetting(
+        'selected_translations',
+      );
       if (raw != null && raw.isNotEmpty) {
         final List<dynamic> decoded = jsonDecode(raw);
         final list = decoded.cast<String>();
@@ -69,8 +71,8 @@ class SelectedTranslationsNotifier extends StateNotifier<List<String>> {
 
 final selectedTranslationsProvider =
     StateNotifierProvider<SelectedTranslationsNotifier, List<String>>((ref) {
-  return SelectedTranslationsNotifier();
-});
+      return SelectedTranslationsNotifier();
+    });
 
 final translationServiceProvider = Provider<TranslationDatabaseService>((ref) {
   return TranslationDatabaseService();
@@ -82,36 +84,37 @@ final translationProvider =
       return service.getTranslation(arg.surah, arg.verse);
     });
 
-final activeVerseTranslationsProvider = FutureProvider.family<
-    List<VerseTranslationData>,
-    ({int surah, int verse})>((ref, arg) async {
-  final activeDbNames = ref.watch(selectedTranslationsProvider);
-  final service = ref.watch(translationServiceProvider);
+final activeVerseTranslationsProvider =
+    FutureProvider.family<List<VerseTranslationData>, ({int surah, int verse})>(
+      (ref, arg) async {
+        final activeDbNames = ref.watch(selectedTranslationsProvider);
+        final service = ref.watch(translationServiceProvider);
 
-  List<VerseTranslationData> results = [];
+        List<VerseTranslationData> results = [];
 
-  for (final dbName in activeDbNames) {
-    final model = kAllTranslations.firstWhere(
-      (m) => m.dbFileName == dbName,
-      orElse: () => kAllTranslations.first,
+        for (final dbName in activeDbNames) {
+          final model = kAllTranslations.firstWhere(
+            (m) => m.dbFileName == dbName,
+            orElse: () => kAllTranslations.first,
+          );
+
+          final text = await service.getTranslationFromDb(
+            fileName: dbName,
+            surah: arg.surah,
+            verse: arg.verse,
+          );
+
+          results.add(
+            VerseTranslationData(
+              dbFileName: dbName,
+              translationName: model.name,
+              language: model.language,
+              text: text,
+              isDefault: model.isDefault,
+            ),
+          );
+        }
+
+        return results;
+      },
     );
-
-    final text = await service.getTranslationFromDb(
-      fileName: dbName,
-      surah: arg.surah,
-      verse: arg.verse,
-    );
-
-    results.add(
-      VerseTranslationData(
-        dbFileName: dbName,
-        translationName: model.name,
-        language: model.language,
-        text: text,
-        isDefault: model.isDefault,
-      ),
-    );
-  }
-
-  return results;
-});

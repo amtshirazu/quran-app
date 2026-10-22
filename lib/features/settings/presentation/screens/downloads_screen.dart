@@ -27,10 +27,10 @@ class DownloadsScreen extends ConsumerWidget {
             gradient: isDark
                 ? null
                 : const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [AppColors.deepGreen, AppColors.emerald600],
-            ),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.deepGreen, AppColors.emerald600],
+                  ),
           ),
           child: SafeArea(
             child: Padding(
@@ -80,14 +80,24 @@ class DownloadsScreen extends ConsumerWidget {
               skipLoadingOnRefresh: true,
               data: (summary) {
                 // Calculate device total capacity = App Used + Real Free Storage
-                final totalDeviceSpace = summary.totalUsedBytes + summary.freeSpaceBytes;
-                final denominator = totalDeviceSpace > 0 ? totalDeviceSpace : 1.0;
+                final totalDeviceSpace =
+                    summary.totalUsedBytes + summary.freeSpaceBytes;
+                final denominator = totalDeviceSpace > 0
+                    ? totalDeviceSpace
+                    : 1.0;
 
                 // Scale segments proportionally across 1000 flex points
-                final audioFlex = ((summary.audioBytes / denominator) * 1000).round();
-                final translationsFlex = ((summary.translationsBytes / denominator) * 1000).round();
-                final quranFlex = ((summary.quranTextBytes / denominator) * 1000).round();
-                final freeFlex = (1000 - (audioFlex + translationsFlex + quranFlex)).clamp(1, 1000);
+                final audioFlex = ((summary.audioBytes / denominator) * 1000)
+                    .round();
+                final translationsFlex =
+                    ((summary.translationsBytes / denominator) * 1000).round();
+                final quranFlex =
+                    ((summary.quranTextBytes / denominator) * 1000).round();
+                final freeFlex =
+                    (1000 - (audioFlex + translationsFlex + quranFlex)).clamp(
+                      1,
+                      1000,
+                    );
 
                 return Container(
                   padding: const EdgeInsets.all(12),
@@ -100,12 +110,12 @@ class DownloadsScreen extends ConsumerWidget {
                     boxShadow: isDark
                         ? null
                         : [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(5),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                            BoxShadow(
+                              color: Colors.black.withAlpha(5),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,8 +416,8 @@ class _ReciterDownloadTile extends ConsumerWidget {
                               color: isDownloading
                                   ? AppColors.emerald600
                                   : (isDark
-                                  ? AppTheme.darkTextSecondary
-                                  : AppColors.gray500),
+                                        ? AppTheme.darkTextSecondary
+                                        : AppColors.gray500),
                               fontWeight: isDownloading
                                   ? FontWeight.bold
                                   : FontWeight.normal,

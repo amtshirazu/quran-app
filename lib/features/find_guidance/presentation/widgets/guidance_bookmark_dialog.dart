@@ -18,9 +18,7 @@ Future<String?> showGuidanceBookmarkDialog(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -149,10 +147,7 @@ Future<String?> showGuidanceBookmarkDialog(
                     ),
                     TextSpan(
                       text: '(optional)',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.gray500,
-                      ),
+                      style: TextStyle(fontSize: 14, color: AppColors.gray500),
                     ),
                   ],
                 ),
@@ -165,10 +160,7 @@ Future<String?> showGuidanceBookmarkDialog(
                 controller: controller,
                 minLines: 3,
                 maxLines: 5,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.gray900,
-                ),
+                style: const TextStyle(fontSize: 14, color: AppColors.gray900),
                 decoration: InputDecoration(
                   hintText:
                       'What does this verse mean to you? Why are you saving it?',
@@ -186,7 +178,9 @@ Future<String?> showGuidanceBookmarkDialog(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                        color: AppColors.emerald500, width: 1.5),
+                      color: AppColors.emerald500,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),

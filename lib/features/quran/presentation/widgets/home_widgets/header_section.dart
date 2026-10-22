@@ -20,10 +20,7 @@ class HeaderSection extends StatelessWidget {
             : const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF0F382C),
-                  Color(0xFF1B5E48),
-                ],
+                colors: [Color(0xFF0F382C), Color(0xFF1B5E48)],
               ),
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(AppSpacing.size28),
@@ -31,11 +28,7 @@ class HeaderSection extends StatelessWidget {
       ),
       child: const Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          GreetingRow(),
-          SizedBox(height: 30),
-          NextPrayerCard(),
-        ],
+        children: [GreetingRow(), SizedBox(height: 30), NextPrayerCard()],
       ),
     );
   }

@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:quran/quran.dart' as quran;
 
 import 'package:quran_app/core/database/database_helper.dart';
+import 'package:quran_app/features/audio/data/audio_timing_service.dart';
+import 'package:quran_app/features/audio/data/audio_artwork_helper.dart';
 import 'package:quran_app/features/audio/presentation/state/repeat_states.dart';
 
 import '../../../quran/domain/models/surah.dart';
@@ -19,150 +21,219 @@ import '../../domain/models/Reciters.dart';
 import 'audio_providers.dart';
 
 class QuranAudioService {
-  // ===========================================================================
-  // AUDIO PLAYERS
-  // ===========================================================================
-
-  /// Main player: holds the entire 114-Surah ConcatenatingAudioSource playlist.
   final AudioPlayer _audioPlayer = AudioPlayer();
-
-  /// Separate player for individual Ayah playback (single Ayah).
   final AudioPlayer _ayahPlayer = AudioPlayer();
-
-  // ===========================================================================
-  // STATE & SUBSCRIPTIONS
-  // ===========================================================================
 
   final Set<String> _downloadingTasks = {};
 
   StreamSubscription<int?>? _currentIndexSubscription;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
   StreamSubscription<Duration>? _positionSubscription;
 
   Ref? _ref;
   bool _initialized = false;
   bool _hasLoadedSurah = false;
-  bool _isHandlingTrackBoundary = false;
-
-  /// Prevents transient engine index resets (e.g. index 0 on load) from
-  /// overriding user selection and flickering the UI.
   bool _isChangingTrack = false;
+  bool _isHandlingCompletion = false;
 
-  /// Tracks previous position to catch natural end-of-track loop wraps accurately.
-  Duration _lastReportedPosition = Duration.zero;
+  int _playOperationToken = 0;
+  int _timingGeneration = 0;
 
-  /// Current repeat mode.
-  RepeatStates _repeatMode = RepeatStates.repeatAll;
+  RepeatStates _repeatMode = RepeatStates.off;
 
-  /// The full Surah list and reciter currently loaded in the playlist.
   List<Surah> _allSurahs = const [];
+  Surah? _currentSurah;
   Reciter? _reciter;
+  int _activeSurahIndex = 0;
 
   bool get hasLoadedSurah => _hasLoadedSurah;
   bool get isPlaying => _audioPlayer.playing;
   AudioPlayer get player => _audioPlayer;
   AudioPlayer get ayahPlayer => _ayahPlayer;
-
-  // ===========================================================================
-  // INITIALIZE SERVICE
-  // ===========================================================================
+  Reciter? get currentReciter => _reciter;
+  Surah? get currentSurah => _currentSurah;
 
   Future<void> init(Ref ref) async {
-    if (_initialized) {
-      return;
-    }
+    if (_initialized) return;
 
     _initialized = true;
     _ref = ref;
-
     _repeatMode = ref.read(repeatModeProvider);
 
     await configureAudioSession();
     await _applyLoopMode();
 
-    // 1. Keep UI synced when playback advances naturally, but ignore during manual load/seeks
+    // 1. Sync active playing surah index & auto-advancement handling
     _currentIndexSubscription = _audioPlayer.currentIndexStream.listen((index) {
-      if (_isChangingTrack) {
+      if (index == null ||
+          index < 0 ||
+          _allSurahs.isEmpty ||
+          index >= _allSurahs.length) {
         return;
       }
 
-      if (index != null && index >= 0 && index < _allSurahs.length) {
+      if (_isChangingTrack) {
+        _activeSurahIndex = index;
+        _currentSurah = _allSurahs[index];
         _ref?.read(selectedSurahIndexProvider.notifier).state = index;
+        _ref?.read(selectedSurahProvider.notifier).state = _allSurahs[index];
+        return;
+      }
+
+      // Automatic track transition by just_audio
+      if (index != _activeSurahIndex) {
+        if (_repeatMode == RepeatStates.off) {
+          // In Repeat OFF mode, automatically advancing to the next track is prevented.
+          // Reset to the beginning of the surah that just finished and pause.
+          unawaited(_preventAutoAdvancementAndReset(_activeSurahIndex));
+        } else if (_repeatMode == RepeatStates.repeatAll) {
+          _activeSurahIndex = index;
+          _currentSurah = _allSurahs[index];
+          _ref?.read(selectedSurahIndexProvider.notifier).state = index;
+          _ref?.read(selectedSurahProvider.notifier).state = _allSurahs[index];
+          _publishCurrentAyah(_allSurahs[index].number, 1);
+        }
       }
     });
 
-    // 2. Full-fidelity End-of-Surah Handler for Repeat OFF
+    // 2. Track completion handler (e.g. at the end of playlist / Surah 114)
+    _playerStateSubscription = _audioPlayer.playerStateStream.listen((
+      playerState,
+    ) {
+      if (_isChangingTrack || _isHandlingCompletion) return;
+
+      if (playerState.processingState == ProcessingState.completed) {
+        unawaited(_handleTrackCompleted());
+      }
+    });
+
+    // 3. Proportional Active Verse Sync
     _positionSubscription = _audioPlayer.positionStream.listen((position) {
-      if (_repeatMode != RepeatStates.off || _isHandlingTrackBoundary) {
-        _lastReportedPosition = position;
-        return;
+      if (!_isChangingTrack && _audioPlayer.playing && _currentSurah != null) {
+        _updateActiveVerseFromPosition(position);
       }
-
-      final duration = _audioPlayer.duration;
-
-      if (duration != null && duration > const Duration(seconds: 1)) {
-        final reachedAbsoluteEnd = position >= duration;
-        final nearEnd = _lastReportedPosition >= duration - const Duration(milliseconds: 1500);
-        final loopedBackToZero = position < const Duration(milliseconds: 200) && nearEnd;
-
-        if (reachedAbsoluteEnd || loopedBackToZero) {
-          unawaited(_handleRepeatOffTrackEnded());
-        }
-      }
-
-      _lastReportedPosition = position;
     });
   }
 
-  // ===========================================================================
-  // REPEAT OFF HANDLER
-  // ===========================================================================
-
-  Future<void> _handleRepeatOffTrackEnded() async {
-    if (_isHandlingTrackBoundary) return;
-    _isHandlingTrackBoundary = true;
+  Future<void> _preventAutoAdvancementAndReset(int finishedIndex) async {
+    if (_isHandlingCompletion) return;
+    _isHandlingCompletion = true;
 
     try {
       await _audioPlayer.pause();
-      await _audioPlayer.seek(Duration.zero);
-      _lastReportedPosition = Duration.zero;
+      await _audioPlayer.seek(Duration.zero, index: finishedIndex);
+
+      _activeSurahIndex = finishedIndex;
+      if (finishedIndex < _allSurahs.length) {
+        _currentSurah = _allSurahs[finishedIndex];
+        _ref?.read(selectedSurahIndexProvider.notifier).state = finishedIndex;
+        _ref?.read(selectedSurahProvider.notifier).state =
+            _allSurahs[finishedIndex];
+        _publishCurrentAyah(_allSurahs[finishedIndex].number, 1);
+      }
     } catch (e) {
-      debugPrint('Error pausing at track boundary: $e');
+      debugPrint('Error handling auto advancement reset: $e');
     } finally {
-      await Future.delayed(const Duration(milliseconds: 300));
-      _isHandlingTrackBoundary = false;
+      _isHandlingCompletion = false;
     }
   }
 
-  // ===========================================================================
-  // REPEAT MODE CONFIGURATION
-  // ===========================================================================
+  Future<void> _handleTrackCompleted() async {
+    if (_isHandlingCompletion) return;
+    _isHandlingCompletion = true;
+
+    try {
+      final finishedIndex = _audioPlayer.currentIndex ?? _activeSurahIndex;
+
+      if (_repeatMode == RepeatStates.off) {
+        await _audioPlayer.pause();
+        await _audioPlayer.seek(Duration.zero, index: finishedIndex);
+
+        _activeSurahIndex = finishedIndex;
+        if (finishedIndex < _allSurahs.length) {
+          _currentSurah = _allSurahs[finishedIndex];
+          _ref?.read(selectedSurahIndexProvider.notifier).state = finishedIndex;
+          _ref?.read(selectedSurahProvider.notifier).state =
+              _allSurahs[finishedIndex];
+          _publishCurrentAyah(_allSurahs[finishedIndex].number, 1);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error handling track completion: $e');
+    } finally {
+      _isHandlingCompletion = false;
+    }
+  }
+
+  void _updateActiveVerseFromPosition(Duration position) {
+    if (_isChangingTrack) return;
+    final currentGen = _timingGeneration;
+    final currentSurahNum = _currentSurah?.number;
+    final currentReciterId = _reciter?.id;
+
+    if (currentSurahNum == null || currentReciterId == null) return;
+    final positionMillis = position.inMilliseconds;
+    final activePlaying = _ref?.read(currentPlayingAyahProvider);
+
+    AudioTimingService.instance
+        .getActiveAyah(
+          reciterId: currentReciterId,
+          surahNumber: currentSurahNum,
+          positionMillis: positionMillis,
+        )
+        .then((ayahNum) {
+          // Stale lookup protection
+          if (currentGen != _timingGeneration) return;
+          if (_currentSurah?.number != currentSurahNum ||
+              _reciter?.id != currentReciterId) {
+            return;
+          }
+          if (!_audioPlayer.playing && !_ayahPlayer.playing) return;
+
+          // Guard against transient 0ms position emission when playback initializes at verse > 1
+          if (positionMillis < 500 &&
+              activePlaying != null &&
+              activePlaying.surah == currentSurahNum &&
+              activePlaying.ayah > 1 &&
+              ayahNum == 1) {
+            return;
+          }
+
+          if (ayahNum != null) {
+            _publishCurrentAyah(currentSurahNum, ayahNum);
+          }
+        });
+  }
 
   Future<void> updateRepeatMode(RepeatStates repeatMode) async {
     _repeatMode = repeatMode;
+    _ref?.read(repeatModeProvider.notifier).state = repeatMode;
     await _applyLoopMode();
   }
 
   Future<void> _applyLoopMode() async {
     switch (_repeatMode) {
       case RepeatStates.repeatOne:
-      case RepeatStates.off:
         await _audioPlayer.setLoopMode(LoopMode.one);
         break;
       case RepeatStates.repeatAll:
         await _audioPlayer.setLoopMode(LoopMode.all);
         break;
+      case RepeatStates.off:
+        await _audioPlayer.setLoopMode(LoopMode.off);
+        break;
     }
   }
-
-  // ===========================================================================
-  // PLAY SURAH
-  // ===========================================================================
 
   Future<void> playSurah({
     required Reciter reciter,
     required Surah surah,
     required List<Surah> allSurahs,
+    int startAyah = 1,
   }) async {
+    final opToken = ++_playOperationToken;
+    _timingGeneration++;
+
     final session = await AudioSession.instance;
     await session.setActive(true);
 
@@ -170,65 +241,87 @@ class QuranAudioService {
       await _ayahPlayer.stop();
     }
 
-    final targetIndex = allSurahs.indexWhere(
-          (s) => s.number == surah.number,
-    );
-
+    final targetIndex = allSurahs.indexWhere((s) => s.number == surah.number);
     if (targetIndex == -1) {
-      throw ArgumentError(
-        'Surah ${surah.number} was not found in allSurahs.',
-      );
+      throw ArgumentError('Surah ${surah.number} not found in allSurahs.');
     }
 
-    // Set lock to prevent currentIndexStream race conditions from updating UI
     _isChangingTrack = true;
-    _ref?.read(selectedSurahIndexProvider.notifier).state = targetIndex;
 
-    _allSurahs = allSurahs;
-
-    final isNewReciter = _reciter?.id != reciter.id;
-    final isPlaylistEmpty = _audioPlayer.sequence.isEmpty;
+    final previousReciter = _reciter;
     _reciter = reciter;
+    _allSurahs = allSurahs;
+    _currentSurah = surah;
+    _activeSurahIndex = targetIndex;
+
+    _ref?.read(selectedSurahIndexProvider.notifier).state = targetIndex;
+    _ref?.read(selectedSurahProvider.notifier).state = surah;
 
     await _applyLoopMode();
 
     final directory = await getApplicationDocumentsDirectory();
 
+    if (opToken != _playOperationToken) return;
+
+    int? initialStartMillis;
+    if (startAyah > 1) {
+      initialStartMillis = await AudioTimingService.instance
+          .getAyahStartTimestamp(
+            reciterId: reciter.id,
+            surahNumber: surah.number,
+            ayahNumber: startAyah,
+          );
+    }
+
+    final initialPosition = initialStartMillis != null
+        ? Duration(milliseconds: initialStartMillis)
+        : Duration.zero;
+
     try {
-      if (isNewReciter || isPlaylistEmpty) {
+      final isNewReciter =
+          previousReciter == null || previousReciter.id != reciter.id;
+      final isPlaylistEmpty = _audioPlayer.sequence.isEmpty;
+      final isSequenceLengthMismatch =
+          _audioPlayer.sequence.length != allSurahs.length;
+
+      if (isNewReciter || isPlaylistEmpty || isSequenceLengthMismatch) {
         final sources = await Future.wait(
           allSurahs.map(
-                (s) => _buildSingleAudioSource(s, reciter, directory.path),
+            (s) => _buildSingleAudioSource(s, reciter, directory.path),
           ),
         );
 
-        final playlist = ConcatenatingAudioSource(
-          useLazyPreparation: true,
-          children: sources,
-        );
+        if (opToken != _playOperationToken) return;
 
-        await _audioPlayer.setAudioSource(
-          playlist,
+        await _audioPlayer.setAudioSources(
+          sources,
           initialIndex: targetIndex,
-          initialPosition: Duration.zero,
+          initialPosition: initialPosition,
         );
       } else {
-        if (_audioPlayer.currentIndex != targetIndex) {
-          await _audioPlayer.seek(Duration.zero, index: targetIndex);
+        if (_audioPlayer.currentIndex != targetIndex ||
+            initialStartMillis != null) {
+          await _audioPlayer.seek(initialPosition, index: targetIndex);
         } else {
           await _audioPlayer.seek(Duration.zero);
         }
       }
 
-      _lastReportedPosition = Duration.zero;
+      if (opToken != _playOperationToken) return;
+
       _hasLoadedSurah = true;
+
+      _publishCurrentAyah(surah.number, startAyah);
 
       unawaited(_audioPlayer.play());
     } finally {
-      // Allow the player engine to stabilize before releasing lock
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _isChangingTrack = false;
-      });
+      if (opToken == _playOperationToken) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (opToken == _playOperationToken) {
+            _isChangingTrack = false;
+          }
+        });
+      }
     }
 
     // Background download check for current Surah
@@ -250,10 +343,6 @@ class QuranAudioService {
     }
   }
 
-  // ===========================================================================
-  // PLAY / PAUSE / STOP / SEEK
-  // ===========================================================================
-
   Future<void> play() async {
     unawaited(_audioPlayer.play());
   }
@@ -263,26 +352,55 @@ class QuranAudioService {
   }
 
   Future<void> stop() async {
+    _playOperationToken++;
+    _timingGeneration++;
+
     await _audioPlayer.stop();
+    await _ayahPlayer.stop();
     if (_audioPlayer.sequence.isNotEmpty) {
-      await _audioPlayer.seek(Duration.zero);
+      await _audioPlayer.seek(Duration.zero, index: 0);
     }
-    _lastReportedPosition = Duration.zero;
+    clearActiveState();
+  }
+
+  void clearActiveState() {
+    _timingGeneration++;
+    _currentSurah = null;
+    AudioTimingService.instance.clearCache();
+    _ref?.read(currentPlayingAyahProvider.notifier).state = null;
+    _ref?.read(jumpToPageProvider.notifier).state = null;
+    _ref?.read(targetAyahProvider.notifier).state = null;
   }
 
   Future<void> seekToStart() async {
-    await _audioPlayer.seek(Duration.zero);
-    _lastReportedPosition = Duration.zero;
+    await _audioPlayer.seek(Duration.zero, index: 0);
   }
 
-  // ===========================================================================
-  // SKIP NEXT / PREVIOUS
-  // ===========================================================================
+  Future<void> seekToAyah({
+    required int surahNumber,
+    required int ayahNumber,
+  }) async {
+    if (_reciter == null ||
+        _currentSurah == null ||
+        _currentSurah!.number != surahNumber)
+      return;
+
+    final startMillis = await AudioTimingService.instance.getAyahStartTimestamp(
+      reciterId: _reciter!.id,
+      surahNumber: surahNumber,
+      ayahNumber: ayahNumber,
+    );
+
+    if (startMillis != null) {
+      await _audioPlayer.seek(Duration(milliseconds: startMillis));
+      _publishCurrentAyah(surahNumber, ayahNumber);
+    }
+  }
 
   Future<void> skipToNext() async {
     if (_allSurahs.isEmpty) return;
 
-    final currentIndex = _audioPlayer.currentIndex ?? 0;
+    final currentIndex = _audioPlayer.currentIndex ?? _activeSurahIndex;
     int target = currentIndex + 1;
 
     if (target >= _allSurahs.length) {
@@ -294,11 +412,15 @@ class QuranAudioService {
     }
 
     _isChangingTrack = true;
+    _activeSurahIndex = target;
+    _currentSurah = _allSurahs[target];
+
     _ref?.read(selectedSurahIndexProvider.notifier).state = target;
+    _ref?.read(selectedSurahProvider.notifier).state = _allSurahs[target];
 
     try {
       await _audioPlayer.seek(Duration.zero, index: target);
-      _lastReportedPosition = Duration.zero;
+      _publishCurrentAyah(_allSurahs[target].number, 1);
     } finally {
       Future.delayed(const Duration(milliseconds: 250), () {
         _isChangingTrack = false;
@@ -309,7 +431,7 @@ class QuranAudioService {
   Future<void> skipToPrevious() async {
     if (_allSurahs.isEmpty) return;
 
-    final currentIndex = _audioPlayer.currentIndex ?? 0;
+    final currentIndex = _audioPlayer.currentIndex ?? _activeSurahIndex;
     int target = currentIndex - 1;
 
     if (target < 0) {
@@ -321,11 +443,15 @@ class QuranAudioService {
     }
 
     _isChangingTrack = true;
+    _activeSurahIndex = target;
+    _currentSurah = _allSurahs[target];
+
     _ref?.read(selectedSurahIndexProvider.notifier).state = target;
+    _ref?.read(selectedSurahProvider.notifier).state = _allSurahs[target];
 
     try {
       await _audioPlayer.seek(Duration.zero, index: target);
-      _lastReportedPosition = Duration.zero;
+      _publishCurrentAyah(_allSurahs[target].number, 1);
     } finally {
       Future.delayed(const Duration(milliseconds: 250), () {
         _isChangingTrack = false;
@@ -333,15 +459,13 @@ class QuranAudioService {
     }
   }
 
-  // ===========================================================================
-  // PLAY VERSE
-  // ===========================================================================
-
   Future<void> playVerse({
     required Reciter reciter,
     required Surah surah,
     required int ayah,
   }) async {
+    _timingGeneration++;
+
     try {
       final session = await AudioSession.instance;
       await session.setActive(true);
@@ -364,6 +488,9 @@ class QuranAudioService {
       await _ayahPlayer.setLoopMode(LoopMode.off);
       await _ayahPlayer.setAudioSource(source, initialPosition: Duration.zero);
 
+      _currentSurah = surah;
+      _reciter = reciter;
+
       _publishCurrentAyah(surah.number, ayah);
 
       unawaited(_ayahPlayer.play());
@@ -376,6 +503,8 @@ class QuranAudioService {
   }
 
   void _publishCurrentAyah(int surahNumber, int ayah) {
+    if (_currentSurah == null || _currentSurah!.number != surahNumber) return;
+
     final ref = _ref;
     if (ref == null) return;
 
@@ -393,17 +522,12 @@ class QuranAudioService {
     }
   }
 
-  // ===========================================================================
-  // AUDIO SOURCES & DOWNLOADS
-  // ===========================================================================
-
   Future<AudioSource> _buildSingleAudioSource(
-      Surah surah,
-      Reciter reciter,
-      String dirPath,
-      ) async {
-    final surahStr = surah.number.toString().padLeft(3, '0');
-    final fileName = '$surahStr.mp3';
+    Surah surah,
+    Reciter reciter,
+    String dirPath,
+  ) async {
+    final fileName = '${surah.number.toString().padLeft(3, '0')}.mp3';
     final localPath = '$dirPath/${reciter.audioFolder}/$fileName';
 
     final cleanBaseUrl = reciter.serverUrl.endsWith('/')
@@ -411,11 +535,14 @@ class QuranAudioService {
         : reciter.serverUrl;
     final url = '$cleanBaseUrl/$fileName';
 
+    final artUri = await AudioArtworkHelper.getLocalAssetFileUri(reciter.image);
+
     final mediaItem = MediaItem(
       id: '${surah.number}',
-      album: surah.translation,
+      album: 'Surah ${surah.nameEnglish}',
       title: 'Surah ${surah.nameEnglish}',
       artist: reciter.name,
+      artUri: artUri,
     );
 
     if (await File(localPath).exists()) {
@@ -437,21 +564,24 @@ class QuranAudioService {
 
     final fileName = '$surahStr$ayahStr.mp3';
 
-    final baseUrl = reciter.ayahServerUrl ??
+    final baseUrl =
+        reciter.ayahServerUrl ??
         'https://everyayah.com/data/${reciter.audioFolder}';
     final cleanBaseUrl = baseUrl.endsWith('/')
         ? baseUrl.substring(0, baseUrl.length - 1)
         : baseUrl;
 
-    final targetFolder = reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
+    final targetFolder =
+        reciter.ayahAudioFolder ?? '${reciter.audioFolder}_ayahs';
     final localPath = '$dirPath/$targetFolder/$fileName';
     final url = '$cleanBaseUrl/$fileName';
 
     final mediaItem = MediaItem(
       id: '${surah.number}:$ayah:$page',
-      album: surah.translation,
-      title: 'Verse $ayah',
+      album: 'Surah ${surah.nameEnglish}',
+      title: 'Surah ${surah.nameEnglish}',
       artist: reciter.name,
+      artUri: Uri.parse('asset:///${reciter.image}'),
     );
 
     if (await File(localPath).exists()) {
@@ -467,8 +597,7 @@ class QuranAudioService {
   }) async {
     final directory = await getApplicationDocumentsDirectory();
 
-    final surahStr = surah.number.toString().padLeft(3, '0');
-    final fileName = '$surahStr.mp3';
+    final fileName = '${surah.number.toString().padLeft(3, '0')}.mp3';
     final localPath = '${directory.path}/${reciter.audioFolder}/$fileName';
 
     final cleanBaseUrl = reciter.serverUrl.endsWith('/')
@@ -483,10 +612,7 @@ class QuranAudioService {
     await _startBackgroundDownload(url, localPath);
   }
 
-  Future<void> _startBackgroundDownload(
-      String url,
-      String savePath,
-      ) async {
+  Future<void> _startBackgroundDownload(String url, String savePath) async {
     if (_downloadingTasks.contains(savePath)) {
       return;
     }
@@ -518,17 +644,13 @@ class QuranAudioService {
     }
   }
 
-  // ===========================================================================
-  // AUDIO SESSION & RESET & DISPOSE
-  // ===========================================================================
-
   Future<void> configureAudioSession() async {
     final session = await AudioSession.instance;
     await session.configure(
       const AudioSessionConfiguration(
         avAudioSessionCategory: AVAudioSessionCategory.playback,
         avAudioSessionCategoryOptions:
-        AVAudioSessionCategoryOptions.mixWithOthers,
+            AVAudioSessionCategoryOptions.mixWithOthers,
         androidAudioAttributes: AndroidAudioAttributes(
           contentType: AndroidAudioContentType.music,
           usage: AndroidAudioUsage.media,
@@ -539,13 +661,16 @@ class QuranAudioService {
   }
 
   Future<void> reset() async {
+    _playOperationToken++;
+    _timingGeneration++;
+
     await _audioPlayer.stop();
     await _ayahPlayer.stop();
     await _audioPlayer.clearAudioSources();
 
     _hasLoadedSurah = false;
     _allSurahs = const [];
-    _lastReportedPosition = Duration.zero;
+    _currentSurah = null;
   }
 
   Future<void> setVolume(double volume) async {
@@ -555,6 +680,7 @@ class QuranAudioService {
 
   void dispose() {
     _currentIndexSubscription?.cancel();
+    _playerStateSubscription?.cancel();
     _positionSubscription?.cancel();
     _audioPlayer.dispose();
     _ayahPlayer.dispose();

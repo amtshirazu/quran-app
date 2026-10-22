@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:quran/quran.dart' as quran;
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/bookmark/domain/model/bookmark.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_provider.dart';
 import 'package:quran_app/features/bookmark/presentation/state/bookmark_service.dart';
 import 'package:quran_app/features/bookmark/presentation/widgets/bookmark_note_dialog.dart';
 import 'package:quran_app/features/progress/presentation/state/last_read_provider.dart';
-import 'package:quran_app/features/progress/presentation/state/profile_progress_provider.dart';
 import 'package:quran_app/features/quran/presentation/state/reading_mode.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
@@ -52,24 +52,35 @@ class SurahHeaderSection extends ConsumerWidget {
         gradient: isDark
             ? null
             : const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.deepGreen, AppColors.emerald600],
-        ),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.deepGreen, AppColors.emerald600],
+              ),
       ),
       child: Row(
         children: [
           IconButton(
             onPressed: () {
-              audio.reset();
-              ref.invalidate(lastReadProvider);
-              ref.invalidate(lastReadResolvedSurahProvider);
-              ref.invalidate(continueReadingProvider);
-              ref.invalidate(profileProgressProvider);
+              audio.stop();
+              audio.clearActiveState();
+              ref.read(currentPlayingAyahProvider.notifier).state = null;
+              ref.read(selectedSurahProvider.notifier).state = null;
+              ref.read(explicitSurahSelectionProvider.notifier).state = null;
               ref.read(currentPageSurahIdProvider.notifier).state = null;
-              context.go("/surahs");
+              ref.read(jumpToPageProvider.notifier).state = null;
+              ref.read(targetAyahProvider.notifier).state = null;
+              ref.read(shouldResumeLastReadProvider.notifier).state = false;
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go("/surahs");
+              }
             },
-            icon: const Icon(LucideIcons.arrowLeft, color: Colors.white, size: 20),
+            icon: const Icon(
+              LucideIcons.arrowLeft,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -112,8 +123,8 @@ class SurahHeaderSection extends ConsumerWidget {
                     Bookmark? existingBookmark;
                     try {
                       existingBookmark = bookmarks.firstWhere(
-                            (b) =>
-                        b.type == BookmarkType.page &&
+                        (b) =>
+                            b.type == BookmarkType.page &&
                             b.page == currentPage,
                       );
                     } catch (_) {
@@ -125,7 +136,8 @@ class SurahHeaderSection extends ConsumerWidget {
                     final note = await showBookmarkDialog(
                       context,
                       title: "Add Bookmark",
-                      subtitle: "${headerSurah.nameEnglish} • Page $currentPage",
+                      subtitle:
+                          "${headerSurah.nameEnglish} • Page $currentPage",
                       initialNote: existingBookmark?.note,
                       isPageMode: true,
                     );
@@ -146,7 +158,9 @@ class SurahHeaderSection extends ConsumerWidget {
                     isBookmarked
                         ? LucideIcons.bookmarkCheck
                         : LucideIcons.bookmark,
-                    color: isBookmarked ? AppColors.emerald600 : AppColors.gray200,
+                    color: isBookmarked
+                        ? AppColors.emerald600
+                        : AppColors.gray200,
                     size: 18,
                   ),
                 ),
@@ -160,35 +174,72 @@ class SurahHeaderSection extends ConsumerWidget {
                   final reciter = ref.read(defaultReciterProvider);
                   final surahs = ref.read(surahListProvider).value;
 
-                  if (playerState?.playing == true) {
+                  if (playerState?.playing == true &&
+                      audio.currentSurah?.number == headerSurah.number) {
                     await audio.pause();
                     return;
                   }
 
-                  if (playerState?.processingState == ProcessingState.completed) {
-                    await audio.seekToStart();
-                  }
-
                   final surahIndex = headerSurah.number - 1;
-                  final surah = (surahs != null && surahIndex >= 0 && surahIndex < surahs.length)
+                  final surah =
+                      (surahs != null &&
+                          surahIndex >= 0 &&
+                          surahIndex < surahs.length)
                       ? surahs[surahIndex]
                       : null;
 
-                  if (!audio.hasLoadedSurah &&
+                  final isSameSurahLoaded =
+                      audio.hasLoadedSurah &&
+                      audio.currentSurah?.number == headerSurah.number &&
+                      audio.currentReciter?.id == reciter?.id;
+
+                  if (!isSameSurahLoaded &&
                       reciter != null &&
                       surah != null &&
                       surahs != null) {
+                    int startAyah = 1;
+                    if (mode == ReadingMode.reading && currentPage != null) {
+                      final pageEntries = quran.getPageData(currentPage);
+                      for (final entry in pageEntries) {
+                        if (entry['surah'] == headerSurah.number) {
+                          startAyah = (entry['start'] ?? 1) as int;
+                          break;
+                        }
+                      }
+                    } else if (mode == ReadingMode.translation) {
+                      final targetAyah = ref.read(targetAyahProvider);
+                      final playingAyah = ref.read(currentPlayingAyahProvider);
+                      final lastRead = ref.read(lastReadProvider).asData?.value;
+                      if (targetAyah != null) {
+                        startAyah = targetAyah;
+                      } else if (playingAyah != null &&
+                          playingAyah.surah == headerSurah.number) {
+                        startAyah = playingAyah.ayah;
+                      } else if (lastRead != null &&
+                          lastRead['mode'] == 'ayah' &&
+                          lastRead['surah_id'] == headerSurah.number &&
+                          lastRead['ayah'] is int) {
+                        startAyah = lastRead['ayah'] as int;
+                      }
+                    }
+
                     await audio.playSurah(
                       reciter: reciter,
                       surah: surah,
                       allSurahs: surahs,
+                      startAyah: startAyah,
                     );
                   } else {
+                    if (playerState?.processingState ==
+                        ProcessingState.completed) {
+                      await audio.seekToStart();
+                    }
                     await audio.play();
                   }
                 },
                 icon: Icon(
-                  playerState?.playing == true
+                  playerState?.playing == true &&
+                          audio.currentSurah?.number == headerSurah?.number
                       ? LucideIcons.pause
                       : LucideIcons.play,
                   color: AppColors.gray200,

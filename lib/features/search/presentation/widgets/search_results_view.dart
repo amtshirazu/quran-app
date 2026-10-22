@@ -19,10 +19,7 @@ import 'highlighted_text.dart';
 class SearchResultsView extends ConsumerWidget {
   final UnifiedSearchResults results;
 
-  const SearchResultsView({
-    super.key,
-    required this.results,
-  });
+  const SearchResultsView({super.key, required this.results});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,10 +51,7 @@ class SearchResultsView extends ConsumerWidget {
               const Text(
                 'Try searching with a different surah, keyword, or topic.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.gray500,
-                ),
+                style: TextStyle(fontSize: 13, color: AppColors.gray500),
               ),
             ],
           ),
@@ -87,9 +81,9 @@ class SearchResultsView extends ConsumerWidget {
         /// 1. Ayahs Section
         if (results.ayahs.isNotEmpty) ...[
           _buildSectionHeader('Ayahs (${results.ayahs.length})'),
-          ...results.ayahs.take(5).map(
-                (item) => _buildAyahCard(context, ref, item, results.query),
-              ),
+          ...results.ayahs
+              .take(5)
+              .map((item) => _buildAyahCard(context, ref, item, results.query)),
           const SizedBox(height: 16),
         ],
 
@@ -97,15 +91,17 @@ class SearchResultsView extends ConsumerWidget {
         if (results.surahs.isNotEmpty) ...[
           _buildSectionHeader('Surahs (${results.surahs.length})'),
           ...results.surahs.map(
-                (surah) => _buildSurahCard(context, ref, surah, results.query),
-              ),
+            (surah) => _buildSurahCard(context, ref, surah, results.query),
+          ),
           const SizedBox(height: 16),
         ],
 
         /// 3. Azkaar Section
         if (results.azkaar.isNotEmpty) ...[
           _buildSectionHeader('Azkaar (${results.azkaar.length})'),
-          ...results.azkaar.take(5).map(
+          ...results.azkaar
+              .take(5)
+              .map(
                 (item) => _buildAzkarCard(context, ref, item, results.query),
               ),
           const SizedBox(height: 16),
@@ -114,9 +110,9 @@ class SearchResultsView extends ConsumerWidget {
         /// 4. Duas Section
         if (results.duas.isNotEmpty) ...[
           _buildSectionHeader('Duas (${results.duas.length})'),
-          ...results.duas.take(5).map(
-                (dua) => _buildDuaCard(context, ref, dua, results.query),
-              ),
+          ...results.duas
+              .take(5)
+              .map((dua) => _buildDuaCard(context, ref, dua, results.query)),
           const SizedBox(height: 16),
         ],
       ],
@@ -215,10 +211,7 @@ class SearchResultsView extends ConsumerWidget {
       child: Center(
         child: Text(
           'No matching $categoryName found.',
-          style: const TextStyle(
-            color: AppColors.gray500,
-            fontSize: 14,
-          ),
+          style: const TextStyle(color: AppColors.gray500, fontSize: 14),
         ),
       ),
     );
@@ -439,7 +432,9 @@ class SearchResultsView extends ConsumerWidget {
           leading: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: isDark ? AppColors.emerald600.withAlpha(38) : AppColors.emerald100,
+              color: isDark
+                  ? AppColors.emerald600.withAlpha(38)
+                  : AppColors.emerald100,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -487,8 +482,8 @@ class SearchResultsView extends ConsumerWidget {
     final formattedSubject = isWitr
         ? 'Qunoot & Supplication'
         : (dua.subject.isNotEmpty
-            ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
-            : 'General');
+              ? '${dua.subject[0].toUpperCase()}${dua.subject.substring(1)}'
+              : 'General');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -508,8 +503,9 @@ class SearchResultsView extends ConsumerWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          ref.read(selectedDuaCategoryProvider.notifier).state =
-              isWitr ? DuaCategory.witr : DuaCategory.quranic;
+          ref.read(selectedDuaCategoryProvider.notifier).state = isWitr
+              ? DuaCategory.witr
+              : DuaCategory.quranic;
           ref.read(targetDuaIdProvider.notifier).state = dua.id;
           context.push('/duas');
         },

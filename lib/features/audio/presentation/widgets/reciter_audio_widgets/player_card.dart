@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -129,8 +128,19 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                 StreamBuilder<Duration>(
                   stream: audioPlayer.positionStream,
                   builder: (context, snapshot) {
-                    final position = snapshot.data ?? Duration.zero;
-                    final duration = audioPlayer.duration ?? Duration.zero;
+                    final audioService = ref.watch(audioServiceProvider);
+                    final isCurrentTrackActive =
+                        audioService.hasLoadedSurah &&
+                        audioService.currentSurah?.number ==
+                            selectedAudioSurah.number &&
+                        audioService.currentReciter?.id == reciter?.id;
+
+                    final position = isCurrentTrackActive
+                        ? (snapshot.data ?? Duration.zero)
+                        : Duration.zero;
+                    final duration = isCurrentTrackActive
+                        ? (audioPlayer.duration ?? Duration.zero)
+                        : Duration.zero;
 
                     double currentSeconds = position.inSeconds.toDouble();
                     double maxSeconds = duration.inSeconds.toDouble();
@@ -248,7 +258,12 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                       ),
                       child: IconButton(
                         icon: Icon(
-                          playerState?.playing == true
+                          playerState?.playing == true &&
+                                  ref
+                                          .read(audioServiceProvider)
+                                          .currentSurah
+                                          ?.number ==
+                                      selectedAudioSurah.number
                               ? LucideIcons.pause
                               : LucideIcons.play,
                           color: Colors.white,
@@ -261,12 +276,18 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                           final surah = ref.read(selectedAudioSurahProvider);
                           final surahs = ref.read(surahListProvider).value;
 
-                          if (playerState?.playing == true) {
+                          if (playerState?.playing == true &&
+                              audio.currentSurah?.number == surah?.number) {
                             await audio.pause();
                             return;
                           }
 
-                          if (!audio.hasLoadedSurah &&
+                          final isSameSurahLoaded =
+                              audio.hasLoadedSurah &&
+                              audio.currentSurah?.number == surah?.number &&
+                              audio.currentReciter?.id == currentReciter?.id;
+
+                          if (!isSameSurahLoaded &&
                               currentReciter != null &&
                               surah != null &&
                               surahs != null) {
@@ -278,6 +299,10 @@ class PlayerCardState extends ConsumerState<PlayerCard> {
                             return;
                           }
 
+                          if (playerState?.processingState ==
+                              ProcessingState.completed) {
+                            await audio.seekToStart();
+                          }
                           await audio.play();
                         },
                       ),

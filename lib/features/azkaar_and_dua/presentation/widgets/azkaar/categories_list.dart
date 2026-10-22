@@ -18,23 +18,31 @@ class CategoryListCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Material(
-        color: isDark ? AppTheme.darkSurface : const Color(0xFFE0F2F1).withAlpha(102),
+        color: isDark
+            ? AppTheme.darkSurface
+            : const Color(0xFFE0F2F1).withAlpha(102),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: isDark ? AppTheme.darkBorder : AppColors.emerald600.withAlpha(26),
+            color: isDark
+                ? AppTheme.darkBorder
+                : AppColors.emerald600.withAlpha(26),
           ),
         ),
         clipBehavior: Clip.antiAlias,
         child: ListTile(
           dense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 2,
+          ),
           leading: Container(
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: isDark ? AppColors.emerald600.withAlpha(38) : const Color(0xFFB2DFDB),
+              color: isDark
+                  ? AppColors.emerald600.withAlpha(38)
+                  : const Color(0xFFB2DFDB),
               borderRadius: BorderRadius.circular(8),
             ),
             alignment: Alignment.center,
@@ -59,7 +67,9 @@ class CategoryListCard extends ConsumerWidget {
             data: (count) => Text(
               '$count azkar',
               style: TextStyle(
-                color: isDark ? AppTheme.darkTextSecondary : AppColors.emerald600,
+                color: isDark
+                    ? AppTheme.darkTextSecondary
+                    : AppColors.emerald600,
                 fontSize: 11,
               ),
             ),
